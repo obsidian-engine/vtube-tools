@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Live ユニークユーザー抽出ツール (Bookmarklet版)</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .page {
+            display: none;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .form-section {
+            padding: 40px 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+            font-size: 1.1rem;
+        }
+        
+        .url-input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+        
+        .url-input:focus {
+            outline: none;
+            border-color: #4facfe;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+        }
+        
+        .extract-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+            width: 100%;
+        }
+        
+        .extract-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
+        }
+        
+        .extract-btn:active {
+            transform: translateY(0);
+        }
+        
+        #bookmarklet-code {
+            font-family: 'Monaco', 'Consolas', monospace !important;
+        }
+        
+        #copy-bookmarklet:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
+        }
+        
+        .extract-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .status-message {
+            text-align: center;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+        
+        .status-loading {
+            background: #e3f2fd;
+            color: #1976d2;
+            border: 1px solid #bbdefb;
+        }
+        
+        .status-success {
+            background: #e8f5e8;
+            color: #2e7d32;
+            border: 1px solid #c8e6c9;
+        }
+        
+        .status-error {
+            background: #ffebee;
+            color: #c62828;
+            border: 1px solid #ffcdd2;
+        }
+        
+        .results-header {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .results-header h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+        
+        .user-count {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            background: rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+        }
+        
+        .usernames-grid {
+            padding: 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+        
+        .username-card {
+            background: #f8f9fa;
+            padding: 15px 20px;
+            border-radius: 10px;
+            border-left: 4px solid #11998e;
+            transition: all 0.3s ease;
+            animation: slideInUp 0.5s ease-out;
+        }
+        
+        .username-card:hover {
+            background: #e9ecef;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .username-text {
+            font-weight: 600;
+            color: #495057;
+            font-size: 1rem;
+        }
+        
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 30px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .back-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        .example-url {
+            font-family: monospace;
+            background: #f1f3f4;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            color: #666;
+            word-break: break-all;
+            margin-top: 5px;
+        }
+        
+        /* iframeスタイルはBookmarklet版では不要 */
+        
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        
+        @media (max-width: 768px) {
+            .usernames-grid {
+                grid-template-columns: 1fr;
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .user-count, .back-btn {
+                position: static;
+                margin: 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ページ1: URL入力フォーム -->
+    <div id="page1" class="page active">
+        <div class="container">
+            <div class="header">
+                <h1>👥 YouTube Live</h1>
+                <p>ユニークユーザー抽出ツール (Bookmarklet版)</p>
+            </div>
+            
+            <div class="form-section">
+                <div class="form-group">
+                    <label for="bookmarklet-instructions">📖 使用方法</label>
+                    <div style="background: #e8f5e8; border: 2px solid #4caf50; border-radius: 10px; padding: 20px; margin: 15px 0;">
+                        <h3 style="margin-top: 0; color: #2e7d32;">📋 3ステップで簡単セットアップ！</h3>
+                        <ol style="margin: 15px 0; padding-left: 20px; line-height: 1.8;">
+                            <li><strong>下のボタンをクリック</strong> → コードをコピー</li>
+                            <li><strong>ブラウザのブックマークマネージャー</strong>で新しいブックマークを作成し、URLにペースト</li>
+                            <li><strong>YouTube Live Chatページ</strong>を開く<br>
+                                <span style="font-family: monospace; background: #f0f0f0; padding: 2px 6px; border-radius: 3px; font-size: 0.9em;">https://www.youtube.com/live_chat?is_popout=1&v=VIDEO_ID</span></li>
+                            <li><strong>作成したブックマーク</strong>をクリックして実行！</li>
+                        </ol>
+                        <div style="background: #fff3e0; border-left: 4px solid #ff9800; padding: 12px; margin-top: 15px; border-radius: 4px;">
+                            <strong>💡 ヒント:</strong> ユニークユーザー名が画面左上に緑色のリストで表示されます。右上にはカウンターが表示されます。
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin: 30px 0;">
+                    <button id="copy-bookmarklet" class="extract-btn" style="margin-bottom: 15px;">
+                        📋 Bookmarkletコードをコピー
+                    </button>
+                    <div style="margin: 15px 0;">
+                        <textarea id="bookmarklet-code" readonly style="width: 100%; height: 120px; font-family: monospace; font-size: 0.8rem; padding: 10px; border: 2px solid #ddd; border-radius: 8px; background: #f8f9fa; resize: vertical;"></textarea>
+                    </div>
+                    <div style="color: #666; font-size: 0.9rem; line-height: 1.5;">
+                        💡 <strong>追加方法：</strong><br>
+                        1. 上のボタンをクリックしてコードをコピー<br>
+                        2. ブラウザの「ブックマーク」→「ブックマークマネージャー」で新規作成<br>
+                        3. 名前: 「YouTube ユーザー抽出」、URL: コピーしたコードをペースト
+                    </div>
+                </div>
+                
+                <div class="status-message" style="background: #e8f5e8; color: #2e7d32; border: 1px solid #4caf50; display: block;">
+                    ✅ <strong>完成！</strong> YouTube Live Chatページでブックマークをクリックするだけで、ユニークユーザー名が自動抽出されます。
+                </div>
+                
+                <div id="status" class="status-message" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ページ2: 結果表示 -->
+    <div id="page2" class="page">
+        <div class="container">
+            <div class="results-header">
+                <button class="back-btn" onclick="goBack()">← 戻る</button>
+                <h2>🎉 抽出結果</h2>
+                <div class="user-count" id="user-count">0人</div>
+            </div>
+            
+            <div class="usernames-grid" id="usernames-grid">
+                <!-- ユーザー名がここに表示される -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Bookmarklet版では隠しiframeは不要 -->
+    
+    <script>
+        // ==========================================
+        // Bookmarklet生成システム
+        // ==========================================
+        
+        // 圧縮されたBookmarkletコード
+        const bookmarkletCode = `javascript:(function(){const u=new Set();let c,l,e,i=false;function init(){if(i)return;i=true;console.log('🚀 ユニークユーザー名システム開始');setTimeout(()=>{createUI();extractExisting();observe()},1000)}function createUI(){const x=document.getElementById('unique-usernames-container');if(x)x.remove();c=document.createElement('div');c.id='unique-usernames-container';c.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;background:transparent;padding:20px;box-sizing:border-box;overflow-y:auto;font-family:"Segoe UI",sans-serif;z-index:9999';const t=document.createElement('div');t.id='unique-usernames-title';t.textContent='👥 ユニークユーザー';t.style.cssText='color:#ffffff;font-size:24px;font-weight:bold;margin-bottom:20px;text-shadow:2px 2px 4px rgba(0,0,0,0.9);border-bottom:3px solid #00ff00;padding-bottom:10px;text-align:center';l=document.createElement('div');l.id='unique-usernames-list';e=document.createElement('div');e.id='username-count';e.textContent='0人';e.style.cssText='position:fixed;top:20px;right:20px;color:#ffffff;font-size:18px;font-weight:bold;background:rgba(0,0,0,0.9);padding:12px 20px;border-radius:25px;text-shadow:1px 1px 2px rgba(0,0,0,0.8);border:2px solid #00ff00;box-shadow:0 0 15px rgba(0,255,0,0.4)';c.appendChild(t);c.appendChild(l);c.appendChild(e);document.body.appendChild(c)}function extractExisting(){document.querySelectorAll('#author-name').forEach(el=>{const n=el.textContent.trim();if(n)addUser(n)})}function addUser(username){if(!u.has(username)){u.add(username);const el=document.createElement('div');el.className='unique-username';el.textContent=username;el.dataset.username=username;el.style.cssText='color:#00ff00;font-size:16px;font-weight:bold;margin:8px 0;padding:12px 16px;background:rgba(0,0,0,0.8);border-radius:8px;text-shadow:1px 1px 2px rgba(0,0,0,0.9);border-left:4px solid #00ff00;animation:slideInRight 0.5s ease-out;transition:all 0.3s ease;box-shadow:0 2px 5px rgba(0,0,0,0.3)';insertAlpha(el,username);updateCount();console.log('➕',username)}}function insertAlpha(el,name){const existing=Array.from(l.children);let inserted=false;for(const child of existing){if(name.localeCompare(child.dataset.username)<0){l.insertBefore(el,child);inserted=true;break}}if(!inserted)l.appendChild(el)}function updateCount(){if(e)e.textContent=u.size+'人'}function observe(){const target=document.querySelector('#items')||document.querySelector('#item-list');if(!target){setTimeout(observe,5000);return}new MutationObserver(mutations=>{mutations.forEach(mutation=>{mutation.addedNodes.forEach(node=>{if(node.nodeType===1){node.querySelectorAll('#author-name').forEach(el=>{const n=el.textContent.trim();if(n)addUser(n)})}})})}).observe(target,{childList:true,subtree:true});console.log('👀 監視開始')}window.chatUsernames={clear:()=>{u.clear();l.innerHTML='';updateCount()},list:()=>Array.from(u).sort(),count:()=>u.size};if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',init)}else{init()}window.addEventListener('load',()=>setTimeout(init,2000))})();void(0);`;
+        
+        // Bookmarkletコード表示とコピー機能
+        window.addEventListener('DOMContentLoaded', function() {
+            const codeTextarea = document.getElementById('bookmarklet-code');
+            const copyButton = document.getElementById('copy-bookmarklet');
+            
+            // テキストエリアにコードを表示
+            if (codeTextarea) {
+                codeTextarea.value = bookmarkletCode;
+            }
+            
+            // コピーボタンの機能
+            if (copyButton) {
+                copyButton.addEventListener('click', function() {
+                    if (codeTextarea) {
+                        codeTextarea.select();
+                        codeTextarea.setSelectionRange(0, 99999); // モバイル端末対応
+                        
+                        try {
+                            document.execCommand('copy');
+                            copyButton.textContent = '✅ コピー完了！';
+                            copyButton.style.background = 'linear-gradient(135deg, #4caf50 0%, #45a049 100%)';
+                            
+                            setTimeout(() => {
+                                copyButton.textContent = '📋 Bookmarkletコードをコピー';
+                                copyButton.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+                            }, 2000);
+                        } catch (err) {
+                            alert('コピーに失敗しました。テキストを手動で選択してCtrl+C（MacはCmd+C）でコピーしてください。');
+                        }
+                    }
+                });
+            }
+        });
+        
+        // 結果表示用の関数（既存）
+        function showResults() {
+            const userCount = document.getElementById('user-count');
+            const usernamesGrid = document.getElementById('usernames-grid');
+            
+            // この関数は実際にはBookmarklet実行時に使用される
+            // HTMLページでは説明用のみ
+        }
+        
+        function goBack() {
+            document.getElementById('page2').classList.remove('active');
+            document.getElementById('page1').classList.add('active');
+        }
+    </script>
+</body>
+</html>
