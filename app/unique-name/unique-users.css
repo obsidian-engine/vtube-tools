@@ -1,194 +1,66 @@
 /* ==========================================
- * OBS YouTube Live ユニークユーザー名表示
- * 1回コピペ完結版
+ * OBS YouTube Live チャット非表示CSS
  * 
  * 使い方：
- * 1. このファイル全体をコピー
- * 2. OBSブラウザソースの「カスタムCSS」にペースト
- * 3. 完了！
+ * 1. OBS Browser SourceでYouTube Live Chat URLを指定
+ * 2. カスタムCSSにこの内容を貼り付け
+ * 3. ユニークユーザー抽出はobs-script.jsを別途実行
  * ========================================== */
 
-/* JavaScript自動実行用の隠しスタイル */
-head::after {
-    content: "";
-    background-image: url("javascript:
-        (function(){
-            const uniqueUsernames = new Set();
-            let container, usernameList, countElement, initialized = false;
-            
-            function init() {
-                if (initialized) return;
-                initialized = true;
-                console.log('🚀 ユニークユーザー名システム開始');
-                
-                setTimeout(() => {
-                    createUI();
-                    extractExisting();
-                    observe();
-                }, 1000);
-            }
-            
-            function createUI() {
-                const existing = document.getElementById('unique-usernames-container');
-                if (existing) existing.remove();
-                
-                container = document.createElement('div');
-                container.id = 'unique-usernames-container';
-                container.style.cssText = `
-                    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-                    background: transparent; padding: 20px; box-sizing: border-box;
-                    overflow-y: auto; font-family: 'Segoe UI', sans-serif; z-index: 9999;
-                `;
-                
-                const title = document.createElement('div');
-                title.id = 'unique-usernames-title';
-                title.textContent = '👥 ユニークユーザー';
-                title.style.cssText = `
-                    color: #ffffff; font-size: 24px; font-weight: bold; margin-bottom: 20px;
-                    text-shadow: 2px 2px 4px rgba(0,0,0,0.9); border-bottom: 3px solid #00ff00;
-                    padding-bottom: 10px; text-align: center;
-                `;
-                
-                usernameList = document.createElement('div');
-                usernameList.id = 'unique-usernames-list';
-                
-                countElement = document.createElement('div');
-                countElement.id = 'username-count';
-                countElement.textContent = '0人';
-                countElement.style.cssText = `
-                    position: fixed; top: 20px; right: 20px; color: #ffffff;
-                    font-size: 18px; font-weight: bold; background: rgba(0,0,0,0.9);
-                    padding: 12px 20px; border-radius: 25px; text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
-                    border: 2px solid #00ff00; box-shadow: 0 0 15px rgba(0,255,0,0.4);
-                `;
-                
-                container.appendChild(title);
-                container.appendChild(usernameList);
-                container.appendChild(countElement);
-                document.body.appendChild(container);
-            }
-            
-            function extractExisting() {
-                document.querySelectorAll('#author-name').forEach(el => {
-                    const name = el.textContent.trim();
-                    if (name) addUser(name);
-                });
-            }
-            
-            function addUser(username) {
-                if (!uniqueUsernames.has(username)) {
-                    uniqueUsernames.add(username);
-                    
-                    const el = document.createElement('div');
-                    el.className = 'unique-username';
-                    el.textContent = username;
-                    el.dataset.username = username;
-                    el.style.cssText = `
-                        color: #00ff00; font-size: 16px; font-weight: bold; margin: 8px 0;
-                        padding: 12px 16px; background: rgba(0,0,0,0.8); border-radius: 8px;
-                        text-shadow: 1px 1px 2px rgba(0,0,0,0.9); border-left: 4px solid #00ff00;
-                        animation: slideInRight 0.5s ease-out; transition: all 0.3s ease;
-                        box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-                    `;
-                    
-                    insertAlpha(el, username);
-                    updateCount();
-                    console.log('➕', username);
-                }
-            }
-            
-            function insertAlpha(el, name) {
-                const existing = Array.from(usernameList.children);
-                let inserted = false;
-                
-                for (const child of existing) {
-                    if (name.localeCompare(child.dataset.username) < 0) {
-                        usernameList.insertBefore(el, child);
-                        inserted = true;
-                        break;
-                    }
-                }
-                
-                if (!inserted) usernameList.appendChild(el);
-            }
-            
-            function updateCount() {
-                if (countElement) countElement.textContent = uniqueUsernames.size + '人';
-            }
-            
-            function observe() {
-                const target = document.querySelector('#items') || document.querySelector('#item-list');
-                if (!target) {
-                    setTimeout(observe, 5000);
-                    return;
-                }
-                
-                new MutationObserver(mutations => {
-                    mutations.forEach(mutation => {
-                        mutation.addedNodes.forEach(node => {
-                            if (node.nodeType === 1) {
-                                node.querySelectorAll('#author-name').forEach(el => {
-                                    const name = el.textContent.trim();
-                                    if (name) addUser(name);
-                                });
-                            }
-                        });
-                    });
-                }).observe(target, { childList: true, subtree: true });
-                
-                console.log('👀 監視開始');
-            }
-            
-            window.chatUsernames = {
-                clear: () => { uniqueUsernames.clear(); usernameList.innerHTML = ''; updateCount(); },
-                list: () => Array.from(uniqueUsernames).sort(),
-                count: () => uniqueUsernames.size
-            };
-            
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', init);
-            } else {
-                init();
-            }
-            
-            window.addEventListener('load', () => setTimeout(init, 2000));
-        })();
-        void(0);
-    ");
-}
-
-/* 通常のCSS部分 */
+/* チャット完全非表示用CSS */
 body {
     background-color: rgba(0, 0, 0, 0) !important;
     margin: 0 !important;
     overflow: hidden !important;
 }
 
+/* ルート要素を非表示 */
+yt-live-chat-app,
 yt-live-chat-renderer {
-    background-color: transparent !important;
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
 }
 
+/* ヘッダーと入力欄を非表示 */
 yt-live-chat-header-renderer,
 yt-live-chat-message-input-renderer,
-yt-live-chat-ticker-renderer,
-#panel-pages,
-#input-panel {
+yt-live-chat-ticker-renderer {
     display: none !important;
+    visibility: hidden !important;
 }
 
+/* パネルとコントロール要素を非表示 */
+#panel-pages,
+#input-panel,
 #item-list,
-#items {
-    background-color: transparent !important;
-    padding: 20px !important;
+#items,
+yt-live-chat-item-list-renderer {
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
 }
 
-/* 全メッセージを非表示 */
+/* 全メッセージタイプを完全非表示 */
 yt-live-chat-text-message-renderer,
 yt-live-chat-paid-message-renderer,
 yt-live-chat-moderator-message-renderer,
 yt-live-chat-deleted-message-renderer,
-yt-live-chat-viewer-engagement-message-renderer {
+yt-live-chat-viewer-engagement-message-renderer,
+yt-live-chat-membership-item-renderer,
+yt-live-chat-paid-sticker-renderer,
+yt-live-chat-banner-manager,
+yt-live-chat-banner-renderer {
     display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+}
+
+/* その他のUI要素も非表示 */
+.style-scope.yt-live-chat-renderer,
+.style-scope.yt-live-chat-item-list-renderer {
+    display: none !important;
+    visibility: hidden !important;
 }
 
 /* アニメーション */
