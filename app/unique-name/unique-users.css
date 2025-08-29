@@ -18,8 +18,6 @@ body {
 yt-live-chat-app,
 yt-live-chat-renderer {
     display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
 }
 
 /* ヘッダーと入力欄を非表示 */
@@ -27,7 +25,6 @@ yt-live-chat-header-renderer,
 yt-live-chat-message-input-renderer,
 yt-live-chat-ticker-renderer {
     display: none !important;
-    visibility: hidden !important;
 }
 
 /* パネルとコントロール要素を非表示 */
@@ -37,8 +34,6 @@ yt-live-chat-ticker-renderer {
 #items,
 yt-live-chat-item-list-renderer {
     display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
 }
 
 /* 全メッセージタイプを完全非表示 */
@@ -52,15 +47,12 @@ yt-live-chat-paid-sticker-renderer,
 yt-live-chat-banner-manager,
 yt-live-chat-banner-renderer {
     display: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
 }
 
 /* その他のUI要素も非表示 */
 .style-scope.yt-live-chat-renderer,
 .style-scope.yt-live-chat-item-list-renderer {
     display: none !important;
-    visibility: hidden !important;
 }
 
 /* アニメーション */
@@ -75,12 +67,6 @@ yt-live-chat-banner-renderer {
 ::-webkit-scrollbar-thumb { background: rgba(0,255,0,0.6); border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(0,255,0,0.8); }
 
-/* ホバー効果 */
-.unique-username:hover {
-    background-color: rgba(0, 255, 0, 0.1) !important;
-    transform: translateX(5px) !important;
-    box-shadow: 0 4px 10px rgba(0, 255, 0, 0.2) !important;
-}
 
 /* ==========================================
  * 📋 コピー完了！OBSの「カスタムCSS」に貼り付けてください

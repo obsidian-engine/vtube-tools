@@ -153,103 +153,6 @@
             border: 1px solid #ffcdd2;
         }
         
-        .results-header {
-            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-            color: white;
-            padding: 30px;
-            text-align: center;
-            position: relative;
-        }
-        
-        .results-header h2 {
-            font-size: 2rem;
-            margin-bottom: 10px;
-        }
-        
-        .user-count {
-            position: absolute;
-            top: 20px;
-            right: 30px;
-            background: rgba(255,255,255,0.2);
-            padding: 10px 20px;
-            border-radius: 25px;
-            font-size: 1.2rem;
-            font-weight: 600;
-            backdrop-filter: blur(10px);
-        }
-        
-        .usernames-grid {
-            padding: 30px;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 15px;
-            max-height: 70vh;
-            overflow-y: auto;
-        }
-        
-        .username-card {
-            background: #f8f9fa;
-            padding: 15px 20px;
-            border-radius: 10px;
-            border-left: 4px solid #11998e;
-            transition: all 0.3s ease;
-            animation: slideInUp 0.5s ease-out;
-        }
-        
-        .username-card:hover {
-            background: #e9ecef;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-        
-        .username-text {
-            font-weight: 600;
-            color: #495057;
-            font-size: 1rem;
-        }
-        
-        @keyframes slideInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .back-btn {
-            position: absolute;
-            top: 20px;
-            left: 30px;
-            background: rgba(255,255,255,0.2);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-        }
-        
-        .back-btn:hover {
-            background: rgba(255,255,255,0.3);
-        }
-        
-        .example-url {
-            font-family: monospace;
-            background: #f1f3f4;
-            padding: 10px;
-            border-radius: 5px;
-            font-size: 0.9rem;
-            color: #666;
-            word-break: break-all;
-            margin-top: 5px;
-        }
-        
-        /* iframeスタイルはBookmarklet版では不要 */
         
         ::-webkit-scrollbar {
             width: 8px;
@@ -270,18 +173,8 @@
         }
         
         @media (max-width: 768px) {
-            .usernames-grid {
-                grid-template-columns: 1fr;
-                padding: 20px;
-            }
-            
             .header h1 {
                 font-size: 2rem;
-            }
-            
-            .user-count, .back-btn {
-                position: static;
-                margin: 10px 0;
             }
         }
     </style>
@@ -337,30 +230,13 @@
         </div>
     </div>
     
-    <!-- ページ2: 結果表示 -->
-    <div id="page2" class="page">
-        <div class="container">
-            <div class="results-header">
-                <button class="back-btn" onclick="goBack()">← 戻る</button>
-                <h2>🎉 抽出結果</h2>
-                <div class="user-count" id="user-count">0人</div>
-            </div>
-            
-            <div class="usernames-grid" id="usernames-grid">
-                <!-- ユーザー名がここに表示される -->
-            </div>
-        </div>
-    </div>
-    
-    <!-- Bookmarklet版では隠しiframeは不要 -->
-    
     <script>
         // ==========================================
         // Bookmarklet生成システム
         // ==========================================
         
-        // シンプルBookmarkletコード（明るい色バージョン）
-        const bookmarkletCode = `javascript:(function(){const u=new Set();let c,l,e,i=false;function hideOriginal(){document.body.style.cssText='background:#000!important;overflow:hidden!important';const toHide=['yt-live-chat-renderer','#chatframe','#chat','#live-chat-iframe','yt-live-chat-app'];toHide.forEach(s=>{const els=document.querySelectorAll(s);els.forEach(el=>el.style.display='none')});document.querySelectorAll('*').forEach(el=>{if(el.id!=='unique-usernames-container'&&!el.closest('#unique-usernames-container')){if(el.tagName!=='SCRIPT'&&el.tagName!=='STYLE'){el.style.visibility='hidden'}}})}function init(){if(i)return;i=true;console.log('🚀 ユニークユーザー名システム開始');setTimeout(()=>{hideOriginal();createUI();extractExisting();observe()},1000)}function createUI(){const x=document.getElementById('unique-usernames-container');if(x)x.remove();c=document.createElement('div');c.id='unique-usernames-container';c.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.95);padding:20px;box-sizing:border-box;overflow-y:auto;font-family:"Segoe UI",sans-serif;z-index:99999;visibility:visible!important;display:block!important';const t=document.createElement('div');t.id='unique-usernames-title';t.textContent='👥 ユニークユーザー';t.style.cssText='color:#ffffff;font-size:24px;font-weight:bold;margin-bottom:20px;text-shadow:2px 2px 4px rgba(0,0,0,0.9);border-bottom:3px solid #00aaff;padding-bottom:10px;text-align:center;visibility:visible!important';l=document.createElement('div');l.id='unique-usernames-list';l.style.cssText='visibility:visible!important';e=document.createElement('div');e.id='username-count';e.textContent='0人';e.style.cssText='position:fixed;top:20px;right:20px;color:#ffffff;font-size:18px;font-weight:bold;background:rgba(0,0,0,0.9);padding:12px 20px;border-radius:25px;text-shadow:1px 1px 2px rgba(0,0,0,0.8);border:2px solid #00aaff;box-shadow:0 0 15px rgba(0,170,255,0.4);visibility:visible!important;text-align:center';c.appendChild(t);c.appendChild(l);c.appendChild(e);document.body.appendChild(c)}function extractExisting(){document.querySelectorAll('#author-name').forEach(el=>{const n=el.textContent.trim();if(n)addUser(n)})}function addUser(username){if(!u.has(username)){u.add(username);const el=document.createElement('div');el.className='unique-username';el.textContent=username;el.dataset.username=username;el.style.cssText='color:#ffffff;font-size:16px;font-weight:bold;margin:8px 0;padding:12px 16px;background:rgba(50,50,50,0.9);border-radius:8px;text-shadow:1px 1px 2px rgba(0,0,0,0.7);border-left:4px solid #00aaff;animation:slideInRight 0.5s ease-out;transition:all 0.3s ease;box-shadow:0 2px 8px rgba(0,170,255,0.3);visibility:visible!important';insertAlpha(el,username);updateCount();console.log('➕',username)}}function insertAlpha(el,name){const existing=Array.from(l.children);let inserted=false;for(const child of existing){if(name.localeCompare(child.dataset.username)<0){l.insertBefore(el,child);inserted=true;break}}if(!inserted)l.appendChild(el)}function updateCount(){if(e)e.textContent=u.size+'人'}function observe(){const target=document.querySelector('#items')||document.querySelector('#item-list');if(!target){setTimeout(observe,5000);return}new MutationObserver(mutations=>{mutations.forEach(mutation=>{mutation.addedNodes.forEach(node=>{if(node.nodeType===1){node.querySelectorAll('#author-name').forEach(el=>{const n=el.textContent.trim();if(n)addUser(n)})}})})}).observe(target,{childList:true,subtree:true})}window.chatUsernames={clear:()=>{u.clear();l.innerHTML='';updateCount()},list:()=>Array.from(u).sort(),count:()=>u.size,show:()=>hideOriginal()};if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',init)}else{init()}window.addEventListener('load',()=>setTimeout(init,2000))})();void(0);`;
+        // シンプルBookmarkletコード（動的配信者検出・番号付き版）
+        const bookmarkletCode = `javascript:(function(){const u=new Set();let c,l,e,i=false,excludeUsers=new Set(),ownerName='';function getOwnerInfo(){try{const channelMeta=document.querySelector('meta[property="og:title"]');if(channelMeta){const title=channelMeta.getAttribute('content');console.log('🎯 チャンネル情報:',title)}const ownerSelectors=['[author-type="owner"] #author-name','[author-is-owner] #author-name','yt-live-chat-text-message-renderer[author-type="owner"] #author-name','yt-live-chat-text-message-renderer[author-is-owner] #author-name'];ownerSelectors.forEach(selector=>{document.querySelectorAll(selector).forEach(el=>{const name=el.textContent.trim();if(name){excludeUsers.add(name);ownerName=name;console.log('👑 配信者検出 ('+selector+'):',name)}})});const moderatorSelectors=['[author-type="moderator"] #author-name','[is-moderator] #author-name'];moderatorSelectors.forEach(selector=>{document.querySelectorAll(selector).forEach(el=>{const name=el.textContent.trim();if(name){excludeUsers.add(name);console.log('🛡️ モデレーター検出:',name)}})});document.querySelectorAll('yt-live-chat-text-message-renderer').forEach(msg=>{const authorType=msg.getAttribute('author-type');const isOwner=msg.hasAttribute('author-is-owner')||authorType==='owner';if(isOwner){const authorName=msg.querySelector('#author-name');if(authorName){const name=authorName.textContent.trim();if(name){excludeUsers.add(name);ownerName=name;console.log('👑 配信者を動的検出 ('+authorType+'):',name)}}}});if(excludeUsers.size>0){console.log('🚫 除外対象ユーザー:',Array.from(excludeUsers))}else{console.log('⚠️ 配信者を検出できませんでした（手動除外は chatUsernames.exclude("ユーザー名") で可能）')}}catch(e){console.warn('配信者検出エラー:',e)}}function hideOriginal(){document.body.style.cssText='background:#000!important;overflow:hidden!important';const toHide=['yt-live-chat-renderer','#chatframe','#chat','#live-chat-iframe','yt-live-chat-app'];toHide.forEach(s=>{const els=document.querySelectorAll(s);els.forEach(el=>el.style.display='none')});document.querySelectorAll('*').forEach(el=>{if(el.id!=='unique-usernames-container'&&!el.closest('#unique-usernames-container')){if(el.tagName!=='SCRIPT'&&el.tagName!=='STYLE'){el.style.visibility='hidden'}}})}function init(){if(i)return;i=true;console.log('🚀 ユニークユーザー名システム開始');setTimeout(()=>{getOwnerInfo();setTimeout(()=>{hideOriginal();createUI();extractExisting();observe()},500)},1500)}function createUI(){const x=document.getElementById('unique-usernames-container');if(x)x.remove();c=document.createElement('div');c.id='unique-usernames-container';c.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.95);padding:20px;box-sizing:border-box;overflow-y:auto;font-family:"Segoe UI",sans-serif;z-index:99999;visibility:visible!important;display:block!important';const t=document.createElement('div');t.id='unique-usernames-title';t.textContent='👥 ユニークユーザー' + (ownerName ? ' (配信者: ' + ownerName + ' を除外)' : '');t.style.cssText='color:#ffffff;font-size:24px;font-weight:bold;margin-bottom:20px;text-shadow:2px 2px 4px rgba(0,0,0,0.9);border-bottom:3px solid #00aaff;padding-bottom:10px;text-align:center;visibility:visible!important';l=document.createElement('div');l.id='unique-usernames-list';l.style.cssText='visibility:visible!important';e=document.createElement('div');e.id='username-count';e.textContent='0人';e.style.cssText='position:fixed;top:20px;right:20px;color:#ffffff;font-size:18px;font-weight:bold;background:rgba(0,0,0,0.9);padding:12px 20px;border-radius:25px;text-shadow:1px 1px 2px rgba(0,0,0,0.8);border:2px solid #00aaff;box-shadow:0 0 15px rgba(0,170,255,0.4);visibility:visible!important;text-align:center';c.appendChild(t);c.appendChild(l);c.appendChild(e);document.body.appendChild(c)}function extractExisting(){document.querySelectorAll('#author-name').forEach(el=>{const msgRenderer=el.closest('yt-live-chat-text-message-renderer');if(msgRenderer){const isOwner=msgRenderer.getAttribute('author-type')==='owner'||msgRenderer.hasAttribute('author-is-owner');if(!isOwner){const n=el.textContent.trim();if(n&&!excludeUsers.has(n))addUser(n)}}})}function addUser(username){if(!u.has(username)&&!excludeUsers.has(username)){u.add(username);const el=document.createElement('div');el.className='unique-username';el.dataset.username=username;const numberSpan=document.createElement('span');numberSpan.className='username-number';numberSpan.style.cssText='color:#00aaff;font-weight:bold;margin-right:10px;min-width:35px;text-align:right;';const nameSpan=document.createElement('span');nameSpan.textContent=username;nameSpan.className='username-text';el.appendChild(numberSpan);el.appendChild(nameSpan);el.style.cssText='color:#ffffff;font-size:16px;font-weight:bold;margin:8px 0;padding:12px 16px;background:rgba(60,60,60,0.9);border-radius:8px;text-shadow:1px 1px 2px rgba(0,0,0,0.7);border-left:4px solid #00aaff;animation:slideInRight 0.5s ease-out;transition:all 0.3s ease;box-shadow:0 2px 8px rgba(0,170,255,0.3);visibility:visible!important;display:flex;align-items:center;';insertAlpha(el,username);updateCount();updateNumbers();console.log('➕',username)}}function insertAlpha(el,name){const existing=Array.from(l.children);let inserted=false;for(const child of existing){if(name.localeCompare(child.dataset.username)<0){l.insertBefore(el,child);inserted=true;break}}if(!inserted)l.appendChild(el)}function updateNumbers(){Array.from(l.children).forEach((el,index)=>{const numberSpan=el.querySelector('.username-number');if(numberSpan){numberSpan.textContent=(index+1)+'.';}})}function updateCount(){if(e)e.textContent=u.size+'人'}function observe(){const target=document.querySelector('#items')||document.querySelector('#item-list');if(!target){setTimeout(observe,5000);return}new MutationObserver(mutations=>{let needsOwnerCheck=false;mutations.forEach(mutation=>{mutation.addedNodes.forEach(node=>{if(node.nodeType===1){const msgRenderer=node.closest('yt-live-chat-text-message-renderer');if(msgRenderer){const authorType=msgRenderer.getAttribute('author-type');const isOwner=msgRenderer.hasAttribute('author-is-owner')||authorType==='owner';if(isOwner){const authorName=msgRenderer.querySelector('#author-name');if(authorName){const name=authorName.textContent.trim();if(name&&!excludeUsers.has(name)){excludeUsers.add(name);ownerName=name;needsOwnerCheck=true;console.log('👑 新しい配信者を検出:',name);const existingEls=document.querySelectorAll('.unique-username');existingEls.forEach(el=>{if(el.dataset.username===name){el.remove();u.delete(name)}});updateCount();updateNumbers()}}}else{node.querySelectorAll('#author-name').forEach(el=>{const n=el.textContent.trim();if(n)addUser(n)})}}}})});if(needsOwnerCheck){const titleEl=document.getElementById('unique-usernames-title');if(titleEl){titleEl.textContent='👥 ユニークユーザー' + (ownerName ? ' (配信者: ' + ownerName + ' を除外)' : '')}}}).observe(target,{childList:true,subtree:true})}window.chatUsernames={clear:()=>{u.clear();l.innerHTML='';updateCount();updateNumbers()},list:()=>Array.from(u).sort(),count:()=>u.size,show:()=>hideOriginal(),exclude:(name)=>{excludeUsers.add(name);const els=document.querySelectorAll('.unique-username');els.forEach(el=>{if(el.dataset.username===name){el.remove();u.delete(name)}});updateCount();updateNumbers();console.log('🚫 手動除外:',name)},owner:()=>ownerName,excluded:()=>Array.from(excludeUsers)};if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',init)}else{init()}window.addEventListener('load',()=>setTimeout(init,2000))})();void(0);`;
         
         // Bookmarkletコード表示とコピー機能
         window.addEventListener('DOMContentLoaded', function() {
@@ -396,19 +272,6 @@
             }
         });
         
-        // 結果表示用の関数（既存）
-        function showResults() {
-            const userCount = document.getElementById('user-count');
-            const usernamesGrid = document.getElementById('usernames-grid');
-            
-            // この関数は実際にはBookmarklet実行時に使用される
-            // HTMLページでは説明用のみ
-        }
-        
-        function goBack() {
-            document.getElementById('page2').classList.remove('active');
-            document.getElementById('page1').classList.add('active');
-        }
     </script>
 </body>
 </html>
