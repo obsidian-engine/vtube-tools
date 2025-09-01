@@ -1,0 +1,33 @@
+{
+  "name": "discord-css-generator",
+  "version": "1.0.0",
+  "description": "Discord立ち絵CSS生成ツール",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "serve": "vite dev --host"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0"
+  },
+  "dependencies": {},
+  "keywords": [
+    "discord",
+    "tachie",
+    "css",
+    "obs",
+    "streaming",
+    "vtuber"
+  ],
+  "author": "Discord CSS Generator",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/vtube-tools"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

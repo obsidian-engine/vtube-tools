@@ -1,0 +1,94 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - master
+      - main
+    paths:
+      - 'app/discord-css-generator/**'
+  workflow_dispatch:
+
+# GitHub Pagesへの書き込み権限設定
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 同時実行制限（デプロイの競合回避）
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  # ビルドジョブ
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./app/discord-css-generator
+    
+    steps:
+      # リポジトリチェックアウト
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Node.js環境セットアップ
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: './app/discord-css-generator/package-lock.json'
+
+      # GitHub Pages設定
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+        with:
+          static_site_generator: other
+
+      # 依存関係インストール
+      - name: Install dependencies
+        run: npm ci
+
+      # Viteビルド実行
+      - name: Build with Vite
+        run: npm run build
+        env:
+          # GitHub Pages用ベースURL設定
+          NODE_ENV: production
+
+      # GitHub Pages用成果物アップロード
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./app/discord-css-generator/dist
+
+  # デプロイジョブ
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      # GitHub Pagesデプロイ
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  # デプロイ完了通知（オプション）
+  notify:
+    runs-on: ubuntu-latest
+    needs: [build, deploy]
+    if: always()
+    steps:
+      - name: Deployment Status
+        run: |
+          if [ "${{ needs.deploy.result }}" == "success" ]; then
+            echo "🚀 デプロイ成功！"
+            echo "📍 サイトURL: ${{ needs.deploy.outputs.page_url || 'https://yourusername.github.io/vtube-tools/' }}"
+          else
+            echo "❌ デプロイ失敗"
+            exit 1
+          fi
