@@ -1,4 +1,4 @@
 /.idea/
 .serena
-test_app/discord-css-generator/node_modules
 discord-css/node_modules
+/docs/
