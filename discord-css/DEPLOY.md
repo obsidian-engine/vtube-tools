@@ -105,12 +105,12 @@ graph LR
 
 ### 公開URL
 ```
-https://obsidian-engine.github.io/vtube-tools/app/discord-css-generator/
+https://[username].github.io/vtube-tools/app/discord-css-generator/
 ```
 
 **例:**
 ```
-https://obsidian-engine.github.io/vtube-tools/app/discord-css-generator/
+https://[username].github.io/vtube-tools/app/discord-css-generator/
 ```
 
 ### URL確認方法

@@ -390,11 +390,11 @@ SOFTWARE.
 
 ## 👥 制作者
 
-**Obsidian Engine** - 配信者向けツール開発チーム
+**Anonymous Dev Team** - 配信者向けツール開発チーム
 
-- 📧 Email: contact@obsidian-engine.com
-- 🌐 Website: https://obsidian-engine.github.io
-- 📦 GitHub: https://github.com/obsidian-engine
+- 📧 Email: [削除済み]
+- 🌐 Website: [削除済み]
+- 📦 GitHub: [削除済み]
 
 ---
 
