@@ -1,4 +1,4 @@
-# VTube Tools
+# YouTube Live Chat ユニークユーザー名抽出ツール (研究目的)
 
 ## ⚠️ 重要な注意事項
 
