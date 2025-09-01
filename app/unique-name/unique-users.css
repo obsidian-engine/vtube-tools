@@ -1,0 +1,78 @@
+/* ==========================================
+ * OBS YouTube Live チャット非表示CSS
+ * 
+ * 使い方：
+ * 1. OBS Browser SourceでYouTube Live Chat URLを指定
+ * 2. カスタムCSSにこの内容を貼り付け
+ * 3. ユニークユーザー抽出はobs-script.jsを別途実行
+ * ========================================== */
+
+/* チャット完全非表示用CSS */
+body {
+    background-color: rgba(0, 0, 0, 0) !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+}
+
+/* ルート要素を非表示 */
+yt-live-chat-app,
+yt-live-chat-renderer {
+    display: none !important;
+}
+
+/* ヘッダーと入力欄を非表示 */
+yt-live-chat-header-renderer,
+yt-live-chat-message-input-renderer,
+yt-live-chat-ticker-renderer {
+    display: none !important;
+}
+
+/* パネルとコントロール要素を非表示 */
+#panel-pages,
+#input-panel,
+#item-list,
+#items,
+yt-live-chat-item-list-renderer {
+    display: none !important;
+}
+
+/* 全メッセージタイプを完全非表示 */
+yt-live-chat-text-message-renderer,
+yt-live-chat-paid-message-renderer,
+yt-live-chat-moderator-message-renderer,
+yt-live-chat-deleted-message-renderer,
+yt-live-chat-viewer-engagement-message-renderer,
+yt-live-chat-membership-item-renderer,
+yt-live-chat-paid-sticker-renderer,
+yt-live-chat-banner-manager,
+yt-live-chat-banner-renderer {
+    display: none !important;
+}
+
+/* その他のUI要素も非表示 */
+.style-scope.yt-live-chat-renderer,
+.style-scope.yt-live-chat-item-list-renderer {
+    display: none !important;
+}
+
+/* アニメーション */
+@keyframes slideInRight {
+    from { opacity: 0; transform: translateX(30px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+/* スクロールバー */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: rgba(0,0,0,0.3); border-radius: 4px; }
+::-webkit-scrollbar-thumb { background: rgba(0,255,0,0.6); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(0,255,0,0.8); }
+
+
+/* ==========================================
+ * 📋 コピー完了！OBSの「カスタムCSS」に貼り付けてください
+ * 
+ * 💡 デバッグコマンド (F12 → コンソール):
+ * - chatUsernames.count()  // ユーザー数
+ * - chatUsernames.list()   // 全リスト
+ * - chatUsernames.clear()  // リセット
+ * ========================================== */
