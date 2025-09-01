@@ -1,4 +1,4 @@
-name: Deploy Discord CSS Generator to GitHub Pages
+name: Deploy Obsidian Engine Tools to GitHub Pages
 
 on:
   push:
@@ -7,6 +7,13 @@ on:
       - main
     paths:
       - 'discord-css/**'
+      - '**/*.html'
+      - '**/*.css' 
+      - '**/*.js'
+      - '**/*.png'
+      - '**/*.svg'
+      - '**/*.json'
+      - '.github/workflows/deploy.yml'
   workflow_dispatch:
 
 # GitHub Pagesへの書き込み権限設定
@@ -17,16 +24,13 @@ permissions:
 
 # 同時実行制限（デプロイの競合回避）
 concurrency:
-  group: "pages"
-  cancel-in-progress: false
+  group: deploy-pages-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   # ビルドジョブ
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./discord-css
     
     steps:
       # リポジトリチェックアウト
@@ -47,22 +51,44 @@ jobs:
         with:
           static_site_generator: other
 
-      # 依存関係インストール
-      - name: Install dependencies
+      # Discord CSS Generator依存関係インストール
+      - name: Install Discord CSS dependencies
+        working-directory: ./discord-css
         run: npm ci
 
-      # Viteビルド実行
-      - name: Build with Vite
+      # Discord CSS Generator Viteビルド実行
+      - name: Build Discord CSS with Vite
+        working-directory: ./discord-css
         run: npm run build
         env:
-          # GitHub Pages用ベースURL設定
           NODE_ENV: production
+
+      # 古いビルド結果のクリーンアップとディレクトリ作成
+      - name: Clean and create main site directory
+        run: |
+          rm -rf ./dist
+          mkdir -p ./dist
+
+      # メインページファイルをdistディレクトリにコピー
+      - name: Copy main site files
+        run: |
+          cp index.html ./dist/
+          cp style.css ./dist/
+          cp script.js ./dist/
+
+      # Discord CSS Generatorビルド結果をサブディレクトリにコピー
+      - name: Copy Discord CSS build
+        run: cp -r ./discord-css/dist ./dist/discord-css
+
+      # Jekyll処理を無効化するファイルを作成
+      - name: Create .nojekyll file
+        run: touch ./dist/.nojekyll
 
       # GitHub Pages用成果物アップロード
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./discord-css/dist
+          path: ./dist
 
   # デプロイジョブ
   deploy:
@@ -76,6 +102,8 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          clean: true
 
   # デプロイ完了通知（オプション）
   notify:
@@ -86,8 +114,9 @@ jobs:
       - name: Deployment Status
         run: |
           if [ "${{ needs.deploy.result }}" == "success" ]; then
-            echo "🚀 デプロイ成功！"
-            echo "📍 サイトURL: https://[username].github.io/vtube-tools/discord-css/"
+            echo "🚀 Obsidian Engine デプロイ成功！"
+            echo "📍 メインサイト: https://obsidian-engine.github.io/vtube-tools/"
+            echo "🎨 Discord CSS: https://obsidian-engine.github.io/vtube-tools/discord-css/"
           else
             echo "❌ デプロイ失敗"
             exit 1
