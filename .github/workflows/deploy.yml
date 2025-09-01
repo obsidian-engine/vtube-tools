@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages
+name: Deploy Discord CSS Generator to GitHub Pages
 
 on:
   push:
@@ -87,7 +87,7 @@ jobs:
         run: |
           if [ "${{ needs.deploy.result }}" == "success" ]; then
             echo "🚀 デプロイ成功！"
-            echo "📍 サイトURL: ${{ needs.deploy.outputs.page_url || 'https://yourusername.github.io/vtube-tools/' }}"
+            echo "📍 サイトURL: https://obsidian-engine.github.io/vtube-tools/app/discord-css-generator/"
           else
             echo "❌ デプロイ失敗"
             exit 1
