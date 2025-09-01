@@ -4,7 +4,7 @@ export default defineConfig({
   root: '.',
   // GitHub Pages用ベースURL設定
   base: process.env.NODE_ENV === 'production' 
-    ? '/vtube-tools/app/discord-css-generator/' 
+    ? '/vtube-tools/' 
     : './',
   
   build: {
