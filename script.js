@@ -19,36 +19,17 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // ツールカードの3D効果とパーティクル
+    // ツールカードの軽微なホバー効果
     const toolCards = document.querySelectorAll('.tool-card');
     
     toolCards.forEach(card => {
-        // マウス移動で3D効果
-        card.addEventListener('mousemove', function(e) {
-            const rect = card.getBoundingClientRect();
-            const centerX = rect.left + rect.width / 2;
-            const centerY = rect.top + rect.height / 2;
-            
-            const mouseX = e.clientX - centerX;
-            const mouseY = e.clientY - centerY;
-            
-            const rotateX = (mouseY / rect.height) * 20;
-            const rotateY = (mouseX / rect.width) * -20;
-            
-            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(10px)`;
+        // シンプルなホバー効果のみ（CSS側で制御）
+        card.addEventListener('mouseenter', function() {
+            card.style.transform = 'translateY(-2px)';
         });
         
-        // マウスが離れたら元に戻す
         card.addEventListener('mouseleave', function() {
-            card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateZ(0)';
-        });
-        
-        // クリック時のフィードバック
-        card.addEventListener('click', function() {
-            card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateZ(-5px)';
-            setTimeout(() => {
-                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateZ(0)';
-            }, 150);
+            card.style.transform = 'translateY(0)';
         });
     });
 
