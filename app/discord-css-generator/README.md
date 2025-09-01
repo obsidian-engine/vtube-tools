@@ -297,7 +297,7 @@ new CSSGeneratorApp();
 ```
 MIT License
 
-Copyright (c) 2025 VTube Tools
+Copyright (c) 2025 Obsidian Engine
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -390,11 +390,11 @@ SOFTWARE.
 
 ## 👥 制作者
 
-**VTube Tools** - 配信者向けツール開発チーム
+**Obsidian Engine** - 配信者向けツール開発チーム
 
-- 📧 Email: contact@vtube-tools.com
-- 🌐 Website: https://vtube-tools.com
-- 📦 GitHub: https://github.com/vtube-tools
+- 📧 Email: contact@obsidian-engine.com
+- 🌐 Website: https://obsidian-engine.github.io
+- 📦 GitHub: https://github.com/obsidian-engine
 
 ---
 
