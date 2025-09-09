@@ -143,6 +143,96 @@ window.ObsidianEngine = {
 
 // サービスワーカー登録（PWA対応準備）
 if ('serviceWorker' in navigator) {
+// コメント用CSSをクリップボードにコピーする機能
+async function copyCommentCSSToClipboard() {
+    try {
+        // comment.cssファイルを動的に取得
+        const response = await fetch('/comment-css/comment.css');
+        if (!response.ok) {
+            throw new Error(`HTTPエラー: ${response.status}`);
+        }
+        const cssContent = await response.text();
+        
+        // モダンなClipboard APIを使用（HTTPS環境で推奨）
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            await navigator.clipboard.writeText(cssContent);
+            return { success: true };
+        }
+        
+        // フォールバック: 古いブラウザ向け
+        const textarea = document.createElement('textarea');
+        textarea.value = cssContent;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        textarea.style.pointerEvents = 'none';
+        document.body.appendChild(textarea);
+        textarea.focus();
+        textarea.select();
+        
+        let success = false;
+        try {
+            success = document.execCommand('copy');
+        } catch (err) {
+            console.error('コピーコマンド実行エラー:', err);
+        }
+        
+        document.body.removeChild(textarea);
+        
+        if (!success) {
+            throw new Error('クリップボードへのコピーに失敗しました');
+        }
+        
+        return { success: true };
+    } catch (error) {
+        console.error('CSSコピーエラー:', error);
+        return { success: false, error: error.message };
+    }
+}
+
+// コメント用CSSコピーボタンのイベントリスナー設定
+document.addEventListener('DOMContentLoaded', function() {
+    const copyCommentCSSButton = document.getElementById('copy-comment-css');
+    if (copyCommentCSSButton) {
+        copyCommentCSSButton.addEventListener('click', async function(e) {
+            e.preventDefault();
+            
+            // ボタンを一時的に無効化
+            const originalText = this.innerHTML;
+            this.disabled = true;
+            this.innerHTML = '⏳ コピー中...';
+            
+            const result = await copyCommentCSSToClipboard();
+            
+            if (result.success) {
+                // 成功フィードバック
+                this.innerHTML = '✅ コピー完了！';
+                this.classList.add('btn-success');
+                
+                // 3秒後に元に戻す
+                setTimeout(() => {
+                    this.innerHTML = originalText;
+                    this.classList.remove('btn-success');
+                    this.disabled = false;
+                }, 3000);
+            } else {
+                // エラーフィードバック
+                this.innerHTML = '❌ コピー失敗';
+                this.classList.add('btn-error');
+                
+                // 3秒後に元に戻す
+                setTimeout(() => {
+                    this.innerHTML = originalText;
+                    this.classList.remove('btn-error');
+                    this.disabled = false;
+                }, 3000);
+                
+                // エラーメッセージを表示
+                console.error('コピーエラー:', result.error);
+            }
+        });
+    }
+});
+
     window.addEventListener('load', function() {
         // 将来的にPWA対応する際はここでサービスワーカーを登録
         console.log('🚀 PWA ready for future implementation');
