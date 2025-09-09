@@ -80,6 +80,10 @@ jobs:
       - name: Copy Discord CSS build
         run: cp -r ./discord-css/dist ./dist/discord-css
 
+      # Comment CSS ディレクトリをコピー
+      - name: Copy Comment CSS
+        run: cp -r ./comment-css ./dist/comment-css
+
       # Jekyll処理を無効化するファイルを作成
       - name: Create .nojekyll file
         run: touch ./dist/.nojekyll
