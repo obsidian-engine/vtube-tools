@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>コメント用CSS - Obsidian Engine</title>
+    <meta name="description" content="YouTube Live Chat カスタムテーマCSS">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎭</text></svg>">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #53B7FF 0%, #81E3DD 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .controls {
+            padding: 30px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .copy-btn {
+            background: linear-gradient(135deg, #53B7FF 0%, #81E3DD 100%);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(83, 183, 255, 0.3);
+        }
+        
+        .copy-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(83, 183, 255, 0.4);
+        }
+        
+        .copy-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .copy-btn.success {
+            background: linear-gradient(135deg, #10b981, #059669);
+            animation: pulse-success 0.3s ease;
+        }
+        
+        .copy-btn.error {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            animation: pulse-error 0.3s ease;
+        }
+        
+        @keyframes pulse-success {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes pulse-error {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+        }
+        
+        .css-preview {
+            padding: 30px;
+        }
+        
+        .css-preview h2 {
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 1.5rem;
+        }
+        
+        .css-code {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            font-family: 'SF Mono', Monaco, Consolas, monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            color: #495057;
+            white-space: pre-wrap;
+            max-height: 500px;
+            overflow-y: auto;
+            word-break: break-all;
+        }
+        
+        .back-link {
+            padding: 20px 30px;
+            text-align: center;
+            border-top: 1px solid #eee;
+        }
+        
+        .back-link a {
+            color: #53B7FF;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .back-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎭 コメント用CSS</h1>
+            <p>YouTube Live Chat カスタムテーマ - 通行止め.ᐟ.ᐟ</p>
+        </div>
+        
+        <div class="controls">
+            <button id="copyBtn" class="copy-btn">
+                📋 CSSをクリップボードにコピー
+            </button>
+        </div>
+        
+        <div class="css-preview">
+            <h2>CSS プレビュー</h2>
+            <pre id="cssCode" class="css-code">/* ----------------------------------------------------
+  ©︎通行止め.ᐟ.ᐟ  - YouTube Live Chat カスタムテーマ
+---------------------------------------------------- */
+
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Sans:wght@400;500;700&display=swap");
+
+/* ----------------------------------------------------
+  Design Tokens
+---------------------------------------------------- */
+:root {
+    /* base gradient */
+    --g: linear-gradient(104deg, #53B7FF 0%, #81E3DD 94.77%);
+
+    /* 共通シャドウ */
+    --shadow-default: 0 1px 3px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
+
+    /* listener */
+    --listener-name: #FFFFFF;
+    --listener-name-bg: var(--g);
+    --listener-comment: #333333;
+    --listener-comment-bg: #FFFFFF;
+
+    /* member */
+    --member-name: #FFFFFF;
+    --member-name-bg: var(--g);
+    --member-comment: #333333;
+    --member-comment-bg: #FFFFFF;
+
+    /* superchat */
+    --superchat-name: #FFFFFF;
+    --superchat-name-bg: #FFFFFF;
+    --superchat-name-border: #FFFFFF;
+    --superchat-header: var(--g);
+    --superchat-comment: #FFFFFF;
+    --superchat-comment-bg: var(--g);
+
+    /* membership */
+    --membership-name: #FFFFFF;
+    --membership-name-bg: #FFFFFF;
+    --membership-name-border: #FFFFFF;
+    --membership-header: var(--g);
+    --membership-comment: #FFFFFF;
+    --membership-comment-bg: var(--g);
+}
+
+/* ----------------------------------------------------
+  スーパーチャット金額別カラー (YouTube標準7段階)
+---------------------------------------------------- */
+/* $2-4.99 青 */
+yt-live-chat-paid-message-renderer[purchase-amount-level="1"] #card.yt-live-chat-paid-message-renderer {
+    background: linear-gradient(135deg, #1E88E5 0%, #42A5F5 100%) !important;
+}
+/* $5-9.99 水色 */
+yt-live-chat-paid-message-renderer[purchase-amount-level="2"] #card.yt-live-chat-paid-message-renderer {
+    background: linear-gradient(135deg, #00ACC1 0%, #26C6DA 100%) !important;
+}
+/* $10-19.99 緑 */
+yt-live-chat-paid-message-renderer[purchase-amount-level="3"] #card.yt-live-chat-paid-message-renderer {
+    background: linear-gradient(135deg, #00C853 0%, #69F0AE 100%) !important;
+}
+/* $20-49.99 黄色（文字は濃色に） */
+yt-live-chat-paid-message-renderer[purchase-amount-level="4"] #card.yt-live-chat-paid-message-renderer {
+    background: linear-gradient(135deg, #FFB300 0%, #FFD54F 100%) !important;
+}
+yt-live-chat-paid-message-renderer[purchase-amount-level="4"] #content.yt-live-chat-paid-message-renderer,
+yt-live-chat-paid-message-renderer[purchase-amount-level="4"] #header.yt-live-chat-paid-message-renderer {
+    color: #333333 !important;
+}
+/* $50-99.99 オレンジ */
+yt-live-chat-paid-message-renderer[purchase-amount-level="5"] #card.yt-live-chat-paid-message-renderer {
+    background: linear-gradient(135deg, #F4511E 0%, #FF8A65 100%) !important;
+}
+/* $100-199.99 マゼンタ */
+yt-live-chat-paid-message-renderer[purchase-amount-level="6"] #card.yt-live-chat-paid-message-renderer {
+    background: linear-gradient(135deg, #E91E63 0%, #F06292 100%) !important;
+}
+/* $200+ 赤 */
+yt-live-chat-paid-message-renderer[purchase-amount-level="7"] #card.yt-live-chat-paid-message-renderer {
+    background: linear-gradient(135deg, #E62117 0%, #FF5252 100%) !important;
+}
+
+/* ----------------------------------------------------
+  Typography & Base
+---------------------------------------------------- */
+ytd-sponsorships-live-chat-header-renderer *,
+yt-live-chat-paid-sticker-renderer *,
+yt-live-chat-membership-item-renderer *,
+yt-live-chat-paid-message-renderer *,
+yt-live-chat-text-message-renderer * {
+    font-family: "Noto Sans JP", system-ui, -apple-system, sans-serif;
+    font-size: 16px !important;
+    font-style: normal !important;
+    font-weight: 500 !important;
+    line-height: 1.6 !important;
+    letter-spacing: 0.3px !important;
+}
+
+ytd-sponsorships-live-chat-gift-purchase-announcement-renderer,
+yt-live-chat-membership-item-renderer,
+yt-live-chat-paid-sticker-renderer,
+yt-live-chat-paid-message-renderer,
+yt-live-chat-text-message-renderer {
+    padding: 8px 12px !important;
+    margin-bottom: 16px !important;
+}
+
+ytd-sponsorships-live-chat-header-renderer,
+yt-live-chat-paid-sticker-renderer,
+yt-live-chat-membership-item-renderer,
+yt-live-chat-paid-message-renderer,
+yt-live-chat-text-message-renderer {
+    animation: fadeIn 0.2s ease-out forwards;
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+/* ----------------------------------------------------
+  content
+---------------------------------------------------- */
+yt-live-chat-text-message-renderer {
+    flex-direction: row !important;
+    gap: 8px;
+    align-items: flex-start;
+}
+
+#content.yt-live-chat-text-message-renderer {
+    position: relative;
+    overflow: visible !important;
+    display: block;
+}
+
+/* ----------------------------------------------------
+  channel（名前タグ）
+---------------------------------------------------- */
+yt-live-chat-text-message-renderer #author-name {
+    display: block;
+    width: fit-content;
+    padding: 6px 16px !important;
+    border-radius: 12px !important;
+    margin-bottom: 4px;
+}
+
+/* listener（通常視聴者） */
+yt-live-chat-text-message-renderer[author-type="owner"] #author-name,
+yt-live-chat-text-message-renderer[author-type="moderator"] #author-name,
+yt-live-chat-text-message-renderer[author-type=""] #author-name {
+    background: var(--listener-name-bg) !important;
+    color: var(--listener-name) !important;
+    font-size: 18px !important;
+    font-weight: 600 !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* member（会員） */
+yt-live-chat-text-message-renderer[author-type="member"] #author-name {
+    background: var(--member-name-bg) !important;
+    color: var(--member-name) !important;
+    font-size: 18px !important;
+    font-weight: 600 !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* owner（配信者自身） */
+yt-live-chat-text-message-renderer[author-is-owner] {
+    background: transparent !important;
+}
+
+/* アイコン（通常メッセージのアバターは非表示） */
+#author-photo.yt-live-chat-text-message-renderer {
+    display: none !important;
+}
+
+/* ----------------------------------------------------
+  message（本文気泡）
+---------------------------------------------------- */
+#message.yt-live-chat-text-message-renderer {
+    background: var(--listener-comment-bg) !important;
+    color: var(--listener-comment) !important;
+    border-radius: 12px;
+    box-shadow: var(--shadow-default) !important;
+    display: block !important;
+    padding: 16px 24px;
+    width: fit-content !important;
+    position: relative;
+    overflow: visible;
+    margin-right: auto;
+}
+
+/* メンバーコメントも同じシャドウ */
+yt-live-chat-text-message-renderer[author-type="member"] #message {
+    box-shadow: var(--shadow-default) !important;
+}
+
+#message.yt-live-chat-text-message-renderer a {
+    color: var(--listener-comment) !important;
+}
+
+/* ----------------------------------------------------
+  superchat
+---------------------------------------------------- */
+/* card header */
+yt-live-chat-paid-message-renderer #card.yt-live-chat-paid-message-renderer {
+    border-radius: 12px;
+    box-shadow: var(--shadow-default) !important;
+    position: relative;
+    width: calc(100% - 24px);
+    padding: 4px 12px;
+}
+
+/* header */
+yt-live-chat-paid-message-renderer #header.yt-live-chat-paid-message-renderer {
+    color: var(--superchat-name);
+    border-bottom: 1px solid var(--superchat-name);
+    padding: 8px 12px 10px;
+    border-radius: 12px 30px 0 0;
+    position: relative;
+}
+
+yt-live-chat-author-chip[disable-highlighting] #author-name.yt-live-chat-author-chip {
+    color: var(--superchat-name);
+}
+
+/* header only */
+yt-live-chat-paid-message-renderer[show-only-header] #header.yt-live-chat-paid-message-renderer {
+    border-radius: 12px;
+    border-bottom: none;
+}
+yt-live-chat-paid-message-renderer[show-only-header] #content.yt-live-chat-paid-message-renderer {
+    padding: 0;
+}
+
+/* badge 行揃え */
+yt-live-chat-paid-message-renderer #single-line.yt-live-chat-paid-message-renderer span#chat-badges {
+    display: flex;
+    align-items: center;
+}
+yt-live-chat-paid-message-renderer #single-line.yt-live-chat-paid-message-renderer {
+    display: flex;
+    justify-content: space-between;
+}
+
+/* price */
+yt-live-chat-paid-message-renderer #header-content-primary-column.yt-live-chat-paid-message-renderer {
+    padding-right: 0 !important;
+}
+#purchase-amount-column.yt-live-chat-paid-message-renderer {
+    text-wrap: nowrap;
+}
+
+/* message */
+yt-live-chat-paid-message-renderer #content.yt-live-chat-paid-message-renderer {
+    background: var(--superchat-comment-bg);
+    color: var(--superchat-comment);
+    border-radius: 0 0 8px 8px;
+    padding: 16px 24px;
+}
+
+/* ----------------------------------------------------
+  sticker
+---------------------------------------------------- */
+yt-live-chat-paid-sticker-renderer:not([dashboard-money-feed]) #card.yt-live-chat-paid-sticker-renderer {
+    display: block;
+    background: var(--superchat-header);
+    padding: 4px 12px;
+    border-radius: 12px;
+    box-shadow: var(--shadow-default) !important;
+    overflow: visible;
+    position: relative;
+}
+
+/* header */
+yt-live-chat-paid-sticker-renderer:not([dashboard-money-feed]) #author-info.yt-live-chat-paid-sticker-renderer {
+    color: var(--superchat-name);
+    border-bottom: 1px solid var(--superchat-name-border);
+    border-radius: 12px 30px 0 0;
+    display: block;
+    padding: 16px 20px 20px !important;
+}
+
+#author-photo.yt-live-chat-paid-sticker-renderer {
+    display: none !important;
+}
+
+/* channel price */
+#content-primary-column.yt-live-chat-paid-sticker-renderer {
+    display: flex;
+    justify-content: space-between;
+}
+yt-live-chat-paid-sticker-renderer:not([dashboard-money-feed]) #purchase-amount-chip.yt-live-chat-paid-sticker-renderer {
+    padding: 0;
+    color: var(--superchat-name);
+}
+
+/* comment */
+yt-live-chat-paid-sticker-renderer:not([dashboard-money-feed]) #sticker-container.yt-live-chat-paid-sticker-renderer {
+    background: var(--superchat-comment-bg) !important;
+    display: block;
+    justify-content: left !important;
+    padding: 16px 30px 20px;
+    border-radius: 0 0 10px 10px;
+}
+
+/* image */
+#sticker img {
+    width: 56px !important;
+    height: 56px !important;
+}
+
+/* ----------------------------------------------------
+  membership
+---------------------------------------------------- */
+/* welcome channel (ヘッダーのみ) */
+yt-live-chat-membership-item-renderer[show-only-header] #header.yt-live-chat-membership-item-renderer {
+    background: var(--membership-header) !important;
+    color: var(--membership-name);
+    padding: 4px 12px;
+    border-radius: 12px;
+    box-shadow: var(--shadow-default) !important;
+    justify-content: left;
+    text-align: left;
+}
+yt-live-chat-membership-item-renderer[show-only-header] #header-content-inner-column {
+    padding: 16px 20px 20px;
+    border-bottom: 1px solid var(--superchat-name-border);
+}
+yt-live-chat-membership-item-renderer[show-only-header] #header-content-primary-column {
+    width: 100%;
+}
+yt-live-chat-membership-item-renderer[show-only-header] #header-content.yt-live-chat-membership-item-renderer {
+    justify-content: left;
+    text-align: left;
+}
+yt-live-chat-membership-item-renderer[show-only-header] #header-subtext.yt-live-chat-membership-item-renderer {
+    color: var(--membership-name);
+    padding: 16px 32px 20px;
+    border-radius: 0 0 30px 30px;
+    margin: 0;
+}
+
+/* comment */
+#header.yt-live-chat-membership-item-renderer {
+    background: var(--membership-comment-bg);
+    color: var(--membership-comment);
+    padding: 0;
+    border-radius: 8px 10px 0 0;
+}
+#content.yt-live-chat-membership-item-renderer {
+    background: var(--membership-comment-bg);
+    color: var(--membership-comment);
+    padding: 20px 30px;
+    border-radius: 0 0 10px 10px;
+}
+yt-live-chat-membership-item-renderer[has-primary-header-text] #header-content-primary-column {
+    width: 100%;
+}
+
+#header-content-primary-column.ytd-sponsorships-live-chat-header-renderer,
+yt-live-chat-author-chip.ytd-sponsorships-live-chat-header-renderer {
+    width: 100%;
+}
+
+/* channel member-history */
+yt-live-chat-membership-item-renderer[has-primary-header-text] #card.yt-live-chat-membership-item-renderer {
+    padding: 4px 12px;
+    background: var(--membership-header);
+    border-radius: 12px;
+    box-shadow: var(--shadow-default) !important;
+}
+yt-live-chat-membership-item-renderer[has-primary-header-text] div#header-content-inner-column {
+    color: var(--membership-name);
+    padding: 16px 20px 0;
+    border-radius: 8px 10px 0 0;
+}
+
+/* membership-name */
+yt-live-chat-membership-item-renderer[has-primary-header-text]:not([dashboard-money-feed]) #header-subtext.yt-live-chat-membership-item-renderer {
+    color: var(--membership-name);
+    border-bottom: 1px solid var(--membership-name-border);
+    padding: 6px 20px 20px;
+    margin: 0;
+}
+
+/* channel */
+#content.ytd-sponsorships-live-chat-header-renderer #author-name.member.yt-live-chat-author-chip {
+    display: block;
+    color: var(--membership-name) !important;
+    border-bottom: 1px solid var(--membership-name-border);
+    padding: 16px 20px 20px;
+    width: 100%;
+}
+
+/* gift message */
+#content.ytd-sponsorships-live-chat-header-renderer {
+    width: 100%;
+    padding: 0;
+}
+#primary-text.ytd-sponsorships-live-chat-header-renderer {
+    color: var(--membership-name);
+    border-radius: 0 0 10px 10px;
+    padding: 16px 30px 20px;
+}
+
+/* gift */
+#header.ytd-sponsorships-live-chat-header-renderer {
+    background: var(--membership-header);
+    color: var(--membership-name);
+    border-radius: 12px;
+    padding: 4px 12px;
+    box-shadow: var(--shadow-default) !important;
+}
+.rhs-image.ytd-sponsorships-live-chat-header-renderer {
+    position: absolute;
+    bottom: 50%;
+    transform: translateY(50%);
+    right: 20px;
+}
+/* gift image */
+ytd-sponsorships-live-chat-header-renderer #img.yt-img-shadow {
+    width: 80px;
+    height: 80px;
+}
+
+/* メンバー通知等でアイコンを表示 */
+#author-photo.ytd-sponsorships-live-chat-header-renderer {
+    display: inline-flex !important;
+}
+
+/* ----------------------------------------------------
+  setting
+---------------------------------------------------- */
+yt-live-chat-renderer {
+    visibility: hidden !important;
+}
+yt-live-chat-renderer * {
+    visibility: initial !important;
+}
+
+/* scroll 抑止（演出のため） */
+#items.yt-live-chat-item-list-renderer,
+#item-scroller.yt-live-chat-item-list-renderer {
+    overflow: hidden !important;
+}
+
+/* バッジ */
+yt-live-chat-author-badge-renderer[type="verified"] {
+    display: none !important;
+}
+
+/* モデレーターバッジは常に表示 */
+yt-live-chat-author-badge-renderer[type="moderator"] {
+    display: inline-flex !important;
+    margin-right: 4px;
+}
+
+/* メンバーシップのバッジを確実に表示 */
+yt-live-chat-author-badge-renderer[type="member"] {
+    display: inline-flex !important;
+    width: 16px !important;
+    height: 16px !important;
+    margin-left: 4px;
+}
+
+/* メッセージ系でのチャンネル写真は隠す */
+#author-photo.yt-live-chat-paid-message-renderer,
+#author-photo.yt-live-chat-membership-item-renderer {
+    display: none !important;
+}
+
+/* emoji サイズ統一 */
+#content.yt-live-chat-paid-message-renderer img.yt-live-chat-paid-message-renderer,
+#message.yt-live-chat-text-message-renderer img,
+yt-live-chat-membership-item-renderer img.emoji {
+    width: 24px !important;
+    height: 24px !important;
+    vertical-align: middle;
+}
+
+/* バッジアイコンの統一サイズ */
+.yt-live-chat-author-badge-renderer {
+    width: 16px !important;
+    height: 16px !important;
+}
+
+/* バッジコンテナ整列 */
+#chat-badges.yt-live-chat-author-chip {
+    display: inline-flex !important;
+    align-items: center;
+    margin-left: 4px;
+}
+
+/* テキスト折返し関連の安定化 */
+yt-live-chat-app {
+    min-width: 0;
+    min-height: 0;
+    word-wrap: break-word;
+    word-break: normal;
+}
+
+/* ----------------------------------------------------
+  delete / UI要素の非表示
+---------------------------------------------------- */
+yt-live-chat-paid-message-renderer[has-heart-button] #menu.yt-live-chat-paid-message-renderer,
+#opt-in-prompt.ytd-sponsorships-live-chat-gift-purchase-announcement-renderer,
+#inline-action-button-container.yt-live-chat-text-message-renderer,
+#before-content-buttons.yt-live-chat-text-message-renderer,
+#creator-heart-button.yt-live-chat-paid-message-renderer,
+#gradient-container.yt-live-chat-paid-message-renderer,
+#action-buttons.yt-live-chat-paid-message-renderer,
+#lower-bumper.yt-live-chat-item-bumper-view-model,
+#lower-bumper.yt-live-chat-paid-message-renderer,
+#reaction-control-panel-overlay.yt-live-chat-renderer,
+#timestamp.yt-live-chat-text-message-renderer,
+#docked-messages.yt-live-chat-docked-message,
+#menu.ytd-sponsorships-live-chat-header-renderer,
+#menu.yt-live-chat-text-message-renderer,
+#menu.yt-live-chat-paid-message-renderer,
+#action-panel.yt-live-chat-renderer,
+#panel-pages.yt-live-chat-renderer,
+#separator.yt-live-chat-renderer,
+ytd-sponsorships-live-chat-gift-redemption-announcement-renderer,
+yt-live-chat-viewer-engagement-message-renderer,
+yt-live-chat-restricted-participation-renderer,
+yt-reaction-control-panel-overlay-view-model,
+yt-live-chat-mode-change-message-renderer,
+yt-live-chat-message-input-renderer,
+yt-live-chat-upsell-dialog-renderer,
+yt-live-chat-action-panel-renderer,
+yt-live-chat-server-error-message,
+yt-live-chat-header-renderer,
+yt-live-chat-ticker-renderer,
+yt-live-chat-banner-manager {
+    display: none !important;
+}</pre>
+        </div>
+        
+        <div class="back-link">
+            <a href="../">← ツール一覧に戻る</a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const copyBtn = document.getElementById('copyBtn');
+            const cssCode = document.getElementById('cssCode');
+            
+            copyBtn.addEventListener('click', async function() {
+                const originalText = this.textContent;
+                this.disabled = true;
+                this.textContent = '⏳ コピー中...';
+                
+                try {
+                    const cssContent = cssCode.textContent;
+                    
+                    // モダンなClipboard APIを使用
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        await navigator.clipboard.writeText(cssContent);
+                    } else {
+                        // フォールバック
+                        const textarea = document.createElement('textarea');
+                        textarea.value = cssContent;
+                        textarea.style.position = 'fixed';
+                        textarea.style.opacity = '0';
+                        document.body.appendChild(textarea);
+                        textarea.select();
+                        document.execCommand('copy');
+                        document.body.removeChild(textarea);
+                    }
+                    
+                    // 成功フィードバック
+                    this.textContent = '✅ コピー完了！';
+                    this.className = 'copy-btn success';
+                    
+                    setTimeout(() => {
+                        this.textContent = originalText;
+                        this.className = 'copy-btn';
+                        this.disabled = false;
+                    }, 3000);
+                    
+                } catch (error) {
+                    console.error('コピーエラー:', error);
+                    
+                    // エラーフィードバック
+                    this.textContent = '❌ コピー失敗';
+                    this.className = 'copy-btn error';
+                    
+                    setTimeout(() => {
+                        this.textContent = originalText;
+                        this.className = 'copy-btn';
+                        this.disabled = false;
+                    }, 3000);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
