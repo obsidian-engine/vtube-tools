@@ -379,6 +379,31 @@ body {
   opacity: 0.6;
 }
 
+/* ボタンの成功・エラー状態のスタイル */
+.btn-success {
+  background: linear-gradient(135deg, #10b981, #059669) !important;
+  animation: pulse-success 0.3s ease;
+}
+
+.btn-error {
+  background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+  animation: pulse-error 0.3s ease;
+}
+
+@keyframes pulse-success {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+@keyframes pulse-error {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+  100% { transform: translateX(0); }
+}
+
 /* Features Section */
 .features-section {
   margin-top: var(--spacing-2xl);
