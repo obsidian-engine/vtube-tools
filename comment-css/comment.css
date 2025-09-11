@@ -8,6 +8,14 @@
   Design Tokens
 ---------------------------------------------------- */
 :root {
+    /* Font Size Scale */
+    --fs-xs: 0.75rem;   /* 12px */
+    --fs-sm: 0.875rem;  /* 14px */
+    --fs-base: 1rem;    /* 16px */
+    --fs-md: 1.125rem;  /* 18px */
+    --fs-lg: 1.25rem;   /* 20px */
+    --fs-xl: 1.5rem;    /* 24px */
+
     /* base gradient */
     --g: linear-gradient(104deg, #53B7FF 0%, #81E3DD 94.77%);
 
@@ -88,7 +96,7 @@ yt-live-chat-membership-item-renderer *,
 yt-live-chat-paid-message-renderer *,
 yt-live-chat-text-message-renderer * {
     font-family: "Noto Sans JP", system-ui, -apple-system, sans-serif;
-    font-size: 16px !important;
+    font-size: var(--fs-md) important;
     font-style: normal !important;
     font-weight: 500 !important;
     line-height: 1.6 !important;
@@ -149,7 +157,7 @@ yt-live-chat-text-message-renderer[author-type="moderator"] #author-name,
 yt-live-chat-text-message-renderer[author-type=""] #author-name {
     background: var(--listener-name-bg) !important;
     color: var(--listener-name) !important;
-    font-size: 18px !important;
+    font-size: var(--fs-base) !important;
     font-weight: 600 !important;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
@@ -158,7 +166,7 @@ yt-live-chat-text-message-renderer[author-type=""] #author-name {
 yt-live-chat-text-message-renderer[author-type="member"] #author-name {
     background: var(--member-name-bg) !important;
     color: var(--member-name) !important;
-    font-size: 18px !important;
+    font-size: var(--fs-base) !important;
     font-weight: 600 !important;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
