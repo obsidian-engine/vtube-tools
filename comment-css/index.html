@@ -425,8 +425,7 @@ yt-live-chat-paid-message-renderer #leaderboard-badge button {
     align-items: center !important;
     justify-content: center !important;
     vertical-align: middle !important;
-    background: linear-gradient(104deg, #53B7FF 0%, #81E3DD 94.77%) !important;
-    background-color: #53B7FF !important;
+    background: var(--g) !important;
     border: none !important;
     padding: 0 !important;
     margin: 0 !important;
@@ -800,12 +799,10 @@ yt-live-chat-banner-manager {
     display: none !important;
 }
 
-/* ============================================================
-   【最終決定版】スーパーチャット全Tier水色統一
-   - YouTubeのインラインCSS変数を完全に上書き
-   - 全Tier（1-7）を個別に指定
-   - background, background-color, background-imageの3つを指定
-============================================================ */
+/* ----------------------------------------------------
+  Superchat Color Override
+  Overrides YouTube's inline styles for all tiers
+---------------------------------------------------- */
 
 /* ステップ1: 全rendererのCSS変数を強制上書き（modern属性・is-v2-style属性も含む） */
 /* 最外側要素を完全に透明化 */
@@ -851,9 +848,7 @@ yt-live-chat-paid-message-renderer[purchase-amount-level="4"] #card.yt-live-chat
 yt-live-chat-paid-message-renderer[purchase-amount-level="5"] #card.yt-live-chat-paid-message-renderer,
 yt-live-chat-paid-message-renderer[purchase-amount-level="6"] #card.yt-live-chat-paid-message-renderer,
 yt-live-chat-paid-message-renderer[purchase-amount-level="7"] #card.yt-live-chat-paid-message-renderer {
-    background: linear-gradient(104deg, #53B7FF 0%, #81E3DD 94.77%) !important;
-    background-color: #53B7FF !important;
-    background-image: linear-gradient(104deg, #53B7FF 0%, #81E3DD 94.77%) !important;
+    background: var(--g) !important;
 }
 
 /* スティッカーrenderer本体を透明化 */
@@ -871,37 +866,31 @@ yt-live-chat-paid-sticker-renderer {
 yt-live-chat-paid-sticker-renderer[is-v2-style] #card.yt-live-chat-paid-sticker-renderer,
 yt-live-chat-paid-sticker-renderer[modern] #card.yt-live-chat-paid-sticker-renderer,
 yt-live-chat-paid-sticker-renderer #card.yt-live-chat-paid-sticker-renderer {
-    background: linear-gradient(104deg, #53B7FF 0%, #81E3DD 94.77%) !important;
-    background-color: #53B7FF !important;
-    background-image: linear-gradient(104deg, #53B7FF 0%, #81E3DD 94.77%) !important;
+    background: var(--g) !important;
 }
 
 /* スティッカーのsticker-containerも水色 */
 yt-live-chat-paid-sticker-renderer[is-v2-style] #sticker-container.yt-live-chat-paid-sticker-renderer,
 yt-live-chat-paid-sticker-renderer[modern] #sticker-container.yt-live-chat-paid-sticker-renderer,
 yt-live-chat-paid-sticker-renderer #sticker-container.yt-live-chat-paid-sticker-renderer {
-    background: linear-gradient(104deg, #53B7FF 0%, #81E3DD 94.77%) !important;
-    background-color: #53B7FF !important;
-    background-image: linear-gradient(104deg, #53B7FF 0%, #81E3DD 94.77%) !important;
+    background: var(--g) !important;
 }
 
 /* スティッカーのコンテンツ部分も水色に */
 yt-live-chat-paid-sticker-renderer[is-v2-style] #content.yt-live-chat-paid-sticker-renderer,
 yt-live-chat-paid-sticker-renderer[modern] #content.yt-live-chat-paid-sticker-renderer,
 yt-live-chat-paid-sticker-renderer #content.yt-live-chat-paid-sticker-renderer {
-    background: linear-gradient(104deg, #53B7FF 0%, #81E3DD 94.77%) !important;
-    background-color: #53B7FF !important;
-    background-image: linear-gradient(104deg, #53B7FF 0%, #81E3DD 94.77%) !important;
+    background: var(--g) !important;
 }
 
 /* ステップ4: ヘッダー・コンテンツの背景も水色に */
 yt-live-chat-paid-message-renderer #header.yt-live-chat-paid-message-renderer {
-    background: linear-gradient(104deg, #53B7FF 0%, #81E3DD 94.77%) !important;
+    background: var(--g) !important;
     color: #FFFFFF !important;
 }
 
 yt-live-chat-paid-message-renderer #content.yt-live-chat-paid-message-renderer {
-    background: linear-gradient(104deg, #53B7FF 0%, #81E3DD 94.77%) !important;
+    background: var(--g) !important;
     color: #FFFFFF !important;
 }
 
@@ -909,9 +898,7 @@ yt-live-chat-paid-message-renderer #content.yt-live-chat-paid-message-renderer {
 yt-live-chat-paid-sticker-renderer[is-v2-style] #author-info.yt-live-chat-paid-sticker-renderer,
 yt-live-chat-paid-sticker-renderer[modern] #author-info.yt-live-chat-paid-sticker-renderer,
 yt-live-chat-paid-sticker-renderer #author-info.yt-live-chat-paid-sticker-renderer {
-    background: linear-gradient(104deg, #53B7FF 0%, #81E3DD 94.77%) !important;
-    background-color: #53B7FF !important;
-    background-image: linear-gradient(104deg, #53B7FF 0%, #81E3DD 94.77%) !important;
+    background: var(--g) !important;
     color: #FFFFFF !important;
 }</pre>
         </div>
