@@ -239,14 +239,14 @@ ytd-sponsorships-live-chat-gift-purchase-announcement-renderer,
 yt-live-chat-membership-item-renderer,
 yt-live-chat-text-message-renderer {
     padding: var(--padding-container) !important;
-    margin-bottom: 8px !important;
+    margin-bottom: 10px !important;
 }
 
 /* スパチャ・スティッカーは外側のpaddingを0に */
 yt-live-chat-paid-sticker-renderer,
 yt-live-chat-paid-message-renderer {
     padding: 0 !important;
-    margin-bottom: 8px !important;
+    margin-bottom: 10px !important;
 }
 
 ytd-sponsorships-live-chat-header-renderer,
@@ -353,6 +353,7 @@ yt-live-chat-paid-message-renderer #card.yt-live-chat-paid-message-renderer {
     position: relative;
     width: 100%;
     padding: var(--padding-card-header);
+    box-sizing: border-box !important;
 }
 
 /* header */
@@ -469,6 +470,7 @@ yt-live-chat-paid-sticker-renderer:not([dashboard-money-feed]) #card.yt-live-cha
     overflow: visible;
     position: relative;
     width: 100%;
+    box-sizing: border-box !important;
 }
 
 /* header */
@@ -540,6 +542,7 @@ yt-live-chat-membership-item-renderer[show-only-header] #header.yt-live-chat-mem
     justify-content: left;
     text-align: left;
     width: 100%;
+    box-sizing: border-box !important;
 }
 yt-live-chat-membership-item-renderer[show-only-header] #header-content-inner-column {
     padding: var(--padding-header-content);
@@ -588,6 +591,7 @@ yt-live-chat-membership-item-renderer[has-primary-header-text] #card.yt-live-cha
     border-radius: 12px;
     box-shadow: var(--shadow-default) !important;
     width: 100%;
+    box-sizing: border-box !important;
 }
 yt-live-chat-membership-item-renderer[has-primary-header-text] div#header-content-inner-column {
     color: var(--membership-name);
@@ -631,6 +635,7 @@ yt-live-chat-membership-item-renderer[has-primary-header-text]:not([dashboard-mo
     padding: var(--padding-card-header);
     box-shadow: var(--shadow-default) !important;
     width: 100%;
+    box-sizing: border-box !important;
 }
 .rhs-image.ytd-sponsorships-live-chat-header-renderer {
     position: absolute;
@@ -803,20 +808,39 @@ yt-live-chat-banner-manager {
 ============================================================ */
 
 /* ステップ1: 全rendererのCSS変数を強制上書き（modern属性・is-v2-style属性も含む） */
+/* 最外側要素を完全に透明化 */
 yt-live-chat-paid-message-renderer,
 yt-live-chat-paid-message-renderer[modern],
+yt-live-chat-paid-message-renderer[is-v2-style],
 yt-live-chat-paid-sticker-renderer,
 yt-live-chat-paid-sticker-renderer[modern],
 yt-live-chat-paid-sticker-renderer[is-v2-style] {
-    --yt-live-chat-paid-message-primary-color: #53B7FF !important;
-    --yt-live-chat-paid-message-secondary-color: #81E3DD !important;
-    --yt-live-chat-paid-message-header-color: #53B7FF !important;
-    --yt-live-chat-paid-sticker-background-color: #53B7FF !important;
+    --yt-live-chat-paid-message-primary-color: transparent !important;
+    --yt-live-chat-paid-message-secondary-color: transparent !important;
+    --yt-live-chat-paid-message-header-color: transparent !important;
+    --yt-live-chat-paid-sticker-background-color: transparent !important;
     --yt-live-chat-paid-sticker-chip-background-color: #53B7FF !important;
     --yt-live-chat-paid-sticker-chip-text-color: #FFFFFF !important;
     background: transparent !important;
     background-color: transparent !important;
     background-image: none !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* 全Tierのrenderer本体を透明化 */
+yt-live-chat-paid-message-renderer[purchase-amount-level="1"],
+yt-live-chat-paid-message-renderer[purchase-amount-level="2"],
+yt-live-chat-paid-message-renderer[purchase-amount-level="3"],
+yt-live-chat-paid-message-renderer[purchase-amount-level="4"],
+yt-live-chat-paid-message-renderer[purchase-amount-level="5"],
+yt-live-chat-paid-message-renderer[purchase-amount-level="6"],
+yt-live-chat-paid-message-renderer[purchase-amount-level="7"] {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    border: none !important;
+    box-shadow: none !important;
 }
 
 /* ステップ2: 全Tier（1-7）の#cardを個別に水色指定 */
@@ -830,6 +854,17 @@ yt-live-chat-paid-message-renderer[purchase-amount-level="7"] #card.yt-live-chat
     background: linear-gradient(104deg, #53B7FF 0%, #81E3DD 94.77%) !important;
     background-color: #53B7FF !important;
     background-image: linear-gradient(104deg, #53B7FF 0%, #81E3DD 94.77%) !important;
+}
+
+/* スティッカーrenderer本体を透明化 */
+yt-live-chat-paid-sticker-renderer[is-v2-style],
+yt-live-chat-paid-sticker-renderer[modern],
+yt-live-chat-paid-sticker-renderer {
+    background: transparent !important;
+    background-color: transparent !important;
+    background-image: none !important;
+    border: none !important;
+    box-shadow: none !important;
 }
 
 /* ステップ3: スティッカーのcard全体を水色 */
