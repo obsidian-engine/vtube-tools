@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>コメント用CSS - Obsidian Engine</title>
-    <meta name="description" content="YouTube Live Chat カスタムテーマCSS">
+    <meta name="daescription" content="YouTube Live Chat カスタムテーマCSS">
     
     <!-- Favicon -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎭</text></svg>">
@@ -221,20 +221,21 @@
 
 /* ----------------------------------------------------
   スーパーチャット金額別カラー (YouTube標準7段階)
+  参考: https://www.learningrevolution.net/youtube-super-chat/
 ---------------------------------------------------- */
-/* $2-4.99 青 */
+/* $1.00-1.99 濃青 (Dark Blue) - Tier 1 */
 yt-live-chat-paid-message-renderer[purchase-amount-level="1"] #card.yt-live-chat-paid-message-renderer {
-    background: linear-gradient(135deg, #1E88E5 0%, #42A5F5 100%) !important;
+    background: linear-gradient(135deg, #0D47A1 0%, #1565C0 100%) !important;
 }
-/* $5-9.99 水色 */
+/* $2.00-4.99 水色 (Light Blue/Cyan) - Tier 2 */
 yt-live-chat-paid-message-renderer[purchase-amount-level="2"] #card.yt-live-chat-paid-message-renderer {
     background: linear-gradient(135deg, #00ACC1 0%, #26C6DA 100%) !important;
 }
-/* $10-19.99 緑 */
+/* $5.00-9.99 緑 (Green) - Tier 3 */
 yt-live-chat-paid-message-renderer[purchase-amount-level="3"] #card.yt-live-chat-paid-message-renderer {
     background: linear-gradient(135deg, #00C853 0%, #69F0AE 100%) !important;
 }
-/* $20-49.99 黄色（文字は濃色に） */
+/* $10.00-19.99 黄色 (Yellow) - Tier 4 */
 yt-live-chat-paid-message-renderer[purchase-amount-level="4"] #card.yt-live-chat-paid-message-renderer {
     background: linear-gradient(135deg, #FFB300 0%, #FFD54F 100%) !important;
 }
@@ -242,15 +243,15 @@ yt-live-chat-paid-message-renderer[purchase-amount-level="4"] #content.yt-live-c
 yt-live-chat-paid-message-renderer[purchase-amount-level="4"] #header.yt-live-chat-paid-message-renderer {
     color: #333333 !important;
 }
-/* $50-99.99 オレンジ */
+/* $20.00-49.99 オレンジ (Orange) - Tier 5 */
 yt-live-chat-paid-message-renderer[purchase-amount-level="5"] #card.yt-live-chat-paid-message-renderer {
     background: linear-gradient(135deg, #F4511E 0%, #FF8A65 100%) !important;
 }
-/* $100-199.99 マゼンタ */
+/* $50.00-99.99 マゼンタ (Magenta) - Tier 6 */
 yt-live-chat-paid-message-renderer[purchase-amount-level="6"] #card.yt-live-chat-paid-message-renderer {
     background: linear-gradient(135deg, #E91E63 0%, #F06292 100%) !important;
 }
-/* $200+ 赤 */
+/* $100.00+ 赤 (Red) - Tier 7 */
 yt-live-chat-paid-message-renderer[purchase-amount-level="7"] #card.yt-live-chat-paid-message-renderer {
     background: linear-gradient(135deg, #E62117 0%, #FF5252 100%) !important;
 }
@@ -439,7 +440,7 @@ yt-live-chat-paid-message-renderer #content.yt-live-chat-paid-message-renderer {
 ---------------------------------------------------- */
 yt-live-chat-paid-sticker-renderer:not([dashboard-money-feed]) #card.yt-live-chat-paid-sticker-renderer {
     display: block;
-    background: var(--superchat-header);
+    background: var(--yt-live-chat-paid-sticker-background-color, var(--superchat-header)) !important;
     padding: var(--padding-card-header);
     border-radius: 12px;
     box-shadow: var(--shadow-default) !important;
@@ -449,8 +450,8 @@ yt-live-chat-paid-sticker-renderer:not([dashboard-money-feed]) #card.yt-live-cha
 
 /* header */
 yt-live-chat-paid-sticker-renderer:not([dashboard-money-feed]) #author-info.yt-live-chat-paid-sticker-renderer {
-    color: var(--superchat-name);
-    border-bottom: 1px solid var(--superchat-name-border);
+    color: var(--yt-live-chat-paid-sticker-chip-text-color, var(--superchat-name));
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 12px 30px 0 0;
     display: block;
     padding: var(--padding-header-content) !important;
@@ -460,19 +461,36 @@ yt-live-chat-paid-sticker-renderer:not([dashboard-money-feed]) #author-info.yt-l
     display: none !important;
 }
 
+/* content container (新構造対応) */
+yt-live-chat-paid-sticker-renderer:not([dashboard-money-feed]) #content.yt-live-chat-paid-sticker-renderer {
+    display: block;
+}
+
+/* author-name-chip container (新構造対応) */
+#author-name-chip.yt-live-chat-paid-sticker-renderer {
+    display: block;
+}
+
 /* channel price */
 #content-primary-column.yt-live-chat-paid-sticker-renderer {
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
+
+/* price column (新構造対応) */
+#price-column.yt-live-chat-paid-sticker-renderer {
+    text-wrap: nowrap;
+}
+
 yt-live-chat-paid-sticker-renderer:not([dashboard-money-feed]) #purchase-amount-chip.yt-live-chat-paid-sticker-renderer {
     padding: 0;
-    color: var(--superchat-name);
+    color: var(--yt-live-chat-paid-sticker-chip-text-color, var(--superchat-name));
 }
 
 /* comment */
 yt-live-chat-paid-sticker-renderer:not([dashboard-money-feed]) #sticker-container.yt-live-chat-paid-sticker-renderer {
-    background: var(--superchat-comment-bg) !important;
+    background: var(--yt-live-chat-paid-sticker-background-color, var(--superchat-comment-bg)) !important;
     display: block;
     justify-content: left !important;
     padding: var(--padding-sticker-content);
