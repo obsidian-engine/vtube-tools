@@ -21,7 +21,7 @@
 /* スパチャ全体 */
 yt-live-chat-paid-message-renderer,
 yt-live-chat-paid-sticker-renderer {
-    background: var(--g) !important;
+    background: transparent !important;
     padding: 0 !important;
     margin-bottom: 8px;
     display: block;
