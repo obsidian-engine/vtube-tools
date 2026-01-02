@@ -204,7 +204,6 @@
 
     /* superchat */
     --superchat-name: #FFFFFF;
-    --superchat-name-bg: #FFFFFF;
     --superchat-name-border: #FFFFFF;
     --superchat-header: var(--g);
     --superchat-comment: #FFFFFF;
@@ -212,7 +211,6 @@
 
     /* membership */
     --membership-name: #FFFFFF;
-    --membership-name-bg: #FFFFFF;
     --membership-name-border: #FFFFFF;
     --membership-header: var(--g);
     --membership-comment: #FFFFFF;
@@ -804,11 +802,11 @@ yt-live-chat-banner-manager {
   Overrides YouTube's inline styles for all tiers
 ---------------------------------------------------- */
 
-/* ステップ1: 全rendererのCSS変数を強制上書き（modern属性・is-v2-style属性も含む） */
-/* 最外側要素を完全に透明化 */
+/* Transparent renderer container for all superchat/sticker variants */
 yt-live-chat-paid-message-renderer,
 yt-live-chat-paid-message-renderer[modern],
 yt-live-chat-paid-message-renderer[is-v2-style],
+yt-live-chat-paid-message-renderer[purchase-amount-level],
 yt-live-chat-paid-sticker-renderer,
 yt-live-chat-paid-sticker-renderer[modern],
 yt-live-chat-paid-sticker-renderer[is-v2-style] {
@@ -825,22 +823,7 @@ yt-live-chat-paid-sticker-renderer[is-v2-style] {
     box-shadow: none !important;
 }
 
-/* 全Tierのrenderer本体を透明化 */
-yt-live-chat-paid-message-renderer[purchase-amount-level="1"],
-yt-live-chat-paid-message-renderer[purchase-amount-level="2"],
-yt-live-chat-paid-message-renderer[purchase-amount-level="3"],
-yt-live-chat-paid-message-renderer[purchase-amount-level="4"],
-yt-live-chat-paid-message-renderer[purchase-amount-level="5"],
-yt-live-chat-paid-message-renderer[purchase-amount-level="6"],
-yt-live-chat-paid-message-renderer[purchase-amount-level="7"] {
-    background: transparent !important;
-    background-color: transparent !important;
-    background-image: none !important;
-    border: none !important;
-    box-shadow: none !important;
-}
-
-/* ステップ2: 全Tier（1-7）の#cardを個別に水色指定 */
+/* Card background color for all tiers */
 yt-live-chat-paid-message-renderer[purchase-amount-level="1"] #card.yt-live-chat-paid-message-renderer,
 yt-live-chat-paid-message-renderer[purchase-amount-level="2"] #card.yt-live-chat-paid-message-renderer,
 yt-live-chat-paid-message-renderer[purchase-amount-level="3"] #card.yt-live-chat-paid-message-renderer,
@@ -851,18 +834,7 @@ yt-live-chat-paid-message-renderer[purchase-amount-level="7"] #card.yt-live-chat
     background: var(--g) !important;
 }
 
-/* スティッカーrenderer本体を透明化 */
-yt-live-chat-paid-sticker-renderer[is-v2-style],
-yt-live-chat-paid-sticker-renderer[modern],
-yt-live-chat-paid-sticker-renderer {
-    background: transparent !important;
-    background-color: transparent !important;
-    background-image: none !important;
-    border: none !important;
-    box-shadow: none !important;
-}
-
-/* ステップ3: スティッカーのcard全体を水色 */
+/* Sticker card background */
 yt-live-chat-paid-sticker-renderer[is-v2-style] #card.yt-live-chat-paid-sticker-renderer,
 yt-live-chat-paid-sticker-renderer[modern] #card.yt-live-chat-paid-sticker-renderer,
 yt-live-chat-paid-sticker-renderer #card.yt-live-chat-paid-sticker-renderer {
@@ -883,7 +855,7 @@ yt-live-chat-paid-sticker-renderer #content.yt-live-chat-paid-sticker-renderer {
     background: var(--g) !important;
 }
 
-/* ステップ4: ヘッダー・コンテンツの背景も水色に */
+/* Header and content backgrounds */
 yt-live-chat-paid-message-renderer #header.yt-live-chat-paid-message-renderer {
     background: var(--g) !important;
     color: #FFFFFF !important;
