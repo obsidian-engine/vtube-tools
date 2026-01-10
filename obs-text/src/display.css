@@ -18,14 +18,20 @@ html, body {
   white-space: pre-wrap;      /* 改行を保持 */
   word-break: break-word;     /* 長い単語を折り返し */
   max-width: 90vw;
-  padding: 1rem;
-  
+
+  /* 文字サイズにぴったり合わせる */
+  width: fit-content;
+  height: fit-content;
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+
   /* デフォルトスタイル(Firebaseで上書き) */
   font-family: 'Noto Sans JP', sans-serif;
   font-size: 48px;
   color: #ffffff;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
-  
+
   /* アンチエイリアシング */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
