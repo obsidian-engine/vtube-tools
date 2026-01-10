@@ -90,7 +90,7 @@ class DisplayApp {
         fontSize: `${style.fontSize || 48}px`,
         color: style.color || "#ffffff",
         textShadow: style.textShadow || "2px 2px 4px rgba(0, 0, 0, 0.8)",
-        backgroundColor: "transparent", // OBS表示は常に透過背景
+        backgroundColor: "transparent", // テキスト部分は透過（bodyのグリーンバックが表示される）
       });
     }
   }
