@@ -320,16 +320,16 @@ class TextEditorApp {
 
       // ボタンテキスト変更（フィードバック）
       const originalText = this.elements.copyUrlBtn.textContent;
-      this.elements.copyUrlBtn.textContent = "✅ コピー完了！";
+      this.elements.copyUrlBtn.textContent = "コピーしました";
 
       setTimeout(() => {
         this.elements.copyUrlBtn.textContent = originalText;
       }, 2000);
     } catch (error) {
       console.error("Copy error:", error);
-      this.elements.copyUrlBtn.textContent = "❌ コピー失敗";
+      this.elements.copyUrlBtn.textContent = "コピー失敗";
       setTimeout(() => {
-        this.elements.copyUrlBtn.textContent = "📋 コピー";
+        this.elements.copyUrlBtn.textContent = "コピー";
       }, 2000);
     }
   }
