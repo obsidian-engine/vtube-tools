@@ -68,7 +68,7 @@ body {
 
 .header {
   text-align: center;
-  padding: var(--spacing-lg);
+  padding: var(--spacing-md);
   background: rgba(13, 17, 23, 0.8);
   border-bottom: 1px solid var(--obsidian-border);
 }
@@ -112,11 +112,12 @@ body {
 }
 
 .container {
-  max-width: 800px;
+  max-width: 1200px;
   margin: 0 auto;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: var(--spacing-lg);
+  align-items: start;
 }
 
 /* カード */
@@ -342,3 +343,9 @@ body {
   border: none;
 }
 
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+  .container {
+    grid-template-columns: 1fr;
+  }
+}
