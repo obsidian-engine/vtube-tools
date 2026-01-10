@@ -37,7 +37,8 @@ body {
   font-family: var(--font-family);
   background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
   color: var(--text-color);
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
 }
 
 /* レイアウト */
@@ -86,6 +87,7 @@ body {
 .main {
   flex: 1;
   padding: var(--spacing-lg);
+  overflow-y: auto;
 }
 
 .container {
