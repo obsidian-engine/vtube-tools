@@ -25,7 +25,7 @@ html, body {
   margin: 0;
 
   /* グリーンバックを文字の範囲だけに適用 */
-  background: #00f900;  /* 文字の範囲だけグリーンバック */
+  background: #00ff00;  /* 鮮やかな緑（クロマキー最適） */
 
   /* デフォルトスタイル(Firebaseで上書き) */
   font-family: 'Noto Sans JP', sans-serif;
