@@ -55,14 +55,12 @@ body {
   font-family: var(--font-family);
   background: var(--gradient-bg);
   color: var(--obsidian-text);
-  min-height: 100vh;
 }
 
 /* レイアウト */
 .app {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
 }
 
 .header {
@@ -105,9 +103,7 @@ body {
 }
 
 .main {
-  flex: 1;
   padding: var(--spacing-lg);
-  overflow-y: auto;
 }
 
 .container {
