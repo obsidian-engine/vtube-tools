@@ -15,9 +15,7 @@ html, body {
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
-  white-space: pre-wrap;      /* 改行を保持 */
-  word-break: break-word;     /* 長い単語を折り返し */
-  max-width: 90vw;
+  white-space: pre;           /* 改行コードのみで改行、自動折り返しなし */
 
   /* 文字サイズにぴったり合わせる */
   width: fit-content;
