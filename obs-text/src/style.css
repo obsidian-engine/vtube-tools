@@ -1,13 +1,34 @@
-/* CSS変数 */
+/* CSS変数 - Obsidian統一デザイン */
 :root {
-  /* カラー */
-  --primary-color: #667eea;
-  --primary-dark: #5568d3;
+  /* Obsidianカラーパレット */
+  --obsidian-black: #0d1117;
+  --obsidian-gray: #21262d;
+  --obsidian-gray-light: #30363d;
+  --obsidian-border: #444c56;
+  --obsidian-accent: #58a6ff;
+  --obsidian-accent-dark: #1f6feb;
+  --obsidian-purple: #8b5cf6;
+  --obsidian-text: #e6edf3;
+  --obsidian-text-muted: #8b949e;
   --success-color: #4caf50;
   --error-color: #f44336;
-  --text-color: #e0e0e0;
-  --bg-color: #1a1a1a;
-  --card-bg: rgba(40, 40, 40, 0.95);
+  
+  /* グラデーション */
+  --gradient-bg: linear-gradient(135deg, #0d1117 0%, #161b22 50%, #1c2128 100%);
+  --gradient-card: linear-gradient(135deg, rgba(33, 38, 45, 0.95) 0%, rgba(22, 27, 34, 0.95) 100%);
+  --gradient-accent: linear-gradient(135deg, #58a6ff 0%, #1f6feb 100%);
+  --gradient-purple: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+  
+  /* シャドウ */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 20px rgba(88, 166, 255, 0.3);
+  
+  /* ボーダーラディウス */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
   
   /* スペーシング */
   --spacing-xs: 0.5rem;
@@ -20,10 +41,7 @@
   
   /* トランジション */
   --transition-normal: 0.3s ease;
-  
-  /* シャドウ */
-  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.2);
-  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.3);
+  --transition-smooth: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* リセット */
@@ -35,8 +53,8 @@
 
 body {
   font-family: var(--font-family);
-  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-  color: var(--text-color);
+  background: var(--gradient-bg);
+  color: var(--obsidian-text);
   height: 100vh;
   overflow: hidden;
 }
@@ -51,8 +69,9 @@ body {
 .header {
   text-align: center;
   padding: var(--spacing-lg);
-  background: rgba(0, 0, 0, 0.3);
-  border-bottom: 2px solid var(--primary-color);
+  background: rgba(13, 17, 23, 0.8);
+  border-bottom: 2px solid var(--obsidian-accent);
+  box-shadow: var(--shadow-sm);
 }
 
 .header-title {
@@ -61,7 +80,7 @@ body {
 }
 
 .header-subtitle {
-  color: #999;
+  color: var(--obsidian-text-muted);
   font-size: 1rem;
 }
 
@@ -69,7 +88,7 @@ body {
   display: inline-block;
   margin-top: var(--spacing-sm);
   padding: 0.5rem 1rem;
-  border-radius: 20px;
+  border-radius: var(--radius-lg);
   font-size: 0.875rem;
   font-weight: bold;
 }
@@ -100,16 +119,30 @@ body {
 
 /* カード */
 .form-card {
-  background: var(--card-bg);
-  border-radius: 12px;
+  background: var(--gradient-card);
+  border-radius: var(--radius-md);
   padding: var(--spacing-lg);
   box-shadow: var(--shadow-md);
+  border: 1px solid var(--obsidian-border);
+  border-top: 3px solid var(--obsidian-accent);
+  transition: all var(--transition-smooth);
+  position: relative;
+}
+
+.form-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg), var(--shadow-glow);
+  border-top-color: var(--obsidian-purple);
 }
 
 .card-title {
   font-size: 1.25rem;
   margin-bottom: var(--spacing-md);
-  color: var(--primary-color);
+  background: var(--gradient-accent);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
 }
 
 /* フォーム要素 */
@@ -131,13 +164,20 @@ body {
 .form-input {
   width: 100%;
   padding: 0.75rem;
-  background: rgba(0, 0, 0, 0.3);
-  border: 2px solid #444;
-  border-radius: 8px;
-  color: var(--text-color);
+  background: rgba(13, 17, 23, 0.6);
+  border: 2px solid var(--obsidian-border);
+  border-radius: var(--radius-sm);
+  color: var(--obsidian-text);
   font-family: var(--font-family);
   font-size: 1rem;
-  transition: border-color var(--transition-normal);
+  transition: all var(--transition-normal);
+}
+
+.form-textarea:focus,
+.form-input:focus {
+  outline: none;
+  border-color: var(--obsidian-accent);
+  box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.1);
 }
 
 .form-textarea:focus,
@@ -149,20 +189,25 @@ body {
 .form-hint {
   display: block;
   margin-top: var(--spacing-xs);
-  color: #999;
+  color: var(--obsidian-text-muted);
   font-size: 0.875rem;
 }
 
 /* プレビュー */
 .preview-container {
-  background: rgba(0, 0, 0, 0.5);
-  border: 2px dashed #444;
-  border-radius: 8px;
+  background: rgba(13, 17, 23, 0.8);
+  border: 2px dashed var(--obsidian-border);
+  border-radius: var(--radius-sm);
   padding: var(--spacing-lg);
   min-height: 200px;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: border-color var(--transition-normal);
+}
+
+.preview-container:hover {
+  border-color: var(--obsidian-accent);
 }
 
 .preview-text {
@@ -178,70 +223,85 @@ body {
 }
 
 .session-id-display {
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(13, 17, 23, 0.6);
   padding: 0.5rem;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   font-family: monospace;
   font-size: 0.875rem;
   word-break: break-all;
+  border: 1px solid var(--obsidian-border);
 }
 
 /* ボタン */
 .btn {
   padding: 0.75rem 1.5rem;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all var(--transition-normal);
+  transition: all var(--transition-smooth);
+  position: relative;
+  overflow: hidden;
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+  background: var(--gradient-accent);
   color: white;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-primary:hover {
+  box-shadow: var(--shadow-md), var(--shadow-glow);
 }
 
 .btn-secondary {
-  background: #555;
-  color: white;
+  background: var(--obsidian-gray-light);
+  color: var(--obsidian-text);
+  border: 1px solid var(--obsidian-border);
 }
 
 .btn:hover {
   transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
 }
 
 /* フッター */
 .footer {
   text-align: center;
   padding: var(--spacing-md);
-  background: rgba(0, 0, 0, 0.3);
-  border-top: 1px solid #333;
+  background: rgba(13, 17, 23, 0.8);
+  border-top: 1px solid var(--obsidian-border);
+  color: var(--obsidian-text-muted);
 }
 
 .footer a {
-  color: var(--primary-color);
+  color: var(--obsidian-accent);
   text-decoration: none;
+  transition: color var(--transition-normal);
+}
+
+.footer a:hover {
+  color: var(--obsidian-purple);
 }
 
 /* セレクト */
 .form-select {
   width: 100%;
   padding: 0.75rem;
-  background: rgba(0, 0, 0, 0.3);
-  border: 2px solid #444;
-  border-radius: 8px;
-  color: var(--text-color);
+  background: rgba(13, 17, 23, 0.6);
+  border: 2px solid var(--obsidian-border);
+  border-radius: var(--radius-sm);
+  color: var(--obsidian-text);
   font-family: var(--font-family);
   font-size: 1rem;
   cursor: pointer;
-  transition: border-color var(--transition-normal);
+  transition: all var(--transition-normal);
 }
 
 .form-select:focus {
   outline: none;
-  border-color: var(--primary-color);
+  border-color: var(--obsidian-accent);
+  box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.1);
 }
 
 /* カラーピッカー */
@@ -255,16 +315,17 @@ body {
   width: 60px;
   height: 44px;
   padding: 0;
-  border: 2px solid #444;
-  border-radius: 8px;
+  border: 2px solid var(--obsidian-border);
+  border-radius: var(--radius-sm);
   cursor: pointer;
   background: transparent;
-  transition: border-color var(--transition-normal);
+  transition: all var(--transition-normal);
 }
 
 .color-picker:focus {
   outline: none;
-  border-color: var(--primary-color);
+  border-color: var(--obsidian-accent);
+  box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.1);
 }
 
 .color-text-input {
@@ -277,10 +338,11 @@ body {
 .form-range {
   width: 100%;
   height: 6px;
-  background: rgba(0, 0, 0, 0.3);
+  background: var(--obsidian-gray-light);
   border-radius: 3px;
   outline: none;
   -webkit-appearance: none;
+  border: 1px solid var(--obsidian-border);
 }
 
 .form-range::-webkit-slider-thumb {
@@ -288,28 +350,32 @@ body {
   appearance: none;
   width: 20px;
   height: 20px;
-  background: var(--primary-color);
+  background: var(--gradient-accent);
   cursor: pointer;
   border-radius: 50%;
-  transition: background var(--transition-normal);
+  transition: all var(--transition-normal);
+  box-shadow: var(--shadow-sm);
 }
 
 .form-range::-webkit-slider-thumb:hover {
-  background: var(--primary-dark);
+  transform: scale(1.1);
+  box-shadow: var(--shadow-md), var(--shadow-glow);
 }
 
 .form-range::-moz-range-thumb {
   width: 20px;
   height: 20px;
-  background: var(--primary-color);
+  background: var(--gradient-accent);
   cursor: pointer;
   border-radius: 50%;
   border: none;
-  transition: background var(--transition-normal);
+  transition: all var(--transition-normal);
+  box-shadow: var(--shadow-sm);
 }
 
 .form-range::-moz-range-thumb:hover {
-  background: var(--primary-dark);
+  transform: scale(1.1);
+  box-shadow: var(--shadow-md), var(--shadow-glow);
 }
 
 /* レスポンシブ */
