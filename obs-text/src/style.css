@@ -55,15 +55,14 @@ body {
   font-family: var(--font-family);
   background: var(--gradient-bg);
   color: var(--obsidian-text);
-  height: 100vh;
-  overflow: hidden;
+  min-height: 100vh;
 }
 
 /* レイアウト */
 .app {
   display: flex;
   flex-direction: column;
-  height: 100vh; /* min-heightではなくheightで固定 */
+  min-height: 100vh;
 }
 
 .header {
@@ -108,7 +107,6 @@ body {
 .main {
   flex: 1;
   padding: var(--spacing-lg);
-  overflow-y: auto;
 }
 
 .container {
