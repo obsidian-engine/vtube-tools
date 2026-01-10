@@ -1,4 +1,4 @@
-import { saveSession, generateSessionId } from './firebase.js';
+import { saveSession, generateSessionId } from "./firebase.js";
 
 /**
  * TextEditorApp - OBSテキスト編集画面アプリケーション
@@ -9,17 +9,17 @@ class TextEditorApp {
     this.elements = {};
     this.sessionId = null;
     this.settings = {
-      text: '',
+      text: "",
       style: {
-        fontFamily: 'Noto Sans JP',
+        fontFamily: "Noto Sans JP",
         fontSize: 48,
-        color: '#ffffff',
-        backgroundColor: 'transparent',
-        textShadow: '2px 2px 4px rgba(0, 0, 0, 0.8)'
-      }
+        color: "#ffffff",
+        backgroundColor: "transparent",
+        textShadow: "2px 2px 4px rgba(0, 0, 0, 0.8)",
+      },
     };
     this.debounceTimer = null;
-    
+
     this.init();
   }
 
@@ -27,14 +27,12 @@ class TextEditorApp {
    * 初期化
    */
   init() {
-    console.log('TextEditorApp initializing...');
     this.initSession();
     this.bindElements();
     this.attachEventListeners();
     this.updatePreview();
     this.updateDisplayUrl();
-    this.setConnectionStatus('connected');
-    console.log('TextEditorApp initialized');
+    this.setConnectionStatus("connected");
   }
 
   /**
@@ -43,13 +41,11 @@ class TextEditorApp {
    */
   initSession() {
     const params = new URLSearchParams(window.location.search);
-    this.sessionId = params.get('session') || generateSessionId();
-    
+    this.sessionId = params.get("session") || generateSessionId();
+
     // URLに反映（履歴置換）
     const newUrl = `${window.location.pathname}?session=${this.sessionId}`;
-    window.history.replaceState({}, '', newUrl);
-    
-    console.log('Session ID:', this.sessionId);
+    window.history.replaceState({}, "", newUrl);
   }
 
   /**
@@ -57,14 +53,14 @@ class TextEditorApp {
    */
   bindElements() {
     this.elements = {
-      textInput: document.getElementById('text-input'),
-      preview: document.getElementById('preview'),
-      displayUrl: document.getElementById('display-url'),
-      copyUrlBtn: document.getElementById('copy-url-btn'),
-      connectionStatus: document.getElementById('connection-status'),
-      sessionIdDisplay: document.getElementById('session-id')
+      textInput: document.getElementById("text-input"),
+      preview: document.getElementById("preview"),
+      displayUrl: document.getElementById("display-url"),
+      copyUrlBtn: document.getElementById("copy-url-btn"),
+      connectionStatus: document.getElementById("connection-status"),
+      sessionIdDisplay: document.getElementById("session-id"),
     };
-    
+
     // セッションID表示
     if (this.elements.sessionIdDisplay) {
       this.elements.sessionIdDisplay.textContent = this.sessionId;
@@ -77,14 +73,14 @@ class TextEditorApp {
   attachEventListeners() {
     // テキスト入力（デバウンス付き）
     if (this.elements.textInput) {
-      this.elements.textInput.addEventListener('input', () => {
+      this.elements.textInput.addEventListener("input", () => {
         this.onTextChange();
       });
     }
 
     // URLコピーボタン
     if (this.elements.copyUrlBtn) {
-      this.elements.copyUrlBtn.addEventListener('click', () => {
+      this.elements.copyUrlBtn.addEventListener("click", () => {
         this.copyDisplayUrl();
       });
     }
@@ -108,16 +104,16 @@ class TextEditorApp {
    */
   updatePreview() {
     if (!this.elements.preview) return;
-    
+
     // XSS対策: textContentを使用
-    this.elements.preview.textContent = this.settings.text || 'プレビュー表示';
-    
+    this.elements.preview.textContent = this.settings.text || "プレビュー表示";
+
     // スタイル適用
     Object.assign(this.elements.preview.style, {
       fontFamily: this.settings.style.fontFamily,
       fontSize: `${this.settings.style.fontSize}px`,
       color: this.settings.style.color,
-      textShadow: this.settings.style.textShadow
+      textShadow: this.settings.style.textShadow,
     });
   }
 
@@ -126,13 +122,13 @@ class TextEditorApp {
    */
   updateDisplayUrl() {
     if (!this.elements.displayUrl) return;
-    
+
     const base = window.location.origin;
-    const pathParts = window.location.pathname.split('/');
-    pathParts[pathParts.length - 1] = 'display.html';
-    const path = pathParts.join('/');
+    const pathParts = window.location.pathname.split("/");
+    pathParts[pathParts.length - 1] = "display.html";
+    const path = pathParts.join("/");
     const url = `${base}${path}?session=${this.sessionId}`;
-    
+
     this.elements.displayUrl.value = url;
   }
 
@@ -142,11 +138,10 @@ class TextEditorApp {
   async syncToFirebase() {
     try {
       await saveSession(this.sessionId, this.settings);
-      this.setConnectionStatus('connected');
-      console.log('Synced to Firebase');
+      this.setConnectionStatus("connected");
     } catch (error) {
-      console.error('Firebase sync error:', error);
-      this.setConnectionStatus('error');
+      console.error("Firebase sync error:", error);
+      this.setConnectionStatus("error");
     }
   }
 
@@ -156,9 +151,10 @@ class TextEditorApp {
    */
   setConnectionStatus(status) {
     if (!this.elements.connectionStatus) return;
-    
+
     this.elements.connectionStatus.className = `connection-status ${status}`;
-    this.elements.connectionStatus.textContent = status === 'connected' ? '接続中' : 'エラー';
+    this.elements.connectionStatus.textContent =
+      status === "connected" ? "接続中" : "エラー";
   }
 
   /**
@@ -166,30 +162,28 @@ class TextEditorApp {
    */
   async copyDisplayUrl() {
     if (!this.elements.displayUrl) return;
-    
+
     try {
       await navigator.clipboard.writeText(this.elements.displayUrl.value);
-      
+
       // ボタンテキスト変更（フィードバック）
       const originalText = this.elements.copyUrlBtn.textContent;
-      this.elements.copyUrlBtn.textContent = '✅ コピー完了！';
-      
+      this.elements.copyUrlBtn.textContent = "✅ コピー完了！";
+
       setTimeout(() => {
         this.elements.copyUrlBtn.textContent = originalText;
       }, 2000);
-      
-      console.log('URL copied to clipboard');
     } catch (error) {
-      console.error('Copy error:', error);
-      this.elements.copyUrlBtn.textContent = '❌ コピー失敗';
+      console.error("Copy error:", error);
+      this.elements.copyUrlBtn.textContent = "❌ コピー失敗";
       setTimeout(() => {
-        this.elements.copyUrlBtn.textContent = '📋 コピー';
+        this.elements.copyUrlBtn.textContent = "📋 コピー";
       }, 2000);
     }
   }
 }
 
 // DOMContentLoaded後に初期化
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
   new TextEditorApp();
 });
