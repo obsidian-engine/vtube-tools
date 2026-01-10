@@ -1,16 +1,16 @@
-import { initializeApp } from 'firebase/app';
-import { getDatabase, ref, set, onValue, off } from 'firebase/database';
+import { initializeApp } from "firebase/app";
+import { getDatabase, ref, set, onValue, off } from "firebase/database";
 
-// Firebase設定（プレースホルダー）
-// 実際の使用時にこれらの値を置き換えてください
+// Firebase設定（Vite環境変数から取得）
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  databaseURL: "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
 // Firebase初期化
@@ -27,10 +27,10 @@ export async function saveSession(sessionId, data) {
     const sessionRef = ref(database, `sessions/${sessionId}`);
     await set(sessionRef, {
       ...data,
-      updatedAt: Date.now()
+      updatedAt: Date.now(),
     });
   } catch (error) {
-    console.error('Firebase save error:', error);
+    console.error("Firebase save error:", error);
     throw error;
   }
 }
@@ -43,14 +43,18 @@ export async function saveSession(sessionId, data) {
  */
 export function subscribeSession(sessionId, callback) {
   const sessionRef = ref(database, `sessions/${sessionId}`);
-  
-  onValue(sessionRef, (snapshot) => {
-    const data = snapshot.val();
-    callback(data);
-  }, (error) => {
-    console.error('Firebase subscribe error:', error);
-  });
-  
+
+  onValue(
+    sessionRef,
+    (snapshot) => {
+      const data = snapshot.val();
+      callback(data);
+    },
+    (error) => {
+      console.error("Firebase subscribe error:", error);
+    },
+  );
+
   return () => off(sessionRef);
 }
 

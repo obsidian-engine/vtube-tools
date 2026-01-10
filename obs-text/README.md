@@ -14,24 +14,36 @@ OBSブラウザソース用のテキストをリアルタイムで編集・表�
 
 ### 1. Firebase設定
 
-`src/firebase.js` のプレースホルダーを実際の値に置き換えてください。
+#### ローカル開発環境
 
-```javascript
-const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",                    // ← 実際のAPIキーに置き換え
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  databaseURL: "https://YOUR_PROJECT_ID-default-rtdb.firebaseio.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
-};
+`.env.example` をコピーして `.env` を作成し、実際の値を設定してください。
+
+```bash
+cp .env.example .env
+```
+
+`.env` ファイルを編集:
+
+```bash
+VITE_FIREBASE_API_KEY=your_api_key_here
+VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
+VITE_FIREBASE_DATABASE_URL=https://your_project-default-rtdb.firebaseio.com
+VITE_FIREBASE_PROJECT_ID=your_project_id
+VITE_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
+VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+VITE_FIREBASE_APP_ID=your_app_id
+VITE_FIREBASE_MEASUREMENT_ID=G-XXXXXXXXXX
 ```
 
 **Firebase設定の取得方法**:
 1. [Firebase Console](https://console.firebase.google.com) にアクセス
 2. プロジェクトを選択（既存）
 3. プロジェクト設定 > マイアプリ > SDK の設定と構成 から取得
+
+#### 本番環境（GitHub Pages）
+
+GitHub Actions で自動的に環境変数が注入されます。
+リポジトリの Secrets に Firebase 設定値を登録してください（設定済み✅）
 
 ### 2. Firebaseセキュリティルール設定
 

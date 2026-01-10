@@ -7,8 +7,9 @@ on:
       - main
     paths:
       - 'discord-css/**'
+      - 'obs-text/**'
       - '**/*.html'
-      - '**/*.css' 
+      - '**/*.css'
       - '**/*.js'
       - '**/*.png'
       - '**/*.svg'
@@ -43,7 +44,9 @@ jobs:
         with:
           node-version: '18'
           cache: 'npm'
-          cache-dependency-path: './discord-css/package-lock.json'
+          cache-dependency-path: |
+            ./discord-css/package-lock.json
+            ./obs-text/package-lock.json
 
       # GitHub Pages設定
       - name: Setup Pages
@@ -62,6 +65,26 @@ jobs:
         run: npm run build
         env:
           NODE_ENV: production
+
+      # OBS Text依存関係インストール
+      - name: Install OBS Text dependencies
+        working-directory: ./obs-text
+        run: npm ci
+
+      # OBS Text Viteビルド実行（Firebase環境変数を注入）
+      - name: Build OBS Text with Vite
+        working-directory: ./obs-text
+        run: npm run build
+        env:
+          NODE_ENV: production
+          VITE_FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
+          VITE_FIREBASE_AUTH_DOMAIN: ${{ secrets.FIREBASE_AUTH_DOMAIN }}
+          VITE_FIREBASE_DATABASE_URL: ${{ secrets.FIREBASE_DATABASE_URL }}
+          VITE_FIREBASE_PROJECT_ID: ${{ secrets.FIREBASE_PROJECT_ID }}
+          VITE_FIREBASE_STORAGE_BUCKET: ${{ secrets.FIREBASE_STORAGE_BUCKET }}
+          VITE_FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
+          VITE_FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
+          VITE_FIREBASE_MEASUREMENT_ID: ${{ secrets.FIREBASE_MEASUREMENT_ID }}
 
       # 古いビルド結果のクリーンアップとディレクトリ作成
       - name: Clean and create main site directory
@@ -83,6 +106,10 @@ jobs:
       # Comment CSS ディレクトリをコピー
       - name: Copy Comment CSS
         run: cp -r ./comment-css ./dist/comment-css
+
+      # OBS Text ビルド結果をサブディレクトリにコピー
+      - name: Copy OBS Text build
+        run: cp -r ./obs-text/dist ./dist/obs-text
 
       # Jekyll処理を無効化するファイルを作成
       - name: Create .nojekyll file
@@ -121,6 +148,7 @@ jobs:
             echo "🚀 Obsidian Engine デプロイ成功！"
             echo "📍 メインサイト: https://obsidian-engine.github.io/vtube-tools/"
             echo "🎨 Discord CSS: https://obsidian-engine.github.io/vtube-tools/discord-css/"
+            echo "📝 OBS Text: https://obsidian-engine.github.io/vtube-tools/obs-text/"
           else
             echo "❌ デプロイ失敗"
             exit 1
