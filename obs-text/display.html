@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OBSテキスト表示</title>
+  
+  <!-- Google Fonts読み込み(将来のフォント選択機能用) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+  
+  <!-- CSS読み込み -->
+  <link rel="stylesheet" href="/src/display.css">
+</head>
+<body>
+  <!-- テキスト表示エリア -->
+  <div id="text-display"></div>
+  
+  <!-- エラーメッセージ(通常は非表示) -->
+  <div id="error-message" style="display: none;">
+    セッションIDが指定されていません
+  </div>
+  
+  <!-- JavaScript読み込み -->
+  <script type="module" src="/src/display.js"></script>
+</body>
+</html>

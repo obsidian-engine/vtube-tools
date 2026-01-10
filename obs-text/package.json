@@ -1,0 +1,35 @@
+{
+  "name": "obs-text",
+  "version": "1.0.0",
+  "description": "OBSブラウザソース用テキスト表示ツール",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0",
+    "terser": "^5.36.0"
+  },
+  "dependencies": {
+    "firebase": "^10.7.0"
+  },
+  "keywords": [
+    "obs",
+    "text",
+    "streaming",
+    "firebase",
+    "realtime",
+    "vtuber"
+  ],
+  "author": "OBS Text Generator",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/obsidian-engine/vtube-tools"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

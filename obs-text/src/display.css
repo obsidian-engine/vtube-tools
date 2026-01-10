@@ -1,0 +1,50 @@
+/* OBS透過背景対応 */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background-color: transparent !important;
+  overflow: hidden;
+}
+
+/* テキスト表示エリア */
+#text-display {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  white-space: pre-wrap;      /* 改行を保持 */
+  word-break: break-word;     /* 長い単語を折り返し */
+  max-width: 90vw;
+  padding: 1rem;
+  
+  /* デフォルトスタイル(Firebaseで上書き) */
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 48px;
+  color: #ffffff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  
+  /* アンチエイリアシング */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* エラーメッセージ */
+#error-message {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #ff4444;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 2rem;
+  border-radius: 8px;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 24px;
+  text-align: center;
+}
+
+/* Phase 2用: Google Fontsフォント定義(将来使用) */
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&family=Kosugi+Maru&family=Sawarabi+Gothic&family=Zen+Maru+Gothic:wght@400;700&display=swap');
