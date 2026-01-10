@@ -107,6 +107,7 @@ body {
 .main {
   flex: 1;
   padding: var(--spacing-lg);
+  overflow-y: auto;
 }
 
 .container {
