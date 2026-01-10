@@ -13,6 +13,7 @@ class TextEditorApp {
       style: {
         fontFamily: "Noto Sans JP",
         fontSize: 48,
+        fontWeight: 400,
         color: "#ffffff",
         backgroundColor: "transparent",
         textShadow: "2px 2px 4px rgba(0, 0, 0, 0.8)",
@@ -59,6 +60,13 @@ class TextEditorApp {
       copyUrlBtn: document.getElementById("copy-url-btn"),
       connectionStatus: document.getElementById("connection-status"),
       sessionIdDisplay: document.getElementById("session-id"),
+      // スタイル設定UI
+      fontSelect: document.getElementById("font-select"),
+      colorPicker: document.getElementById("color-picker"),
+      colorText: document.getElementById("color-text"),
+      weightSelect: document.getElementById("weight-select"),
+      sizeSlider: document.getElementById("size-slider"),
+      sizeValue: document.getElementById("size-value"),
     };
 
     // セッションID表示
@@ -84,6 +92,47 @@ class TextEditorApp {
         this.copyDisplayUrl();
       });
     }
+
+    // フォント選択
+    if (this.elements.fontSelect) {
+      this.elements.fontSelect.addEventListener("change", () => {
+        this.onStyleChange();
+      });
+    }
+
+    // カラーピッカー
+    if (this.elements.colorPicker) {
+      this.elements.colorPicker.addEventListener("input", (e) => {
+        this.elements.colorText.value = e.target.value;
+        this.onStyleChange();
+      });
+    }
+
+    // カラーテキスト入力
+    if (this.elements.colorText) {
+      this.elements.colorText.addEventListener("input", (e) => {
+        const value = e.target.value;
+        if (/^#[0-9A-Fa-f]{6}$/.test(value)) {
+          this.elements.colorPicker.value = value;
+          this.onStyleChange();
+        }
+      });
+    }
+
+    // 文字太さ選択
+    if (this.elements.weightSelect) {
+      this.elements.weightSelect.addEventListener("change", () => {
+        this.onStyleChange();
+      });
+    }
+
+    // 文字サイズスライダー
+    if (this.elements.sizeSlider) {
+      this.elements.sizeSlider.addEventListener("input", (e) => {
+        this.elements.sizeValue.textContent = e.target.value;
+        this.onStyleChange();
+      });
+    }
   }
 
   /**
@@ -93,6 +142,23 @@ class TextEditorApp {
     clearTimeout(this.debounceTimer);
     this.debounceTimer = setTimeout(async () => {
       this.settings.text = this.elements.textInput.value;
+      this.updatePreview();
+      await this.syncToFirebase();
+    }, 300);
+  }
+
+  /**
+   * スタイル変更時の処理（デバウンス300ms）
+   */
+  onStyleChange() {
+    clearTimeout(this.debounceTimer);
+    this.debounceTimer = setTimeout(async () => {
+      // settings.styleを更新
+      this.settings.style.fontFamily = this.elements.fontSelect.value;
+      this.settings.style.color = this.elements.colorPicker.value;
+      this.settings.style.fontWeight = parseInt(this.elements.weightSelect.value);
+      this.settings.style.fontSize = parseInt(this.elements.sizeSlider.value);
+
       this.updatePreview();
       await this.syncToFirebase();
     }, 300);
@@ -112,6 +178,7 @@ class TextEditorApp {
     Object.assign(this.elements.preview.style, {
       fontFamily: this.settings.style.fontFamily,
       fontSize: `${this.settings.style.fontSize}px`,
+      fontWeight: this.settings.style.fontWeight,
       color: this.settings.style.color,
       textShadow: this.settings.style.textShadow,
     });

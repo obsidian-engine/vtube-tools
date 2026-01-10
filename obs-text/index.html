@@ -11,6 +11,11 @@
   <meta property="og:description" content="配信中にテキストをリアルタイム更新">
   <meta property="og:type" content="website">
   
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kosugi+Maru&family=M+PLUS+Rounded+1c:wght@400;700;900&family=Noto+Sans+JP:wght@400;700;900&family=Sawarabi+Gothic&family=Zen+Maru+Gothic:wght@400;700;900&display=swap" rel="stylesheet">
+  
   <!-- CSS読み込み -->
   <link rel="stylesheet" href="/src/style.css">
 </head>
@@ -50,6 +55,58 @@
               <div class="session-id-display">
                 <code id="session-id">読み込み中...</code>
               </div>
+            </div>
+          </div>
+          
+          <!-- スタイル設定 -->
+          <div class="form-card">
+            <h2 class="card-title">🎨 スタイル設定</h2>
+            
+            <!-- フォント選択 -->
+            <div class="form-group">
+              <label for="font-select" class="form-label">フォント</label>
+              <select id="font-select" class="form-select">
+                <option value="Noto Sans JP">Noto Sans JP</option>
+                <option value="M PLUS Rounded 1c">M PLUS Rounded 1c</option>
+                <option value="Kosugi Maru">Kosugi Maru</option>
+                <option value="Sawarabi Gothic">Sawarabi Gothic</option>
+                <option value="Zen Maru Gothic">Zen Maru Gothic</option>
+              </select>
+            </div>
+            
+            <!-- 文字色 -->
+            <div class="form-group">
+              <label for="color-picker" class="form-label">文字色</label>
+              <div class="color-picker-group">
+                <input type="color" id="color-picker" class="color-picker" value="#ffffff">
+                <input type="text" id="color-text" class="form-input color-text-input" value="#ffffff" maxlength="7" pattern="^#[0-9A-Fa-f]{6}$">
+              </div>
+            </div>
+            
+            <!-- 文字太さ -->
+            <div class="form-group">
+              <label for="weight-select" class="form-label">文字太さ</label>
+              <select id="weight-select" class="form-select">
+                <option value="400">通常 (400)</option>
+                <option value="700">太字 (700)</option>
+                <option value="900">極太 (900)</option>
+              </select>
+            </div>
+            
+            <!-- 文字サイズ -->
+            <div class="form-group">
+              <label for="size-slider" class="form-label">
+                文字サイズ: <span id="size-value">48</span>px
+              </label>
+              <input 
+                type="range" 
+                id="size-slider" 
+                class="form-range" 
+                min="12" 
+                max="200" 
+                step="1" 
+                value="48"
+              >
             </div>
           </div>
         </section>
