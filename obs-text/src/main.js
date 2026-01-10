@@ -1,4 +1,8 @@
-import { saveSession, generateSessionId } from "./firebase.js";
+import {
+  saveSession,
+  generateSessionId,
+  subscribeSession,
+} from "./firebase.js";
 
 /**
  * TextEditorApp - OBSテキスト編集画面アプリケーション
@@ -20,6 +24,8 @@ class TextEditorApp {
       },
     };
     this.debounceTimer = null;
+    this.unsubscribe = null;
+    this.isLoadingSettings = false;
 
     this.init();
   }
@@ -27,10 +33,11 @@ class TextEditorApp {
   /**
    * 初期化
    */
-  init() {
+  async init() {
     this.initSession();
     this.bindElements();
     this.attachEventListeners();
+    await this.loadSettings();
     this.updatePreview();
     this.updateDisplayUrl();
     this.setConnectionStatus("connected");
@@ -47,6 +54,76 @@ class TextEditorApp {
     // URLに反映（履歴置換）
     const newUrl = `${window.location.pathname}?session=${this.sessionId}`;
     window.history.replaceState({}, "", newUrl);
+  }
+
+  /**
+   * 設定を読み込む（localStorage → Firebase）
+   */
+  async loadSettings() {
+    this.isLoadingSettings = true;
+
+    try {
+      // 1. localStorageから復元（オフライン対応）
+      const localKey = `obs-text-settings-${this.sessionId}`;
+      const localData = localStorage.getItem(localKey);
+      if (localData) {
+        try {
+          const parsed = JSON.parse(localData);
+          this.applySettings(parsed);
+        } catch (error) {
+          console.error("localStorage parse error:", error);
+        }
+      }
+
+      // 2. Firebaseから復元（優先）
+      this.unsubscribe = subscribeSession(this.sessionId, (data) => {
+        if (data && !this.isLoadingSettings) {
+          this.applySettings(data);
+        }
+      });
+
+      // 初回ロード完了
+      this.isLoadingSettings = false;
+    } catch (error) {
+      console.error("Settings load error:", error);
+      this.isLoadingSettings = false;
+    }
+  }
+
+  /**
+   * 設定を適用（内部状態 + UI更新）
+   */
+  applySettings(data) {
+    // 設定を更新
+    if (data.text !== undefined) {
+      this.settings.text = data.text;
+      if (this.elements.textInput) {
+        this.elements.textInput.value = data.text;
+      }
+    }
+
+    if (data.style) {
+      this.settings.style = { ...this.settings.style, ...data.style };
+
+      // UI要素に反映
+      if (this.elements.fontSelect && data.style.fontFamily) {
+        this.elements.fontSelect.value = data.style.fontFamily;
+      }
+      if (this.elements.colorPicker && data.style.color) {
+        this.elements.colorPicker.value = data.style.color;
+        this.elements.colorText.value = data.style.color;
+      }
+      if (this.elements.weightSelect && data.style.fontWeight) {
+        this.elements.weightSelect.value = data.style.fontWeight.toString();
+      }
+      if (this.elements.sizeSlider && data.style.fontSize) {
+        this.elements.sizeSlider.value = data.style.fontSize.toString();
+        this.elements.sizeValue.textContent = data.style.fontSize.toString();
+      }
+    }
+
+    // プレビュー更新
+    this.updatePreview();
   }
 
   /**
@@ -156,7 +233,9 @@ class TextEditorApp {
       // settings.styleを更新
       this.settings.style.fontFamily = this.elements.fontSelect.value;
       this.settings.style.color = this.elements.colorPicker.value;
-      this.settings.style.fontWeight = parseInt(this.elements.weightSelect.value);
+      this.settings.style.fontWeight = parseInt(
+        this.elements.weightSelect.value,
+      );
       this.settings.style.fontSize = parseInt(this.elements.sizeSlider.value);
 
       this.updatePreview();
@@ -200,11 +279,17 @@ class TextEditorApp {
   }
 
   /**
-   * Firebaseに同期
+   * Firebaseに同期（+ localStorage保存）
    */
   async syncToFirebase() {
     try {
+      // Firebase保存
       await saveSession(this.sessionId, this.settings);
+
+      // localStorage保存（オフライン対応）
+      const localKey = `obs-text-settings-${this.sessionId}`;
+      localStorage.setItem(localKey, JSON.stringify(this.settings));
+
       this.setConnectionStatus("connected");
     } catch (error) {
       console.error("Firebase sync error:", error);
