@@ -249,10 +249,11 @@ body {
 /* フッター */
 .footer {
   text-align: center;
-  padding: var(--spacing-md);
+  padding: 1rem;
   background: rgba(13, 17, 23, 0.8);
   border-top: 1px solid var(--obsidian-border);
   color: var(--obsidian-text-muted);
+  font-size: 0.875rem;
 }
 
 .footer a {
