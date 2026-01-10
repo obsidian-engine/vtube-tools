@@ -1,5 +1,5 @@
 /* OBSクロマキー背景対応 - 透明背景 */
-html, body {
+body.obs-display {
   margin: 0;
   padding: 0;
   width: 100%;
