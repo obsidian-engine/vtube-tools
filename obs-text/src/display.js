@@ -62,6 +62,7 @@ class DisplayApp {
           style: {
             fontFamily: "Noto Sans JP",
             fontSize: 48,
+            fontWeight: 400,
             color: "#ffffff",
             textShadow: "2px 2px 4px rgba(0, 0, 0, 0.8)",
           },
@@ -88,9 +89,10 @@ class DisplayApp {
       Object.assign(this.elements.textDisplay.style, {
         fontFamily: style.fontFamily || "Noto Sans JP",
         fontSize: `${style.fontSize || 48}px`,
+        fontWeight: style.fontWeight || 400,
         color: style.color || "#ffffff",
         textShadow: style.textShadow || "2px 2px 4px rgba(0, 0, 0, 0.8)",
-        backgroundColor: "transparent", // テキスト部分は透過（bodyのグリーンバックが表示される）
+        // backgroundColorはCSSのデフォルト（#00f900）を使用
       });
     }
   }

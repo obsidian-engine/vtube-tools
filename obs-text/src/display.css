@@ -1,11 +1,10 @@
-/* OBSクロマキー背景対応 */
+/* OBSクロマキー背景対応 - 透明背景 */
 html, body {
   margin: 0;
   padding: 0;
   width: 100%;
   height: 100%;
-  background: #00f900 !important; /* グリーンバック（クロマキー用） - backgroundで上書き */
-  background-color: #00f900 !important;
+  background: transparent;  /* 背景を透明に（文字の範囲だけグリーンバック表示） */
   overflow: hidden;
 }
 
@@ -26,6 +25,9 @@ html, body {
   display: inline-block;
   padding: 0;
   margin: 0;
+
+  /* グリーンバックを文字の範囲だけに適用 */
+  background: #00f900;  /* 文字の範囲だけグリーンバック */
 
   /* デフォルトスタイル(Firebaseで上書き) */
   font-family: 'Noto Sans JP', sans-serif;
@@ -52,6 +54,3 @@ html, body {
   font-size: 24px;
   text-align: center;
 }
-
-/* Phase 2用: Google Fontsフォント定義(将来使用) */
-@import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&family=Kosugi+Maru&family=Sawarabi+Gothic&family=Zen+Maru+Gothic:wght@400;700&display=swap');
