@@ -68,7 +68,7 @@ body {
 
 .header {
   text-align: center;
-  padding: var(--spacing-md);
+  padding: var(--spacing-sm);
   background: rgba(13, 17, 23, 0.8);
   border-bottom: 1px solid var(--obsidian-border);
 }
@@ -182,7 +182,7 @@ body {
 
 /* プレビュー */
 .preview-container {
-  background: rgba(13, 17, 23, 0.8);
+  background: rgba(33, 38, 45, 0.95);
   border: 1px solid var(--obsidian-border);
   border-radius: var(--radius-sm);
   padding: var(--spacing-lg);
@@ -193,9 +193,11 @@ body {
 }
 
 .preview-text {
-  font-size: 1.5rem;
+  font-size: 1.75rem;
   text-align: center;
   white-space: pre;
+  color: var(--obsidian-text);
+  font-weight: 500;
 }
 
 /* URL表示 */
