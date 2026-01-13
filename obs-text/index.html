@@ -29,11 +29,14 @@
     
     <main class="main">
       <div class="container">
-        <!-- 編集セクション -->
-        <section class="input-section">
-          <div class="form-card">
-            <h2 class="card-title">テキスト編集</h2>
+        <!-- Step 1: テキスト入力とスタイル調整 -->
+        <section class="step-section step-1">
+          <h2 class="step-title">
+            <span class="step-number">1️⃣</span>
+            テキストを入力してスタイルを調整
+          </h2>
 
+          <div class="form-card">
             <!-- テキスト入力 -->
             <div class="form-group">
               <label for="text-input" class="form-label">
@@ -49,19 +52,9 @@
               <small class="form-hint">1000文字まで入力可能です</small>
             </div>
 
-            <!-- セッションID表示 -->
-            <div class="form-group">
-              <label for="session-id" class="form-label">セッションID</label>
-              <div class="session-id-display">
-                <code id="session-id" tabindex="0">読み込み中...</code>
-              </div>
-            </div>
-          </div>
+            <!-- スタイル設定 -->
+            <h3 class="subsection-title">スタイル設定</h3>
 
-          <!-- スタイル設定 -->
-          <div class="form-card">
-            <h2 class="card-title">スタイル設定</h2>
-            
             <!-- フォント選択 -->
             <div class="form-group">
               <label for="font-select" class="form-label">フォント</label>
@@ -73,7 +66,7 @@
                 <option value="Zen Maru Gothic">Zen Maru Gothic</option>
               </select>
             </div>
-            
+
             <!-- 文字色 -->
             <div class="form-group">
               <label for="color-picker" class="form-label">文字色</label>
@@ -82,7 +75,7 @@
                 <input type="text" id="color-text" class="form-input color-text-input" value="#ffffff" maxlength="7" pattern="^#[0-9A-Fa-f]{6}$">
               </div>
             </div>
-            
+
             <!-- 文字太さ -->
             <div class="form-group">
               <label for="weight-select" class="form-label">文字太さ</label>
@@ -92,41 +85,66 @@
                 <option value="900">極太 (900)</option>
               </select>
             </div>
-            
+
             <!-- 文字サイズ -->
             <div class="form-group">
               <label for="size-slider" class="form-label">
                 文字サイズ: <span id="size-value">48</span>px
               </label>
-              <input 
-                type="range" 
-                id="size-slider" 
-                class="form-range" 
-                min="12" 
-                max="200" 
-                step="1" 
+              <input
+                type="range"
+                id="size-slider"
+                class="form-range"
+                min="12"
+                max="200"
+                step="1"
                 value="48"
               >
             </div>
+
+            <!-- セッションID（詳細情報として折りたたみ） -->
+            <details class="advanced-info">
+              <summary>詳細情報</summary>
+              <div class="form-group">
+                <label for="session-id" class="form-label">あなた専用のID</label>
+                <div class="session-id-display">
+                  <code id="session-id" tabindex="0">読み込み中...</code>
+                </div>
+                <small class="form-hint">このIDで編集内容が保存されます</small>
+              </div>
+            </details>
           </div>
         </section>
-        
-        <!-- プレビューセクション -->
-        <section class="preview-section">
+
+        <!-- Step 2: プレビュー確認 -->
+        <section class="step-section step-2">
+          <h2 class="step-title">
+            <span class="step-number">2️⃣</span>
+            プレビューで確認
+          </h2>
+
           <div class="form-card">
-            <h2 class="card-title">プレビュー</h2>
             <div class="preview-container">
               <div id="preview" class="preview-text">
                 プレビュー表示
               </div>
             </div>
+            <p class="guide-text">
+              このプレビューと同じ見た目がOBSに表示されます
+            </p>
           </div>
+        </section>
 
-          <!-- OBS URL表示 -->
+        <!-- Step 3: OBSに設定 -->
+        <section class="step-section step-3">
+          <h2 class="step-title">
+            <span class="step-number">3️⃣</span>
+            OBSに設定
+          </h2>
+
           <div class="form-card">
-            <h2 class="card-title">OBS設定</h2>
             <div class="form-group">
-              <label for="display-url" class="form-label">OBS用URL</label>
+              <label for="display-url" class="form-label">ブラウザソース用URL</label>
               <div class="url-display-group">
                 <input
                   type="text"
@@ -139,7 +157,13 @@
                   コピー
                 </button>
               </div>
-              <small class="form-hint">OBSのブラウザソースにこのURLを貼り付けてください</small>
+              <small class="form-hint">このURLをOBSの「ブラウザソース」に貼り付けてください</small>
+            </div>
+
+            <div class="guide-actions">
+              <button id="show-guide-btn" class="btn btn-primary">
+                📖 OBS設定ガイドを見る
+              </button>
             </div>
           </div>
         </section>
