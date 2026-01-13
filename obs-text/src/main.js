@@ -137,6 +137,7 @@ class TextEditorApp {
       copyUrlBtn: document.getElementById("copy-url-btn"),
       connectionStatus: document.getElementById("connection-status"),
       sessionIdDisplay: document.getElementById("session-id"),
+      showGuideBtn: document.getElementById("show-guide-btn"),
       // スタイル設定UI
       fontSelect: document.getElementById("font-select"),
       colorPicker: document.getElementById("color-picker"),
@@ -208,6 +209,13 @@ class TextEditorApp {
       this.elements.sizeSlider.addEventListener("input", (e) => {
         this.elements.sizeValue.textContent = e.target.value;
         this.onStyleChange();
+      });
+    }
+
+    // ガイドボタン
+    if (this.elements.showGuideBtn) {
+      this.elements.showGuideBtn.addEventListener("click", () => {
+        this.showGuideModal();
       });
     }
   }
@@ -332,6 +340,91 @@ class TextEditorApp {
         this.elements.copyUrlBtn.textContent = "コピー";
       }, 2000);
     }
+  }
+
+  /**
+   * OBS設定ガイドモーダルを表示
+   */
+  showGuideModal() {
+    // モーダルを動的に作成
+    const modal = document.createElement("div");
+    modal.className = "guide-modal active";
+    modal.innerHTML = this.getGuideContent();
+
+    // body に追加
+    document.body.appendChild(modal);
+
+    // 閉じるボタン・背景クリックでモーダルを削除
+    const closeBtn = modal.querySelector(".guide-modal-close");
+    if (closeBtn) {
+      closeBtn.addEventListener("click", () => {
+        modal.remove();
+      });
+    }
+
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) {
+        modal.remove();
+      }
+    });
+
+    // ESCキーで閉じる
+    const handleEsc = (e) => {
+      if (e.key === "Escape") {
+        modal.remove();
+        document.removeEventListener("keydown", handleEsc);
+      }
+    };
+    document.addEventListener("keydown", handleEsc);
+  }
+
+  /**
+   * ガイドコンテンツHTML生成
+   */
+  getGuideContent() {
+    return `
+      <div class="guide-modal-content">
+        <div class="guide-modal-header">
+          <h2 class="guide-modal-title">OBS設定ガイド</h2>
+          <button class="guide-modal-close" aria-label="閉じる">&times;</button>
+        </div>
+
+        <div class="guide-steps">
+          <div class="guide-step">
+            <h3>ステップ1: ブラウザソースを追加</h3>
+            <ol>
+              <li>OBSで「ソース」の「+」をクリック</li>
+              <li>「ブラウザ」を選択</li>
+              <li>名前を「テロップ」にして「OK」</li>
+            </ol>
+          </div>
+
+          <div class="guide-step">
+            <h3>ステップ2: URLを貼り付け</h3>
+            <ol>
+              <li>「URL」の欄に、上でコピーしたURLを貼り付け</li>
+              <li>幅: 1920、高さ: 1080</li>
+              <li>「OK」をクリック</li>
+            </ol>
+          </div>
+
+          <div class="guide-step">
+            <h3>ステップ3: 背景を透明にする</h3>
+            <ol>
+              <li>追加した「テロップ」を右クリック → 「フィルタ」</li>
+              <li>「+」→「クロマキー」を選択</li>
+              <li>キーカラータイプ: 緑</li>
+              <li>そのまま「閉じる」</li>
+            </ol>
+          </div>
+
+          <div class="guide-complete">
+            <p><strong>✅ 完了！</strong></p>
+            <p>編集画面でテキストを変更すると、OBSに自動反映されます。</p>
+          </div>
+        </div>
+      </div>
+    `;
   }
 }
 
