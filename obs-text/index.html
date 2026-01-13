@@ -18,6 +18,7 @@
   
   <!-- CSS読み込み -->
   <link rel="stylesheet" href="/src/style.css">
+  <link rel="stylesheet" href="/src/effects.css">
 </head>
 <body>
   <div class="app">
@@ -109,6 +110,20 @@
               </button>
             </div>
 
+            <!-- Phase 3-2: テンプレートボタン -->
+            <div class="form-group">
+              <button id="template-btn" class="btn btn-customize">
+                📁 テンプレート
+              </button>
+            </div>
+
+            <!-- Phase 3-3: エフェクトボタン -->
+            <div class="form-group">
+              <button id="effect-btn" class="btn btn-customize">
+                ✨ エフェクト
+              </button>
+            </div>
+
           </div>
         </section>
 
@@ -173,6 +188,12 @@
 
   <!-- Phase 3-1: カスタマイズパネルコンテナ -->
   <div id="customize-panel-container" style="display: none;"></div>
+
+  <!-- Phase 3-2: テンプレートパネルコンテナ -->
+  <div id="template-panel-container" style="display: none;"></div>
+
+  <!-- Phase 3-3: エフェクトパネルコンテナ -->
+  <div id="effect-panel-container" style="display: none;"></div>
 
   <script type="module" src="/src/main.js"></script>
 </body>

@@ -1,8 +1,12 @@
 import { saveSettings, subscribeSettings } from "./firebase.js";
 import { SetupWizard } from "./wizard.js";
 import { CustomizePanel } from "./ui/customizePanel.js";
+import { TemplatePanel } from "./ui/templatePanel.js";
+import { EffectPanel } from "./ui/effectPanel.js";
 import { ExtendedStyle } from "./domain/style.js";
 import { Template } from "./domain/template.js";
+import { Effect } from "./domain/effect.js";
+import { TemplateRepository } from "./infrastructure/templateRepository.js";
 
 /**
  * TextEditorApp - OBSテキスト編集画面アプリケーション
@@ -24,6 +28,10 @@ class TextEditorApp {
     };
     this.extendedStyle = null; // Phase 3-1: 拡張スタイルモデル
     this.customizePanel = null; // Phase 3-1: カスタマイズパネル
+    this.templateRepository = null; // Phase 3-2: テンプレートリポジトリ
+    this.templatePanel = null; // Phase 3-2: テンプレートパネル
+    this.effect = new Effect(); // Phase 3-3: エフェクト
+    this.effectPanel = null; // Phase 3-3: エフェクトパネル
     this.debounceTimer = null;
     this.unsubscribe = null;
     this.isLoadingSettings = false;
@@ -54,6 +62,8 @@ class TextEditorApp {
   async continueInit() {
     this.bindElements();
     this.initCustomizePanel(); // Phase 3-1: カスタマイズパネル初期化
+    this.initTemplatePanel(); // Phase 3-2: テンプレートパネル初期化
+    this.initEffectPanel(); // Phase 3-3: エフェクトパネル初期化
     this.attachEventListeners();
     await this.loadSettings();
     this.updatePreview();
@@ -141,6 +151,14 @@ class TextEditorApp {
       }
     }
 
+    // Phase 3-3: エフェクトを復元
+    if (data.effect) {
+      this.effect = Effect.fromFirestore(data.effect);
+      if (this.effectPanel) {
+        this.effectPanel.loadEffect(this.effect);
+      }
+    }
+
     // プレビュー更新
     this.updatePreview();
   }
@@ -168,6 +186,14 @@ class TextEditorApp {
         "customize-panel-container",
       ),
       customizeBtn: document.getElementById("customize-btn"),
+      // Phase 3-2: テンプレートパネル用
+      templatePanelContainer: document.getElementById(
+        "template-panel-container",
+      ),
+      templateBtn: document.getElementById("template-btn"),
+      // Phase 3-3: エフェクトパネル用
+      effectPanelContainer: document.getElementById("effect-panel-container"),
+      effectBtn: document.getElementById("effect-btn"),
     };
   }
 
@@ -207,6 +233,55 @@ class TextEditorApp {
 
     // 初期パネルは非表示
     this.customizePanel.hide();
+  }
+
+  /**
+   * Phase 3-2: テンプレートパネルの初期化
+   */
+  initTemplatePanel() {
+    if (!this.elements.templatePanelContainer) {
+      console.warn("Template panel container not found");
+      return;
+    }
+
+    // リポジトリとパネルを作成
+    this.templateRepository = new TemplateRepository();
+    this.templatePanel = new TemplatePanel(
+      this.templateRepository,
+      (template) => this.applyTemplate(template),
+    );
+
+    // 保存リクエストハンドラーを設定
+    this.templatePanel.setOnSaveRequest((name) => {
+      this.saveCurrentAsTemplate(name);
+    });
+
+    // パネルをマウント
+    this.templatePanel.mount(this.elements.templatePanelContainer);
+
+    // 初期パネルは非表示
+    this.templatePanel.hide();
+  }
+
+  /**
+   * Phase 3-3: エフェクトパネルの初期化
+   */
+  initEffectPanel() {
+    if (!this.elements.effectPanelContainer) {
+      console.warn("Effect panel container not found");
+      return;
+    }
+
+    // エフェクトパネル作成
+    this.effectPanel = new EffectPanel((effect, isPreview) =>
+      this.onEffectChange(effect, isPreview),
+    );
+
+    // パネルをマウント
+    this.effectPanel.mount(this.elements.effectPanelContainer);
+
+    // 初期パネルは非表示
+    this.effectPanel.hide();
   }
 
   /**
@@ -280,6 +355,24 @@ class TextEditorApp {
       this.elements.customizeBtn.addEventListener("click", () => {
         if (this.customizePanel) {
           this.customizePanel.toggle();
+        }
+      });
+    }
+
+    // Phase 3-2: テンプレートボタン
+    if (this.elements.templateBtn) {
+      this.elements.templateBtn.addEventListener("click", () => {
+        if (this.templatePanel) {
+          this.templatePanel.show();
+        }
+      });
+    }
+
+    // Phase 3-3: エフェクトボタン
+    if (this.elements.effectBtn) {
+      this.elements.effectBtn.addEventListener("click", () => {
+        if (this.effectPanel) {
+          this.effectPanel.show();
         }
       });
     }
@@ -364,12 +457,18 @@ class TextEditorApp {
    */
   async syncToFirebase() {
     try {
+      // Phase 3-3: effectを含める
+      const dataToSave = {
+        ...this.settings,
+        effect: this.effect ? this.effect.toFirestore() : null,
+      };
+
       // Firebase保存
-      await saveSettings(this.settings);
+      await saveSettings(dataToSave);
 
       // localStorage保存（オフライン対応）
       const localKey = "obs-text-settings";
-      localStorage.setItem(localKey, JSON.stringify(this.settings));
+      localStorage.setItem(localKey, JSON.stringify(dataToSave));
 
       this.setConnectionStatus("connected");
     } catch (error) {
@@ -554,6 +653,127 @@ class TextEditorApp {
     // ExtendedStyleのCSS適用
     const cssStyle = style.toCSS();
     Object.assign(this.elements.preview.style, cssStyle);
+  }
+
+  /**
+   * Phase 3-2: テンプレートを適用
+   */
+  applyTemplate(template) {
+    // ExtendedStyleを更新
+    this.extendedStyle = template.style;
+
+    // settings.styleを更新
+    const firestoreData = template.style.toFirestore();
+    this.settings.style = {
+      ...firestoreData,
+      textShadow: template.style.getTextShadowCSS(),
+    };
+
+    // Phase 3-3: Effectを更新
+    if (template.effect) {
+      this.effect = template.effect;
+      if (this.effectPanel) {
+        this.effectPanel.loadEffect(this.effect);
+      }
+    }
+
+    // プレビュー更新
+    this.updatePreviewWithExtendedStyle(template.style);
+
+    // Firebase同期
+    this.syncToFirebase();
+
+    // 成功通知
+    console.log(`テンプレート「${template.name}」を適用しました`);
+  }
+
+  /**
+   * Phase 3-2: 現在のスタイルをテンプレートとして保存
+   */
+  saveCurrentAsTemplate(name) {
+    if (!this.extendedStyle) {
+      alert("保存するスタイルがありません");
+      return;
+    }
+
+    try {
+      const template = new Template({
+        name,
+        style: this.extendedStyle,
+        effect: this.effect,
+      });
+
+      if (this.templateRepository.save(template)) {
+        alert(`テンプレート「${name}」を保存しました`);
+        this.templatePanel.refresh();
+      }
+    } catch (error) {
+      console.error("Failed to save template:", error);
+      alert("テンプレートの保存に失敗しました");
+    }
+  }
+
+  /**
+   * Phase 3-3: エフェクト変更時の処理
+   */
+  onEffectChange(effect, isPreview = false) {
+    this.effect = effect;
+
+    if (isPreview) {
+      // プレビューモード: プレビュー要素にエフェクトを適用
+      this.previewEffect(effect);
+    } else {
+      // 通常モード: Firebase同期
+      this.syncToFirebase();
+    }
+  }
+
+  /**
+   * Phase 3-3: プレビュー要素にエフェクトを適用
+   */
+  previewEffect(effect) {
+    const preview = this.elements.preview;
+    if (!preview) return;
+
+    // 既存のエフェクトクラスを削除
+    const classesToRemove = Array.from(preview.classList).filter(
+      (cls) => cls.startsWith("effect-") || cls === "text-effect",
+    );
+    classesToRemove.forEach((cls) => preview.classList.remove(cls));
+
+    if (!effect || !effect.enabled || effect.type === "none") {
+      return;
+    }
+
+    // エフェクトクラスを追加
+    let effectClass = `effect-${effect.type}`;
+    if (effect.type === "slideIn" && effect.config?.direction) {
+      effectClass += `-${effect.config.direction}`;
+    }
+
+    preview.classList.add("text-effect");
+    preview.classList.add(effectClass);
+
+    // 速度クラス
+    const speed = effect.speed || 1.0;
+    if (speed < 0.8) {
+      preview.classList.add("effect-speed-slow");
+    } else if (speed > 1.2) {
+      preview.classList.add("effect-speed-fast");
+    } else {
+      preview.classList.add("effect-speed-normal");
+    }
+
+    // Easingクラス
+    const easing = effect.config?.easing || "ease";
+    preview.classList.add(`effect-easing-${easing}`);
+
+    // アニメーション終了後にクラスを削除
+    const handleAnimationEnd = () => {
+      classesToRemove.forEach((cls) => preview.classList.remove(cls));
+      preview.removeEventListener("animationend", handleAnimationEnd);
+    };
+    preview.addEventListener("animationend", handleAnimationEnd);
   }
 }
 

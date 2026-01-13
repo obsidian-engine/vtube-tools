@@ -9,6 +9,8 @@ class DisplayApp {
     this.elements = {};
     this.unsubscribe = null;
     this.lastData = null; // キャッシュ（障害時フォールバック用）
+    this.currentEffect = null; // Phase 3-3: 現在のエフェクト
+    this.lastText = null; // テキスト変更検出用
 
     this.init();
   }
@@ -35,13 +37,8 @@ class DisplayApp {
    * Firebase設定をリアルタイム購読
    */
   subscribeToSettings() {
-    console.log("[Display] Subscribing to settings");
-
     this.unsubscribe = subscribeSettings((data) => {
-      console.log("[Display] Firebase data received:", data);
-
       if (data) {
-        console.log("[Display] Updating display with data");
         this.updateDisplay(data);
         this.lastData = data; // キャッシュ更新
       } else {
@@ -69,7 +66,11 @@ class DisplayApp {
   updateDisplay(data) {
     if (!this.elements.textDisplay) return;
 
-    const { text, style } = data;
+    const { text, style, effect } = data;
+
+    // テキスト変更検出
+    const textChanged = this.lastText !== text;
+    this.lastText = text;
 
     // XSS対策: textContentを使用（innerHTML禁止）
     this.elements.textDisplay.textContent = text || "";
@@ -91,6 +92,12 @@ class DisplayApp {
 
     // 位置調整
     this.applyPosition(displayStyle, style.position);
+
+    // Phase 3-3: エフェクト適用（テキスト変更時のみ）
+    if (effect && textChanged) {
+      this.currentEffect = effect;
+      this.triggerEffect(effect);
+    }
   }
 
   /**
@@ -134,6 +141,69 @@ class DisplayApp {
       right: "translate(-100%, -50%)",
     };
     displayStyle.transform = transforms[position.align] || transforms.center;
+  }
+
+  /**
+   * Phase 3-3: エフェクトをトリガー
+   */
+  triggerEffect(effect) {
+    if (!effect || !effect.enabled || effect.type === "none") {
+      this.removeEffect();
+      return;
+    }
+
+    const element = this.elements.textDisplay;
+    if (!element) return;
+
+    // 既存のエフェクトクラスを削除
+    this.removeEffect();
+
+    // エフェクトクラスを構築
+    let effectClass = `effect-${effect.type}`;
+
+    // slideInの場合は方向を追加
+    if (effect.type === "slideIn" && effect.config?.direction) {
+      effectClass += `-${effect.config.direction}`;
+    }
+
+    // 共通クラス
+    element.classList.add("text-effect");
+    element.classList.add(effectClass);
+
+    // 速度クラス
+    const speed = effect.speed || 1.0;
+    if (speed < 0.8) {
+      element.classList.add("effect-speed-slow");
+    } else if (speed > 1.2) {
+      element.classList.add("effect-speed-fast");
+    } else {
+      element.classList.add("effect-speed-normal");
+    }
+
+    // Easingクラス
+    const easing = effect.config?.easing || "ease";
+    element.classList.add(`effect-easing-${easing}`);
+
+    // アニメーション終了後にクラスを削除
+    const handleAnimationEnd = () => {
+      this.removeEffect();
+      element.removeEventListener("animationend", handleAnimationEnd);
+    };
+    element.addEventListener("animationend", handleAnimationEnd);
+  }
+
+  /**
+   * Phase 3-3: エフェクトクラスを削除
+   */
+  removeEffect() {
+    const element = this.elements.textDisplay;
+    if (!element) return;
+
+    // エフェクト関連のクラスを全て削除
+    const classesToRemove = Array.from(element.classList).filter(
+      (cls) => cls.startsWith("effect-") || cls === "text-effect",
+    );
+    classesToRemove.forEach((cls) => element.classList.remove(cls));
   }
 
   /**
