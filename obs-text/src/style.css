@@ -182,17 +182,25 @@ body {
   border-radius: var(--radius-sm);
   padding: var(--spacing-lg);
   min-height: 200px;
+  max-height: 400px;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
+  position: relative;
 }
 
 .preview-text {
   font-size: 1.75rem;
   text-align: center;
-  white-space: pre;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
   color: var(--obsidian-text);
   font-weight: 500;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: hidden;
 }
 
 /* URL表示 */
@@ -858,4 +866,218 @@ body {
   .wizard-next {
     max-width: none;
   }
+}
+
+/* ========================================
+   Phase 3-1: カスタマイズパネルスタイル
+   ======================================== */
+
+/* カスタマイズボタン */
+.btn-customize {
+  background: linear-gradient(135deg, var(--obsidian-accent), #9333ea);
+  color: white;
+  border: none;
+  transition: all var(--transition-normal);
+}
+
+.btn-customize:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(139, 92, 246, 0.3);
+}
+
+/* カスタマイズパネル */
+.customize-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 400px;
+  height: 100vh;
+  background: var(--obsidian-bg-primary);
+  border-left: 1px solid var(--obsidian-border);
+  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  animation: slideInRight 0.3s ease;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* パネルヘッダー */
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-md);
+  border-bottom: 1px solid var(--obsidian-border);
+  background: var(--obsidian-bg-secondary);
+}
+
+.panel-header h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  color: var(--obsidian-text-normal);
+}
+
+.panel-close {
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: var(--obsidian-text-muted);
+  cursor: pointer;
+  line-height: 1;
+  transition: color var(--transition-normal);
+  padding: 0;
+  width: 32px;
+  height: 32px;
+}
+
+.panel-close:hover {
+  color: var(--obsidian-text-normal);
+}
+
+/* パネルコンテンツ */
+.panel-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--spacing-md);
+}
+
+.panel-section {
+  margin-bottom: var(--spacing-lg);
+}
+
+.panel-section h4 {
+  margin-bottom: var(--spacing-sm);
+  font-size: 1rem;
+  color: var(--obsidian-text-normal);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+/* テンプレートグリッド */
+.template-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-sm);
+}
+
+.template-btn {
+  padding: var(--spacing-sm);
+  border: 2px solid var(--obsidian-border);
+  border-radius: var(--radius-sm);
+  background: var(--obsidian-bg-secondary);
+  color: var(--obsidian-text-normal);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-size: 0.875rem;
+}
+
+.template-btn:hover {
+  border-color: var(--obsidian-accent);
+  background: var(--obsidian-bg-hover);
+  transform: translateY(-2px);
+}
+
+.template-btn:active {
+  transform: translateY(0);
+}
+
+/* サブコントロール */
+.sub-controls {
+  margin-top: var(--spacing-sm);
+  padding-left: var(--spacing-md);
+  border-left: 2px solid var(--obsidian-border);
+}
+
+.sub-controls .form-group {
+  margin-bottom: var(--spacing-sm);
+}
+
+/* パネルフッター */
+.panel-footer {
+  padding: var(--spacing-md);
+  border-top: 1px solid var(--obsidian-border);
+  background: var(--obsidian-bg-secondary);
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.panel-footer .btn {
+  flex: 1;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+  .customize-panel {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .template-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* フォームコントロール（パネル用） */
+.customize-panel .form-control {
+  width: 100%;
+  padding: var(--spacing-xs);
+  border: 1px solid var(--obsidian-border);
+  border-radius: var(--radius-sm);
+  background: var(--obsidian-bg-secondary);
+  color: var(--obsidian-text-normal);
+  font-size: 0.875rem;
+}
+
+.customize-panel .form-control:focus {
+  outline: none;
+  border-color: var(--obsidian-accent);
+  box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.2);
+}
+
+.customize-panel input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--obsidian-border);
+}
+
+.customize-panel input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--obsidian-accent);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+}
+
+.customize-panel input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.customize-panel input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin-right: var(--spacing-xs);
+  cursor: pointer;
+}
+
+.customize-panel label {
+  display: block;
+  margin-bottom: var(--spacing-xs);
+  font-size: 0.875rem;
+  color: var(--obsidian-text-muted);
 }

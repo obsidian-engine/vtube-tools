@@ -1,9 +1,12 @@
-import {
-  saveSession,
-  generateSessionId,
-  subscribeSession,
-} from "./firebase.js";
+import { saveSettings, subscribeSettings } from "./firebase.js";
 import { SetupWizard } from "./wizard.js";
+import { CustomizePanel } from "./ui/customizePanel.js";
+import { TemplatePanel } from "./ui/templatePanel.js";
+import { EffectPanel } from "./ui/effectPanel.js";
+import { ExtendedStyle } from "./domain/style.js";
+import { Template } from "./domain/template.js";
+import { Effect } from "./domain/effect.js";
+import { TemplateRepository } from "./infrastructure/templateRepository.js";
 
 /**
  * TextEditorApp - OBSテキスト編集画面アプリケーション
@@ -12,7 +15,6 @@ import { SetupWizard } from "./wizard.js";
 class TextEditorApp {
   constructor() {
     this.elements = {};
-    this.sessionId = null;
     this.settings = {
       text: "",
       style: {
@@ -24,6 +26,12 @@ class TextEditorApp {
         textShadow: "2px 2px 4px rgba(0, 0, 0, 0.8)",
       },
     };
+    this.extendedStyle = null; // Phase 3-1: 拡張スタイルモデル
+    this.customizePanel = null; // Phase 3-1: カスタマイズパネル
+    this.templateRepository = null; // Phase 3-2: テンプレートリポジトリ
+    this.templatePanel = null; // Phase 3-2: テンプレートパネル
+    this.effect = new Effect(); // Phase 3-3: エフェクト
+    this.effectPanel = null; // Phase 3-3: エフェクトパネル
     this.debounceTimer = null;
     this.unsubscribe = null;
     this.isLoadingSettings = false;
@@ -44,7 +52,7 @@ class TextEditorApp {
       wizard.start();
       return;
     }
-    
+
     this.continueInit();
   }
 
@@ -52,8 +60,10 @@ class TextEditorApp {
    * ウィザード完了後、または通常の初期化
    */
   async continueInit() {
-    this.initSession();
     this.bindElements();
+    this.initCustomizePanel(); // Phase 3-1: カスタマイズパネル初期化
+    this.initTemplatePanel(); // Phase 3-2: テンプレートパネル初期化
+    this.initEffectPanel(); // Phase 3-3: エフェクトパネル初期化
     this.attachEventListeners();
     await this.loadSettings();
     this.updatePreview();
@@ -68,27 +78,11 @@ class TextEditorApp {
     if (settings.textColor) {
       this.settings.style.color = settings.textColor;
     }
-    if (settings.background === 'chromakey') {
-      this.settings.style.backgroundColor = '#00ff00';
+    if (settings.background === "chromakey") {
+      this.settings.style.backgroundColor = "#00ff00";
     } else if (settings.backgroundColor) {
       this.settings.style.backgroundColor = settings.backgroundColor;
     }
-    if (settings.sessionId) {
-      this.sessionId = settings.sessionId;
-    }
-  }
-
-  /**
-   * セッションID初期化
-   * URLパラメータから取得、なければ新規生成
-   */
-  initSession() {
-    const params = new URLSearchParams(window.location.search);
-    this.sessionId = params.get("session") || generateSessionId();
-
-    // URLに反映（履歴置換）
-    const newUrl = `${window.location.pathname}?session=${this.sessionId}`;
-    window.history.replaceState({}, "", newUrl);
   }
 
   /**
@@ -99,7 +93,7 @@ class TextEditorApp {
 
     try {
       // 1. localStorageから復元（オフライン対応）
-      const localKey = `obs-text-settings-${this.sessionId}`;
+      const localKey = "obs-text-settings";
       const localData = localStorage.getItem(localKey);
       if (localData) {
         try {
@@ -111,7 +105,7 @@ class TextEditorApp {
       }
 
       // 2. Firebaseから復元（優先）
-      this.unsubscribe = subscribeSession(this.sessionId, (data) => {
+      this.unsubscribe = subscribeSettings((data) => {
         if (data && !this.isLoadingSettings) {
           this.applySettings(data);
         }
@@ -157,6 +151,14 @@ class TextEditorApp {
       }
     }
 
+    // Phase 3-3: エフェクトを復元
+    if (data.effect) {
+      this.effect = Effect.fromFirestore(data.effect);
+      if (this.effectPanel) {
+        this.effectPanel.loadEffect(this.effect);
+      }
+    }
+
     // プレビュー更新
     this.updatePreview();
   }
@@ -171,7 +173,6 @@ class TextEditorApp {
       displayUrl: document.getElementById("display-url"),
       copyUrlBtn: document.getElementById("copy-url-btn"),
       connectionStatus: document.getElementById("connection-status"),
-      sessionIdDisplay: document.getElementById("session-id"),
       showGuideBtn: document.getElementById("show-guide-btn"),
       // スタイル設定UI
       fontSelect: document.getElementById("font-select"),
@@ -180,12 +181,107 @@ class TextEditorApp {
       weightSelect: document.getElementById("weight-select"),
       sizeSlider: document.getElementById("size-slider"),
       sizeValue: document.getElementById("size-value"),
+      // Phase 3-1: カスタマイズパネル用
+      customizePanelContainer: document.getElementById(
+        "customize-panel-container",
+      ),
+      customizeBtn: document.getElementById("customize-btn"),
+      // Phase 3-2: テンプレートパネル用
+      templatePanelContainer: document.getElementById(
+        "template-panel-container",
+      ),
+      templateBtn: document.getElementById("template-btn"),
+      // Phase 3-3: エフェクトパネル用
+      effectPanelContainer: document.getElementById("effect-panel-container"),
+      effectBtn: document.getElementById("effect-btn"),
     };
+  }
 
-    // セッションID表示
-    if (this.elements.sessionIdDisplay) {
-      this.elements.sessionIdDisplay.textContent = this.sessionId;
+  /**
+   * Phase 3-1: カスタマイズパネルの初期化
+   */
+  initCustomizePanel() {
+    if (!this.elements.customizePanelContainer) {
+      console.warn("Customize panel container not found");
+      return;
     }
+
+    // 既存の設定から ExtendedStyle を作成（マイグレーション）
+    this.extendedStyle = new ExtendedStyle({
+      fontFamily: this.settings.style.fontFamily,
+      fontSize: this.settings.style.fontSize,
+      color: this.settings.style.color,
+      backgroundColor:
+        this.settings.style.backgroundColor === "transparent"
+          ? null
+          : this.settings.style.backgroundColor,
+      shadow: ExtendedStyle.parseTextShadow(this.settings.style.textShadow),
+    });
+
+    // カスタマイズパネル作成
+    this.customizePanel = new CustomizePanel(
+      this.elements.customizePanelContainer,
+      {
+        onStyleChange: (style) => {
+          this.onExtendedStyleChange(style);
+        },
+        onTemplateSelect: (template) => {
+          this.onTemplateSelect(template);
+        },
+      },
+    );
+
+    // 初期パネルは非表示
+    this.customizePanel.hide();
+  }
+
+  /**
+   * Phase 3-2: テンプレートパネルの初期化
+   */
+  initTemplatePanel() {
+    if (!this.elements.templatePanelContainer) {
+      console.warn("Template panel container not found");
+      return;
+    }
+
+    // リポジトリとパネルを作成
+    this.templateRepository = new TemplateRepository();
+    this.templatePanel = new TemplatePanel(
+      this.templateRepository,
+      (template) => this.applyTemplate(template),
+    );
+
+    // 保存リクエストハンドラーを設定
+    this.templatePanel.setOnSaveRequest((name) => {
+      this.saveCurrentAsTemplate(name);
+    });
+
+    // パネルをマウント
+    this.templatePanel.mount(this.elements.templatePanelContainer);
+
+    // 初期パネルは非表示
+    this.templatePanel.hide();
+  }
+
+  /**
+   * Phase 3-3: エフェクトパネルの初期化
+   */
+  initEffectPanel() {
+    if (!this.elements.effectPanelContainer) {
+      console.warn("Effect panel container not found");
+      return;
+    }
+
+    // エフェクトパネル作成
+    this.effectPanel = new EffectPanel((effect, isPreview) =>
+      this.onEffectChange(effect, isPreview),
+    );
+
+    // パネルをマウント
+    this.effectPanel.mount(this.elements.effectPanelContainer);
+
+    // 初期パネルは非表示
+    this.effectPanel.hide();
   }
 
   /**
@@ -253,6 +349,33 @@ class TextEditorApp {
         this.showGuideModal();
       });
     }
+
+    // Phase 3-1: カスタマイズボタン
+    if (this.elements.customizeBtn) {
+      this.elements.customizeBtn.addEventListener("click", () => {
+        if (this.customizePanel) {
+          this.customizePanel.toggle();
+        }
+      });
+    }
+
+    // Phase 3-2: テンプレートボタン
+    if (this.elements.templateBtn) {
+      this.elements.templateBtn.addEventListener("click", () => {
+        if (this.templatePanel) {
+          this.templatePanel.show();
+        }
+      });
+    }
+
+    // Phase 3-3: エフェクトボタン
+    if (this.elements.effectBtn) {
+      this.elements.effectBtn.addEventListener("click", () => {
+        if (this.effectPanel) {
+          this.effectPanel.show();
+        }
+      });
+    }
   }
 
   /**
@@ -293,10 +416,16 @@ class TextEditorApp {
   updatePreview() {
     if (!this.elements.preview) return;
 
+    // ExtendedStyleがある場合はそちらを優先
+    if (this.extendedStyle) {
+      this.updatePreviewWithExtendedStyle(this.extendedStyle);
+      return;
+    }
+
     // XSS対策: textContentを使用
     this.elements.preview.textContent = this.settings.text || "プレビュー表示";
 
-    // スタイル適用
+    // 基本スタイル適用
     Object.assign(this.elements.preview.style, {
       fontFamily: this.settings.style.fontFamily,
       fontSize: `${this.settings.style.fontSize}px`,
@@ -316,7 +445,9 @@ class TextEditorApp {
     const pathParts = window.location.pathname.split("/");
     pathParts[pathParts.length - 1] = "display.html";
     const path = pathParts.join("/");
-    const url = `${base}${path}?session=${this.sessionId}`;
+
+    // シンプルなURL（パラメータなし）
+    const url = `${base}${path}`;
 
     this.elements.displayUrl.value = url;
   }
@@ -326,12 +457,18 @@ class TextEditorApp {
    */
   async syncToFirebase() {
     try {
+      // Phase 3-3: effectを含める
+      const dataToSave = {
+        ...this.settings,
+        effect: this.effect ? this.effect.toFirestore() : null,
+      };
+
       // Firebase保存
-      await saveSession(this.sessionId, this.settings);
+      await saveSettings(dataToSave);
 
       // localStorage保存（オフライン対応）
-      const localKey = `obs-text-settings-${this.sessionId}`;
-      localStorage.setItem(localKey, JSON.stringify(this.settings));
+      const localKey = "obs-text-settings";
+      localStorage.setItem(localKey, JSON.stringify(dataToSave));
 
       this.setConnectionStatus("connected");
     } catch (error) {
@@ -460,6 +597,183 @@ class TextEditorApp {
         </div>
       </div>
     `;
+  }
+
+  /**
+   * Phase 3-1: 拡張スタイル変更時の処理
+   */
+  onExtendedStyleChange(style) {
+    this.extendedStyle = style;
+
+    // settings.styleを新形式で更新（shadow/stroke/position含む）
+    const firestoreData = style.toFirestore();
+    this.settings.style = {
+      ...firestoreData,
+      // 後方互換性のためtextShadowも残す
+      textShadow: style.getTextShadowCSS(),
+    };
+
+    // プレビュー更新
+    this.updatePreviewWithExtendedStyle(style);
+
+    // Firebase同期
+    this.syncToFirebase();
+  }
+
+  /**
+   * Phase 3-1: テンプレート選択時の処理
+   */
+  onTemplateSelect(template) {
+    this.extendedStyle = template.style;
+
+    // settings.styleを新形式で更新（shadow/stroke/position含む）
+    const firestoreData = template.style.toFirestore();
+    this.settings.style = {
+      ...firestoreData,
+      // 後方互換性のためtextShadowも残す
+      textShadow: template.style.getTextShadowCSS(),
+    };
+
+    // プレビュー更新
+    this.updatePreviewWithExtendedStyle(template.style);
+
+    // Firebase同期
+    this.syncToFirebase();
+  }
+
+  /**
+   * Phase 3-1: ExtendedStyleを使ったプレビュー更新
+   */
+  updatePreviewWithExtendedStyle(style) {
+    if (!this.elements.preview) return;
+
+    // XSS対策: textContentを使用
+    this.elements.preview.textContent = this.settings.text || "プレビュー表示";
+
+    // ExtendedStyleのCSS適用
+    const cssStyle = style.toCSS();
+    Object.assign(this.elements.preview.style, cssStyle);
+  }
+
+  /**
+   * Phase 3-2: テンプレートを適用
+   */
+  applyTemplate(template) {
+    // ExtendedStyleを更新
+    this.extendedStyle = template.style;
+
+    // settings.styleを更新
+    const firestoreData = template.style.toFirestore();
+    this.settings.style = {
+      ...firestoreData,
+      textShadow: template.style.getTextShadowCSS(),
+    };
+
+    // Phase 3-3: Effectを更新
+    if (template.effect) {
+      this.effect = template.effect;
+      if (this.effectPanel) {
+        this.effectPanel.loadEffect(this.effect);
+      }
+    }
+
+    // プレビュー更新
+    this.updatePreviewWithExtendedStyle(template.style);
+
+    // Firebase同期
+    this.syncToFirebase();
+
+    // 成功通知
+    console.log(`テンプレート「${template.name}」を適用しました`);
+  }
+
+  /**
+   * Phase 3-2: 現在のスタイルをテンプレートとして保存
+   */
+  saveCurrentAsTemplate(name) {
+    if (!this.extendedStyle) {
+      alert("保存するスタイルがありません");
+      return;
+    }
+
+    try {
+      const template = new Template({
+        name,
+        style: this.extendedStyle,
+        effect: this.effect,
+      });
+
+      if (this.templateRepository.save(template)) {
+        alert(`テンプレート「${name}」を保存しました`);
+        this.templatePanel.refresh();
+      }
+    } catch (error) {
+      console.error("Failed to save template:", error);
+      alert("テンプレートの保存に失敗しました");
+    }
+  }
+
+  /**
+   * Phase 3-3: エフェクト変更時の処理
+   */
+  onEffectChange(effect, isPreview = false) {
+    this.effect = effect;
+
+    if (isPreview) {
+      // プレビューモード: プレビュー要素にエフェクトを適用
+      this.previewEffect(effect);
+    } else {
+      // 通常モード: Firebase同期
+      this.syncToFirebase();
+    }
+  }
+
+  /**
+   * Phase 3-3: プレビュー要素にエフェクトを適用
+   */
+  previewEffect(effect) {
+    const preview = this.elements.preview;
+    if (!preview) return;
+
+    // 既存のエフェクトクラスを削除
+    const classesToRemove = Array.from(preview.classList).filter(
+      (cls) => cls.startsWith("effect-") || cls === "text-effect",
+    );
+    classesToRemove.forEach((cls) => preview.classList.remove(cls));
+
+    if (!effect || !effect.enabled || effect.type === "none") {
+      return;
+    }
+
+    // エフェクトクラスを追加
+    let effectClass = `effect-${effect.type}`;
+    if (effect.type === "slideIn" && effect.config?.direction) {
+      effectClass += `-${effect.config.direction}`;
+    }
+
+    preview.classList.add("text-effect");
+    preview.classList.add(effectClass);
+
+    // 速度クラス
+    const speed = effect.speed || 1.0;
+    if (speed < 0.8) {
+      preview.classList.add("effect-speed-slow");
+    } else if (speed > 1.2) {
+      preview.classList.add("effect-speed-fast");
+    } else {
+      preview.classList.add("effect-speed-normal");
+    }
+
+    // Easingクラス
+    const easing = effect.config?.easing || "ease";
+    preview.classList.add(`effect-easing-${easing}`);
+
+    // アニメーション終了後にクラスを削除
+    const handleAnimationEnd = () => {
+      classesToRemove.forEach((cls) => preview.classList.remove(cls));
+      preview.removeEventListener("animationend", handleAnimationEnd);
+    };
+    preview.addEventListener("animationend", handleAnimationEnd);
   }
 }
 
