@@ -21,12 +21,15 @@ const database = getDatabase(app);
  * セッションデータを保存
  * @param {string} sessionId - セッションID
  * @param {object} data - 保存データ { text, style }
+ * @param {string} token - オプション: アクセストークン
  */
-export async function saveSession(sessionId, data) {
+export async function saveSession(sessionId, data, token = null) {
   try {
     const sessionRef = ref(database, `sessions/${sessionId}`);
     await set(sessionRef, {
       ...data,
+      token: token || generateAccessToken(),
+      isPublic: false,
       updatedAt: Date.now(),
     });
   } catch (error) {
@@ -56,6 +59,14 @@ export function subscribeSession(sessionId, callback) {
   );
 
   return () => off(sessionRef);
+}
+
+/**
+ * アクセストークンを生成（セキュリティ用）
+ * @returns {string} 16文字のランダム文字列
+ */
+export function generateAccessToken() {
+  return crypto.randomUUID().replace(/-/g, "").substring(0, 16);
 }
 
 /**
