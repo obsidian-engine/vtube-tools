@@ -7,14 +7,34 @@ class SetupWizard {
     this.state = {
       currentStep: 0,
       answers: {},
-      completed: false
+      completed: false,
     };
     this.steps = [
-      { id: 'welcome', title: 'ようこそ！', render: () => this.renderWelcome() },
-      { id: 'obs-check', title: 'OBSの確認', render: () => this.renderObsCheck() },
-      { id: 'text-color', title: 'テキスト色', render: () => this.renderTextColor() },
-      { id: 'background', title: '背景設定', render: () => this.renderBackground() },
-      { id: 'complete', title: '設定完了', render: () => this.renderComplete() }
+      {
+        id: "welcome",
+        title: "ようこそ！",
+        render: () => this.renderWelcome(),
+      },
+      {
+        id: "obs-check",
+        title: "OBSの確認",
+        render: () => this.renderObsCheck(),
+      },
+      {
+        id: "text-color",
+        title: "テキスト色",
+        render: () => this.renderTextColor(),
+      },
+      {
+        id: "background",
+        title: "背景設定",
+        render: () => this.renderBackground(),
+      },
+      {
+        id: "complete",
+        title: "設定完了",
+        render: () => this.renderComplete(),
+      },
     ];
   }
 
@@ -22,7 +42,7 @@ class SetupWizard {
    * ウィザードを表示すべきか判定
    */
   static shouldShow() {
-    return !localStorage.getItem('wizard-completed');
+    return !localStorage.getItem("wizard-completed");
   }
 
   /**
@@ -38,8 +58,8 @@ class SetupWizard {
    * モーダルHTMLを生成
    */
   createModal() {
-    const modal = document.createElement('div');
-    modal.className = 'wizard-modal active';
+    const modal = document.createElement("div");
+    modal.className = "wizard-modal active";
     modal.innerHTML = `
       <div class="wizard-content">
         <div class="wizard-progress">
@@ -64,28 +84,29 @@ class SetupWizard {
    */
   renderStep(stepIndex) {
     const step = this.steps[stepIndex];
-    const container = this.modal.querySelector('.wizard-step-container');
+    const container = this.modal.querySelector(".wizard-step-container");
     container.innerHTML = step.render();
 
     // プログレスバー更新
     const progress = ((stepIndex + 1) / this.steps.length) * 100;
-    this.modal.querySelector('.wizard-progress-bar').style.width = `${progress}%`;
-    this.modal.querySelector('.wizard-progress-text').textContent = 
+    this.modal.querySelector(".wizard-progress-bar").style.width =
+      `${progress}%`;
+    this.modal.querySelector(".wizard-progress-text").textContent =
       `ステップ ${stepIndex + 1} / ${this.steps.length}`;
 
     // ナビゲーションボタンの状態更新
-    const prevBtn = this.modal.querySelector('.wizard-prev');
-    const nextBtn = this.modal.querySelector('.wizard-next');
-    const skipBtn = this.modal.querySelector('.wizard-skip');
+    const prevBtn = this.modal.querySelector(".wizard-prev");
+    const nextBtn = this.modal.querySelector(".wizard-next");
+    const skipBtn = this.modal.querySelector(".wizard-skip");
 
     prevBtn.disabled = stepIndex === 0;
-    
+
     if (stepIndex === this.steps.length - 1) {
-      nextBtn.textContent = '完了';
-      skipBtn.style.display = 'none';
+      nextBtn.textContent = "完了";
+      skipBtn.style.display = "none";
     } else {
-      nextBtn.textContent = '次へ';
-      skipBtn.style.display = 'block';
+      nextBtn.textContent = "次へ";
+      skipBtn.style.display = "block";
     }
 
     // ステップ固有のイベントリスナーを追加
@@ -132,7 +153,7 @@ class SetupWizard {
    * Step 2: テキスト色
    */
   renderTextColor() {
-    const currentColor = this.state.answers.textColor || '#ffffff';
+    const currentColor = this.state.answers.textColor || "#ffffff";
     return `
       <h2>テキストの色を選んでください</h2>
       <div class="wizard-color-picker">
@@ -206,53 +227,32 @@ class SetupWizard {
    * URLを生成
    */
   generateUrl() {
-    const baseUrl = window.location.origin + window.location.pathname.replace('index.html', 'display.html');
-    const params = new URLSearchParams();
-    
-    // セッションIDを生成または取得
-    const sessionId = this.state.answers.sessionId || this.generateSessionId();
-    params.set('session', sessionId);
-
-    if (this.state.answers.textColor) {
-      params.set('color', this.state.answers.textColor.replace('#', ''));
-    }
-
-    if (this.state.answers.background === 'chromakey') {
-      params.set('bg', '00ff00');
-    } else if (this.state.answers.backgroundColor) {
-      params.set('bg', this.state.answers.backgroundColor.replace('#', ''));
-    }
-
-    return `${baseUrl}?${params.toString()}`;
-  }
-
-  /**
-   * セッションIDを生成
-   */
-  generateSessionId() {
-    return crypto.randomUUID().replace(/-/g, '').substring(0, 12);
+    const baseUrl =
+      window.location.origin +
+      window.location.pathname.replace("index.html", "display.html");
+    return baseUrl;
   }
 
   /**
    * ステップ固有のイベントリスナーを追加
    */
   attachStepEventListeners(stepId) {
-    const container = this.modal.querySelector('.wizard-step-container');
+    const container = this.modal.querySelector(".wizard-step-container");
 
     switch (stepId) {
-      case 'welcome':
+      case "welcome":
         this.attachWelcomeListeners(container);
         break;
-      case 'obs-check':
+      case "obs-check":
         this.attachObsCheckListeners(container);
         break;
-      case 'text-color':
+      case "text-color":
         this.attachTextColorListeners(container);
         break;
-      case 'background':
+      case "background":
         this.attachBackgroundListeners(container);
         break;
-      case 'complete':
+      case "complete":
         this.attachCompleteListeners(container);
         break;
     }
@@ -262,9 +262,9 @@ class SetupWizard {
    * Welcome ステップのリスナー
    */
   attachWelcomeListeners(container) {
-    const options = container.querySelectorAll('.wizard-option');
-    options.forEach(option => {
-      option.addEventListener('click', (e) => {
+    const options = container.querySelectorAll(".wizard-option");
+    options.forEach((option) => {
+      option.addEventListener("click", (e) => {
         this.state.answers.firstTime = e.target.dataset.value;
         this.nextStep();
       });
@@ -275,18 +275,18 @@ class SetupWizard {
    * OBS Check ステップのリスナー
    */
   attachObsCheckListeners(container) {
-    const options = container.querySelectorAll('.wizard-option');
-    const helpDiv = container.querySelector('#obs-help');
+    const options = container.querySelectorAll(".wizard-option");
+    const helpDiv = container.querySelector("#obs-help");
 
-    options.forEach(option => {
-      option.addEventListener('click', (e) => {
+    options.forEach((option) => {
+      option.addEventListener("click", (e) => {
         const value = e.target.dataset.value;
         this.state.answers.obsReady = value;
 
-        if (value === 'no') {
-          helpDiv.style.display = 'block';
+        if (value === "no") {
+          helpDiv.style.display = "block";
         } else {
-          helpDiv.style.display = 'none';
+          helpDiv.style.display = "none";
           this.nextStep();
         }
       });
@@ -297,9 +297,9 @@ class SetupWizard {
    * Text Color ステップのリスナー
    */
   attachTextColorListeners(container) {
-    const presets = container.querySelectorAll('.wizard-color-preset');
-    const customPicker = container.querySelector('.wizard-color-custom');
-    const preview = container.querySelector('#wizard-preview-text');
+    const presets = container.querySelectorAll(".wizard-color-preset");
+    const customPicker = container.querySelector(".wizard-color-custom");
+    const preview = container.querySelector("#wizard-preview-text");
 
     const updateColor = (color) => {
       this.state.answers.textColor = color;
@@ -307,15 +307,15 @@ class SetupWizard {
       this.saveState();
     };
 
-    presets.forEach(preset => {
-      preset.addEventListener('click', (e) => {
+    presets.forEach((preset) => {
+      preset.addEventListener("click", (e) => {
         const color = e.target.dataset.color;
         updateColor(color);
         customPicker.value = color;
       });
     });
 
-    customPicker.addEventListener('input', (e) => {
+    customPicker.addEventListener("input", (e) => {
       updateColor(e.target.value);
     });
   }
@@ -324,26 +324,26 @@ class SetupWizard {
    * Background ステップのリスナー
    */
   attachBackgroundListeners(container) {
-    const options = container.querySelectorAll('.wizard-option');
-    const colorPicker = container.querySelector('#background-color-picker');
+    const options = container.querySelectorAll(".wizard-option");
+    const colorPicker = container.querySelector("#background-color-picker");
 
-    options.forEach(option => {
-      option.addEventListener('click', (e) => {
+    options.forEach((option) => {
+      option.addEventListener("click", (e) => {
         const value = e.target.dataset.value;
         this.state.answers.background = value;
 
-        if (value === 'color') {
-          colorPicker.style.display = 'block';
+        if (value === "color") {
+          colorPicker.style.display = "block";
         } else {
-          colorPicker.style.display = 'none';
+          colorPicker.style.display = "none";
           this.nextStep();
         }
       });
     });
 
     if (colorPicker) {
-      const bgColorInput = colorPicker.querySelector('.wizard-bg-color');
-      bgColorInput?.addEventListener('input', (e) => {
+      const bgColorInput = colorPicker.querySelector(".wizard-bg-color");
+      bgColorInput?.addEventListener("input", (e) => {
         this.state.answers.backgroundColor = e.target.value;
         this.saveState();
       });
@@ -354,20 +354,20 @@ class SetupWizard {
    * Complete ステップのリスナー
    */
   attachCompleteListeners(container) {
-    const copyBtn = container.querySelector('#wizard-copy-btn');
-    const finishBtn = container.querySelector('#wizard-finish-btn');
-    const urlInput = container.querySelector('#wizard-url');
+    const copyBtn = container.querySelector("#wizard-copy-btn");
+    const finishBtn = container.querySelector("#wizard-finish-btn");
+    const urlInput = container.querySelector("#wizard-url");
 
-    copyBtn?.addEventListener('click', () => {
+    copyBtn?.addEventListener("click", () => {
       urlInput.select();
-      document.execCommand('copy');
-      copyBtn.textContent = 'コピーしました！';
+      document.execCommand("copy");
+      copyBtn.textContent = "コピーしました！";
       setTimeout(() => {
-        copyBtn.textContent = 'コピー';
+        copyBtn.textContent = "コピー";
       }, 2000);
     });
 
-    finishBtn?.addEventListener('click', () => {
+    finishBtn?.addEventListener("click", () => {
       this.complete();
     });
   }
@@ -376,13 +376,13 @@ class SetupWizard {
    * ナビゲーションのイベントリスナーを追加
    */
   attachEventListeners() {
-    const prevBtn = this.modal.querySelector('.wizard-prev');
-    const nextBtn = this.modal.querySelector('.wizard-next');
-    const skipBtn = this.modal.querySelector('.wizard-skip');
+    const prevBtn = this.modal.querySelector(".wizard-prev");
+    const nextBtn = this.modal.querySelector(".wizard-next");
+    const skipBtn = this.modal.querySelector(".wizard-skip");
 
-    prevBtn.addEventListener('click', () => this.prevStep());
-    nextBtn.addEventListener('click', () => this.nextStep());
-    skipBtn.addEventListener('click', () => this.skip());
+    prevBtn.addEventListener("click", () => this.prevStep());
+    nextBtn.addEventListener("click", () => this.nextStep());
+    skipBtn.addEventListener("click", () => this.skip());
   }
 
   /**
@@ -412,7 +412,9 @@ class SetupWizard {
    * スキップ
    */
   skip() {
-    if (confirm('ウィザードをスキップしますか？\n後からでも設定を変更できます。')) {
+    if (
+      confirm("ウィザードをスキップしますか？\n後からでも設定を変更できます。")
+    ) {
       this.complete();
     }
   }
@@ -422,7 +424,7 @@ class SetupWizard {
    */
   complete() {
     this.state.completed = true;
-    localStorage.setItem('wizard-completed', 'true');
+    localStorage.setItem("wizard-completed", "true");
     this.modal.remove();
     if (this.onComplete) {
       this.onComplete(this.state.answers);
@@ -433,19 +435,19 @@ class SetupWizard {
    * 状態を保存
    */
   saveState() {
-    localStorage.setItem('wizard-state', JSON.stringify(this.state));
+    localStorage.setItem("wizard-state", JSON.stringify(this.state));
   }
 
   /**
    * 状態を復元
    */
   restoreState() {
-    const saved = localStorage.getItem('wizard-state');
+    const saved = localStorage.getItem("wizard-state");
     if (saved) {
       try {
         this.state = JSON.parse(saved);
       } catch (e) {
-        console.error('Failed to restore wizard state:', e);
+        console.error("Failed to restore wizard state:", e);
       }
     }
   }

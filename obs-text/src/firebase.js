@@ -18,18 +18,14 @@ const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 
 /**
- * セッションデータを保存
- * @param {string} sessionId - セッションID
+ * 設定データを保存（単一設定）
  * @param {object} data - 保存データ { text, style }
- * @param {string} token - オプション: アクセストークン
  */
-export async function saveSession(sessionId, data, token = null) {
+export async function saveSettings(data) {
   try {
-    const sessionRef = ref(database, `sessions/${sessionId}`);
-    await set(sessionRef, {
+    const settingsRef = ref(database, "settings");
+    await set(settingsRef, {
       ...data,
-      token: token || generateAccessToken(),
-      isPublic: false,
       updatedAt: Date.now(),
     });
   } catch (error) {
@@ -39,16 +35,15 @@ export async function saveSession(sessionId, data, token = null) {
 }
 
 /**
- * セッションデータをリアルタイム監視
- * @param {string} sessionId - セッションID
+ * 設定データをリアルタイム監視（単一設定）
  * @param {function} callback - データ変更時のコールバック
  * @returns {function} unsubscribe関数
  */
-export function subscribeSession(sessionId, callback) {
-  const sessionRef = ref(database, `sessions/${sessionId}`);
+export function subscribeSettings(callback) {
+  const settingsRef = ref(database, "settings");
 
   onValue(
-    sessionRef,
+    settingsRef,
     (snapshot) => {
       const data = snapshot.val();
       callback(data);
@@ -58,23 +53,7 @@ export function subscribeSession(sessionId, callback) {
     },
   );
 
-  return () => off(sessionRef);
-}
-
-/**
- * アクセストークンを生成（セキュリティ用）
- * @returns {string} 16文字のランダム文字列
- */
-export function generateAccessToken() {
-  return crypto.randomUUID().replace(/-/g, "").substring(0, 16);
-}
-
-/**
- * UUIDv4を生成（セッションID用）
- * @returns {string} UUID
- */
-export function generateSessionId() {
-  return crypto.randomUUID();
+  return () => off(settingsRef);
 }
 
 export { database };

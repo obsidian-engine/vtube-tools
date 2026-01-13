@@ -102,17 +102,13 @@
               >
             </div>
 
-            <!-- セッションID（詳細情報として折りたたみ） -->
-            <details class="advanced-info">
-              <summary>詳細情報</summary>
-              <div class="form-group">
-                <label for="session-id" class="form-label">あなた専用のID</label>
-                <div class="session-id-display">
-                  <code id="session-id" tabindex="0">読み込み中...</code>
-                </div>
-                <small class="form-hint">このIDで編集内容が保存されます</small>
-              </div>
-            </details>
+            <!-- Phase 3-1: カスタマイズボタン -->
+            <div class="form-group">
+              <button id="customize-btn" class="btn btn-customize">
+                🎨 高度なカスタマイズ
+              </button>
+            </div>
+
           </div>
         </section>
 
@@ -174,7 +170,10 @@
       <p>&copy; 2024 Obsidian Engine | <a href="https://github.com/obsidian-engine/vtube-tools">GitHub</a></p>
     </footer>
   </div>
-  
+
+  <!-- Phase 3-1: カスタマイズパネルコンテナ -->
+  <div id="customize-panel-container" style="display: none;"></div>
+
   <script type="module" src="/src/main.js"></script>
 </body>
 </html>
