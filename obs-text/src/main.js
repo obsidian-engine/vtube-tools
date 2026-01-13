@@ -3,6 +3,7 @@ import {
   generateSessionId,
   subscribeSession,
 } from "./firebase.js";
+import { SetupWizard } from "./wizard.js";
 
 /**
  * TextEditorApp - OBSテキスト編集画面アプリケーション
@@ -34,6 +35,23 @@ class TextEditorApp {
    * 初期化
    */
   async init() {
+    // ウィザード表示判定
+    if (SetupWizard.shouldShow()) {
+      const wizard = new SetupWizard((settings) => {
+        this.applyWizardSettings(settings);
+        this.continueInit();
+      });
+      wizard.start();
+      return;
+    }
+    
+    this.continueInit();
+  }
+
+  /**
+   * ウィザード完了後、または通常の初期化
+   */
+  async continueInit() {
     this.initSession();
     this.bindElements();
     this.attachEventListeners();
@@ -41,6 +59,23 @@ class TextEditorApp {
     this.updatePreview();
     this.updateDisplayUrl();
     this.setConnectionStatus("connected");
+  }
+
+  /**
+   * ウィザード設定を適用
+   */
+  applyWizardSettings(settings) {
+    if (settings.textColor) {
+      this.settings.style.color = settings.textColor;
+    }
+    if (settings.background === 'chromakey') {
+      this.settings.style.backgroundColor = '#00ff00';
+    } else if (settings.backgroundColor) {
+      this.settings.style.backgroundColor = settings.backgroundColor;
+    }
+    if (settings.sessionId) {
+      this.sessionId = settings.sessionId;
+    }
   }
 
   /**

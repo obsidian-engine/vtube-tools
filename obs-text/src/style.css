@@ -542,3 +542,320 @@ body {
     font-size: 1.75rem;
   }
 }
+
+/* ========================================
+   ウィザードスタイル
+   ======================================== */
+
+/* ウィザードモーダル */
+.wizard-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: var(--spacing-md);
+}
+
+.wizard-modal.active {
+  display: flex;
+}
+
+.wizard-content {
+  background: var(--obsidian-gray);
+  border-radius: var(--radius-lg);
+  max-width: 600px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--obsidian-border);
+}
+
+/* プログレスバー */
+.wizard-progress {
+  margin-bottom: var(--spacing-lg);
+}
+
+.wizard-progress-bar {
+  height: 8px;
+  background: var(--gradient-accent);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+  box-shadow: 0 0 10px rgba(88, 166, 255, 0.3);
+}
+
+.wizard-progress-text {
+  display: block;
+  margin-top: var(--spacing-xs);
+  color: var(--obsidian-text-muted);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+/* ステップコンテナ */
+.wizard-step-container {
+  min-height: 250px;
+  margin-bottom: var(--spacing-lg);
+}
+
+.wizard-step-container h2 {
+  font-size: 1.75rem;
+  margin-bottom: var(--spacing-md);
+  color: var(--obsidian-text);
+  font-weight: 700;
+}
+
+.wizard-step-container p {
+  color: var(--obsidian-text-muted);
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: var(--spacing-md);
+}
+
+/* オプション選択 */
+.wizard-options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  margin: var(--spacing-md) 0;
+}
+
+.wizard-option {
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: rgba(88, 166, 255, 0.1);
+  border: 2px solid var(--obsidian-border);
+  border-radius: var(--radius-md);
+  color: var(--obsidian-text);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  text-align: left;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.wizard-option:hover {
+  background: rgba(88, 166, 255, 0.2);
+  border-color: var(--obsidian-accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.wizard-option small {
+  display: block;
+  margin-top: 0.25rem;
+  color: var(--obsidian-text-muted);
+  font-size: 0.875rem;
+  font-weight: 400;
+}
+
+/* ヘルプメッセージ */
+.wizard-help {
+  margin-top: var(--spacing-md);
+  padding: var(--spacing-sm);
+  background: rgba(244, 67, 54, 0.1);
+  border-left: 3px solid var(--error-color);
+  border-radius: var(--radius-sm);
+  color: var(--obsidian-text);
+}
+
+.wizard-help p {
+  margin-bottom: var(--spacing-xs);
+  color: var(--obsidian-text);
+}
+
+.wizard-help ol {
+  margin-left: var(--spacing-md);
+  color: var(--obsidian-text-muted);
+}
+
+.wizard-help li {
+  margin-bottom: 0.25rem;
+}
+
+/* カラーピッカー */
+.wizard-color-picker {
+  display: flex;
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+  align-items: center;
+  margin: var(--spacing-md) 0;
+}
+
+.wizard-color-preset {
+  width: 60px;
+  height: 60px;
+  border: 3px solid var(--obsidian-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--obsidian-text);
+}
+
+.wizard-color-preset:hover {
+  border-color: var(--obsidian-accent);
+  transform: scale(1.1);
+  box-shadow: var(--shadow-md);
+}
+
+.wizard-color-custom {
+  width: 80px;
+  height: 60px;
+  padding: 0;
+  border: 3px solid var(--obsidian-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  background: transparent;
+  transition: all var(--transition-normal);
+}
+
+.wizard-color-custom:hover {
+  border-color: var(--obsidian-accent);
+}
+
+/* プレビュー */
+.wizard-preview {
+  margin-top: var(--spacing-md);
+  padding: var(--spacing-lg);
+  background: rgba(13, 17, 23, 0.6);
+  border: 1px solid var(--obsidian-border);
+  border-radius: var(--radius-sm);
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#wizard-preview-text {
+  font-size: 2rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* URL表示 */
+.wizard-url-display {
+  display: flex;
+  gap: var(--spacing-sm);
+  margin: var(--spacing-md) 0;
+}
+
+#wizard-url {
+  flex: 1;
+  padding: var(--spacing-sm);
+  background: rgba(13, 17, 23, 0.6);
+  border: 2px solid var(--obsidian-border);
+  border-radius: var(--radius-sm);
+  color: var(--obsidian-text);
+  font-family: monospace;
+  font-size: 0.875rem;
+}
+
+/* ガイドセクション */
+.wizard-guide-section {
+  margin-top: var(--spacing-lg);
+  padding: var(--spacing-md);
+  background: rgba(88, 166, 255, 0.1);
+  border: 1px solid var(--obsidian-accent);
+  border-radius: var(--radius-sm);
+}
+
+.wizard-guide-section h3 {
+  font-size: 1.25rem;
+  margin-bottom: var(--spacing-sm);
+  color: var(--obsidian-accent);
+  font-weight: 600;
+}
+
+.wizard-guide-section ol {
+  margin-left: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+  color: var(--obsidian-text);
+}
+
+.wizard-guide-section li {
+  margin-bottom: var(--spacing-xs);
+  line-height: 1.6;
+}
+
+/* ナビゲーション */
+.wizard-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-top: var(--spacing-lg);
+  padding-top: var(--spacing-md);
+  border-top: 1px solid var(--obsidian-border);
+}
+
+.wizard-prev,
+.wizard-next {
+  flex: 1;
+  max-width: 150px;
+}
+
+.wizard-prev:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.wizard-skip {
+  background: none;
+  border: none;
+  color: var(--obsidian-text-muted);
+  cursor: pointer;
+  padding: var(--spacing-xs);
+  font-size: 0.875rem;
+  transition: color var(--transition-normal);
+}
+
+.wizard-skip:hover {
+  color: var(--obsidian-accent);
+}
+
+/* 背景カラーピッカー */
+#background-color-picker {
+  margin-top: var(--spacing-sm);
+}
+
+.wizard-bg-color {
+  width: 100%;
+  height: 60px;
+  padding: 0;
+  border: 3px solid var(--obsidian-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+/* レスポンシブ対応 - ウィザード */
+@media (max-width: 768px) {
+  .wizard-content {
+    max-width: 100%;
+    padding: var(--spacing-md);
+  }
+
+  .wizard-step-container h2 {
+    font-size: 1.5rem;
+  }
+
+  .wizard-color-picker {
+    justify-content: center;
+  }
+
+  .wizard-nav {
+    flex-wrap: wrap;
+  }
+
+  .wizard-prev,
+  .wizard-next {
+    max-width: none;
+  }
+}

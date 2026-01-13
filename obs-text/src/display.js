@@ -51,8 +51,20 @@ class DisplayApp {
    * Firebaseセッションをリアルタイム購読
    */
   subscribeToSession() {
+    const params = new URLSearchParams(window.location.search);
+    const urlToken = params.get("token");
+
     this.unsubscribe = subscribeSession(this.sessionId, (data) => {
       if (data) {
+        // トークン検証（セキュリティ強化）
+        if (!data.isPublic) {
+          if (!urlToken || !data.token || data.token !== urlToken) {
+            this.showError("アクセス権限がありません");
+            console.error("Token validation failed");
+            return;
+          }
+        }
+
         this.updateDisplay(data);
         this.lastData = data; // キャッシュ更新
       } else {
