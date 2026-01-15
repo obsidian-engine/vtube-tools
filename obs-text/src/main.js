@@ -285,6 +285,57 @@ class TextEditorApp {
   }
 
   /**
+   * 緑色（クロマキー）かどうか判定
+   * @param {string} hexColor - #RRGGBB形式の色
+   * @returns {boolean}
+   */
+  isChromaKeyGreen(hexColor) {
+    const r = parseInt(hexColor.slice(1, 3), 16);
+    const g = parseInt(hexColor.slice(3, 5), 16);
+    const b = parseInt(hexColor.slice(5, 7), 16);
+
+    // HSL変換
+    const max = Math.max(r, g, b) / 255;
+    const min = Math.min(r, g, b) / 255;
+    const l = (max + min) / 2;
+
+    if (max === min) return false; // グレースケールは除外
+
+    const d = max - min;
+    const s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+
+    let h = 0;
+    if (max === r / 255) {
+      h = ((g / 255 - b / 255) / d + (g < b ? 6 : 0)) / 6;
+    } else if (max === g / 255) {
+      h = ((b / 255 - r / 255) / d + 2) / 6;
+    } else {
+      h = ((r / 255 - g / 255) / d + 4) / 6;
+    }
+
+    // 緑の範囲: 色相 90-150度（0.25-0.42）、彩度 > 0.4
+    return h >= 0.25 && h <= 0.42 && s > 0.4;
+  }
+
+  /**
+   * 緑色を安全な色に変換
+   * @param {string} hexColor - #RRGGBB形式の色
+   * @returns {string} - 変換後の色
+   */
+  convertFromGreen(hexColor) {
+    const r = parseInt(hexColor.slice(1, 3), 16);
+    const g = parseInt(hexColor.slice(3, 5), 16);
+    const b = parseInt(hexColor.slice(5, 7), 16);
+
+    // 緑成分を青に移動（シアン寄りに）
+    const newR = r;
+    const newG = Math.floor(g * 0.7);
+    const newB = Math.min(255, b + Math.floor(g * 0.3));
+
+    return `#${newR.toString(16).padStart(2, "0")}${newG.toString(16).padStart(2, "0")}${newB.toString(16).padStart(2, "0")}`;
+  }
+
+  /**
    * イベントリスナーを登録
    */
   attachEventListeners() {
@@ -312,7 +363,19 @@ class TextEditorApp {
     // カラーピッカー
     if (this.elements.colorPicker) {
       this.elements.colorPicker.addEventListener("input", (e) => {
-        this.elements.colorText.value = e.target.value;
+        let color = e.target.value;
+
+        // 緑色チェック
+        if (this.isChromaKeyGreen(color)) {
+          const safeColor = this.convertFromGreen(color);
+          alert(
+            `⚠️ クロマキー警告\n\n緑系統の色はOBSのクロマキーで透明化されます。\n自動的に安全な色（${safeColor}）に変換しました。`,
+          );
+          color = safeColor;
+          this.elements.colorPicker.value = color;
+        }
+
+        this.elements.colorText.value = color;
         this.onStyleChange();
       });
     }
@@ -320,8 +383,18 @@ class TextEditorApp {
     // カラーテキスト入力
     if (this.elements.colorText) {
       this.elements.colorText.addEventListener("input", (e) => {
-        const value = e.target.value;
+        let value = e.target.value;
         if (/^#[0-9A-Fa-f]{6}$/.test(value)) {
+          // 緑色チェック
+          if (this.isChromaKeyGreen(value)) {
+            const safeColor = this.convertFromGreen(value);
+            alert(
+              `⚠️ クロマキー警告\n\n緑系統の色はOBSのクロマキーで透明化されます。\n自動的に安全な色（${safeColor}）に変換しました。`,
+            );
+            value = safeColor;
+            this.elements.colorText.value = value;
+          }
+
           this.elements.colorPicker.value = value;
           this.onStyleChange();
         }
@@ -382,10 +455,28 @@ class TextEditorApp {
    * テキスト変更時の処理（デバウンス300ms）
    */
   onTextChange() {
+    // テキスト更新
+    this.settings.text = this.elements.textInput.value;
+
+    // 文字数カウンター更新
+    const charCount = this.settings.text.length;
+    const charCountEl = document.getElementById("char-count");
+    if (charCountEl) {
+      charCountEl.textContent = charCount;
+      // 1000文字超過時に警告表示
+      if (charCount > 1000) {
+        charCountEl.style.color = "var(--error-color)";
+      } else {
+        charCountEl.style.color = "";
+      }
+    }
+
+    // プレビューは即座に更新
+    this.updatePreview();
+
+    // Firebase同期はデバウンス
     clearTimeout(this.debounceTimer);
     this.debounceTimer = setTimeout(async () => {
-      this.settings.text = this.elements.textInput.value;
-      this.updatePreview();
       await this.syncToFirebase();
     }, 300);
   }
@@ -394,17 +485,22 @@ class TextEditorApp {
    * スタイル変更時の処理（デバウンス300ms）
    */
   onStyleChange() {
+    // settings.styleを更新
+    this.settings.style.fontFamily = this.elements.fontSelect.value;
+    this.settings.style.color = this.elements.colorPicker.value;
+    this.settings.style.fontWeight = parseInt(this.elements.weightSelect.value);
+    this.settings.style.fontSize = parseInt(this.elements.sizeSlider.value);
+
+    // 基本スタイルが変更された場合、ExtendedStyleをリセット
+    // （カスタマイズパネルから変更する場合は onExtendedStyleChange が呼ばれる）
+    this.extendedStyle = null;
+
+    // プレビューは即座に更新
+    this.updatePreview();
+
+    // Firebase同期はデバウンス
     clearTimeout(this.debounceTimer);
     this.debounceTimer = setTimeout(async () => {
-      // settings.styleを更新
-      this.settings.style.fontFamily = this.elements.fontSelect.value;
-      this.settings.style.color = this.elements.colorPicker.value;
-      this.settings.style.fontWeight = parseInt(
-        this.elements.weightSelect.value,
-      );
-      this.settings.style.fontSize = parseInt(this.elements.sizeSlider.value);
-
-      this.updatePreview();
       await this.syncToFirebase();
     }, 300);
   }
@@ -432,6 +528,44 @@ class TextEditorApp {
       fontWeight: this.settings.style.fontWeight,
       color: this.settings.style.color,
       textShadow: this.settings.style.textShadow,
+    });
+
+    // プレビューを画面に収める
+    this.scalePreviewToFit();
+  }
+
+  /**
+   * プレビューテキストをコンテナに収まるようにスケール調整
+   */
+  scalePreviewToFit() {
+    if (!this.elements.preview) return;
+
+    const container = this.elements.preview.parentElement;
+    if (!container) return;
+
+    // 一度スケールをリセット
+    this.elements.preview.style.transform = "scale(1)";
+
+    // 次のフレームでサイズを測定（DOMが更新された後）
+    requestAnimationFrame(() => {
+      const containerRect = container.getBoundingClientRect();
+      const previewRect = this.elements.preview.getBoundingClientRect();
+
+      // パディングを考慮
+      const maxWidth = containerRect.width - 32; // 左右16pxずつ
+      const maxHeight = containerRect.height - 32; // 上下16pxずつ
+
+      // スケール計算
+      const scaleX =
+        previewRect.width > maxWidth ? maxWidth / previewRect.width : 1;
+      const scaleY =
+        previewRect.height > maxHeight ? maxHeight / previewRect.height : 1;
+      const scale = Math.min(scaleX, scaleY, 1); // 1を超えないように
+
+      // スケール適用
+      if (scale < 1) {
+        this.elements.preview.style.transform = `scale(${scale})`;
+      }
     });
   }
 
@@ -653,6 +787,9 @@ class TextEditorApp {
     // ExtendedStyleのCSS適用
     const cssStyle = style.toCSS();
     Object.assign(this.elements.preview.style, cssStyle);
+
+    // プレビューを画面に収める
+    this.scalePreviewToFit();
   }
 
   /**

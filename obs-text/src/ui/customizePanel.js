@@ -69,6 +69,7 @@ export class CustomizePanel {
             <h4>
               <label>
                 <input type="checkbox" id="shadowEnabled"> シャドウ
+                <span class="tooltip-icon" title="テキストに影をつけて読みやすくします">ⓘ</span>
               </label>
             </h4>
             <div id="shadowControls" class="sub-controls">
@@ -95,6 +96,7 @@ export class CustomizePanel {
             <h4>
               <label>
                 <input type="checkbox" id="strokeEnabled"> 縁取り
+                <span class="tooltip-icon" title="テキストの周りに枠線を追加して目立たせます">ⓘ</span>
               </label>
             </h4>
             <div id="strokeControls" class="sub-controls">
@@ -174,6 +176,54 @@ export class CustomizePanel {
   }
 
   /**
+   * 緑色（クロマキー）かどうか判定
+   * @param {string} hexColor - #RRGGBB形式の色
+   * @returns {boolean}
+   */
+  isChromaKeyGreen(hexColor) {
+    const r = parseInt(hexColor.slice(1, 3), 16);
+    const g = parseInt(hexColor.slice(3, 5), 16);
+    const b = parseInt(hexColor.slice(5, 7), 16);
+
+    const max = Math.max(r, g, b) / 255;
+    const min = Math.min(r, g, b) / 255;
+    const l = (max + min) / 2;
+
+    if (max === min) return false;
+
+    const d = max - min;
+    const s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+
+    let h = 0;
+    if (max === r / 255) {
+      h = ((g / 255 - b / 255) / d + (g < b ? 6 : 0)) / 6;
+    } else if (max === g / 255) {
+      h = ((b / 255 - r / 255) / d + 2) / 6;
+    } else {
+      h = ((r / 255 - g / 255) / d + 4) / 6;
+    }
+
+    return h >= 0.25 && h <= 0.42 && s > 0.4;
+  }
+
+  /**
+   * 緑色を安全な色に変換
+   * @param {string} hexColor - #RRGGBB形式の色
+   * @returns {string}
+   */
+  convertFromGreen(hexColor) {
+    const r = parseInt(hexColor.slice(1, 3), 16);
+    const g = parseInt(hexColor.slice(3, 5), 16);
+    const b = parseInt(hexColor.slice(5, 7), 16);
+
+    const newR = r;
+    const newG = Math.floor(g * 0.7);
+    const newB = Math.min(255, b + Math.floor(g * 0.3));
+
+    return `#${newR.toString(16).padStart(2, "0")}${newG.toString(16).padStart(2, "0")}${newB.toString(16).padStart(2, "0")}`;
+  }
+
+  /**
    * イベントリスナーを設定
    */
   attachEventListeners() {
@@ -195,7 +245,17 @@ export class CustomizePanel {
     // リアルタイム更新用のinputイベント
     const inputs = this.container.querySelectorAll("input, select");
     inputs.forEach((input) => {
-      input.addEventListener("input", () => this.updatePreview());
+      input.addEventListener("input", () => {
+        // 色入力の場合は緑色チェック
+        if (input.type === "color" && this.isChromaKeyGreen(input.value)) {
+          const safeColor = this.convertFromGreen(input.value);
+          alert(
+            `⚠️ クロマキー警告\n\n緑系統の色はOBSのクロマキーで透明化されます。\n自動的に安全な色（${safeColor}）に変換しました。`,
+          );
+          input.value = safeColor;
+        }
+        this.updatePreview();
+      });
     });
 
     // チェックボックスでコントロールの表示/非表示

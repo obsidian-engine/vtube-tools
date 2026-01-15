@@ -161,11 +161,40 @@ body {
   transition: all var(--transition-normal);
 }
 
+.form-textarea:hover,
+.form-input:hover {
+  border-color: var(--obsidian-gray-light);
+}
+
 .form-textarea:focus,
 .form-input:focus {
   outline: none;
   border-color: var(--obsidian-accent);
   box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.1);
+}
+
+.form-textarea:focus-visible,
+.form-input:focus-visible {
+  outline: 2px solid var(--obsidian-accent);
+  outline-offset: 2px;
+}
+
+.form-textarea:disabled,
+.form-input:disabled {
+  background: rgba(13, 17, 23, 0.3);
+  color: var(--obsidian-text-muted);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.form-textarea.error,
+.form-input.error {
+  border-color: var(--error-color);
+}
+
+.form-textarea.error:focus,
+.form-input.error:focus {
+  box-shadow: 0 0 0 3px rgba(244, 67, 54, 0.1);
 }
 
 .form-hint {
@@ -186,7 +215,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+  overflow: auto; /* hiddenからautoに変更してスクロール可能に */
   position: relative;
 }
 
@@ -199,8 +228,10 @@ body {
   color: var(--obsidian-text);
   font-weight: 500;
   max-width: 100%;
-  max-height: 100%;
-  overflow: hidden;
+  /* スケール制御: 大きすぎる場合は縮小 */
+  transform-origin: center;
+  /* コンテナ内で適切にフィット */
+  object-fit: contain;
 }
 
 /* URL表示 */
@@ -221,13 +252,13 @@ body {
 
 /* ボタン */
 .btn {
-  padding: 0.75rem 1.5rem;
+  padding: 1rem 1.5rem; /* 44px以上のタッチターゲット確保 */
   border: none;
   border-radius: var(--radius-sm);
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background var(--transition-normal);
+  transition: all var(--transition-normal);
 }
 
 .btn-primary {
@@ -239,6 +270,23 @@ body {
   background: var(--obsidian-accent-dark);
 }
 
+.btn-primary:focus-visible {
+  outline: 2px solid var(--obsidian-accent);
+  outline-offset: 2px;
+}
+
+.btn-primary:active {
+  background: #1651c1;
+  transform: translateY(1px);
+}
+
+.btn-primary:disabled {
+  background: var(--obsidian-gray-light);
+  color: var(--obsidian-text-muted);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
 .btn-secondary {
   background: var(--obsidian-gray-light);
   color: var(--obsidian-text);
@@ -247,6 +295,23 @@ body {
 
 .btn-secondary:hover {
   background: var(--obsidian-border);
+}
+
+.btn-secondary:focus-visible {
+  outline: 2px solid var(--obsidian-accent);
+  outline-offset: 2px;
+}
+
+.btn-secondary:active {
+  background: var(--obsidian-gray);
+  transform: translateY(1px);
+}
+
+.btn-secondary:disabled {
+  background: var(--obsidian-gray);
+  color: var(--obsidian-text-muted);
+  cursor: not-allowed;
+  opacity: 0.6;
 }
 
 /* フッター */
@@ -283,10 +348,26 @@ body {
   transition: all var(--transition-normal);
 }
 
+.form-select:hover {
+  border-color: var(--obsidian-gray-light);
+}
+
 .form-select:focus {
   outline: none;
   border-color: var(--obsidian-accent);
   box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.1);
+}
+
+.form-select:focus-visible {
+  outline: 2px solid var(--obsidian-accent);
+  outline-offset: 2px;
+}
+
+.form-select:disabled {
+  background: rgba(13, 17, 23, 0.3);
+  color: var(--obsidian-text-muted);
+  cursor: not-allowed;
+  opacity: 0.6;
 }
 
 /* カラーピッカー */
@@ -1080,4 +1161,48 @@ body {
   margin-bottom: var(--spacing-xs);
   font-size: 0.875rem;
   color: var(--obsidian-text-muted);
+}
+
+/* ツールチップ */
+.tooltip-icon {
+  display: inline-block;
+  margin-left: 0.5rem;
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
+  text-align: center;
+  border-radius: 50%;
+  background: var(--obsidian-gray-light);
+  color: var(--obsidian-text-muted);
+  font-size: 0.75rem;
+  cursor: help;
+  position: relative;
+}
+
+.tooltip-icon:hover::after {
+  content: attr(title);
+  position: absolute;
+  bottom: 125%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.5rem 0.75rem;
+  background: var(--obsidian-gray);
+  color: var(--obsidian-text);
+  border: 1px solid var(--obsidian-border);
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  white-space: nowrap;
+  z-index: 1000;
+  box-shadow: var(--shadow-md);
+}
+
+.tooltip-icon:hover::before {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-top-color: var(--obsidian-gray);
+  z-index: 1000;
 }
