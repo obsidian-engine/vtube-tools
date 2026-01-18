@@ -19,10 +19,25 @@ export class TemplatePanel {
     const templates = this.repository.getAll();
 
     return `
-      <div class="customize-panel template-panel">
+      <div class="customize-panel template-panel" role="dialog" aria-labelledby="template-panel-title">
         <div class="panel-header">
-          <h2>📁 テンプレート</h2>
-          <button class="panel-close" data-action="close">&times;</button>
+          <h2 id="template-panel-title">テンプレート</h2>
+          <button class="panel-close" data-action="close" aria-label="閉じる">&times;</button>
+        </div>
+
+        <!-- C4: エラーメッセージ表示領域（aria-live） -->
+        <div class="error-messages" aria-live="polite" aria-atomic="true" style="display: none;"></div>
+
+        <!-- W1: カスタム削除確認モーダル -->
+        <div class="delete-modal" style="display: none;" role="alertdialog" aria-labelledby="delete-modal-title" aria-describedby="delete-modal-description">
+          <div class="delete-modal-content">
+            <h3 id="delete-modal-title">削除確認</h3>
+            <p id="delete-modal-description"></p>
+            <div class="delete-modal-actions">
+              <button class="btn btn-danger" data-action="confirm-delete" style="background-color: #dc3545; color: white;">削除</button>
+              <button class="btn btn-secondary" data-action="cancel-delete">キャンセル</button>
+            </div>
+          </div>
         </div>
 
         <div class="panel-body">
@@ -49,7 +64,7 @@ export class TemplatePanel {
                       <button class="btn btn-secondary btn-sm" data-action="load" data-id="${template.id}">
                         読込
                       </button>
-                      <button class="btn btn-danger btn-sm" data-action="delete" data-id="${template.id}">
+                      <button class="btn btn-danger btn-sm" data-action="delete" data-id="${template.id}" aria-label="${template.name}を削除">
                         削除
                       </button>
                     </div>
@@ -73,6 +88,7 @@ export class TemplatePanel {
                 class="form-input"
                 placeholder="例: マイスタイル"
                 maxlength="50"
+                aria-required="true"
               >
             </div>
             <button class="btn btn-primary" data-action="save">
@@ -148,6 +164,12 @@ export class TemplatePanel {
         case "delete":
           this.handleDelete(e.target.dataset.id);
           break;
+        case "confirm-delete":
+          this.confirmDelete();
+          break;
+        case "cancel-delete":
+          this.cancelDelete();
+          break;
         case "export":
           this.handleExport();
           break;
@@ -162,6 +184,9 @@ export class TemplatePanel {
         this.handlePreset(preset);
       }
     });
+
+    // W3: キーボードナビゲーション設定
+    this.setupKeyboardNavigation();
   }
 
   /**
@@ -172,13 +197,14 @@ export class TemplatePanel {
     const name = nameInput.value.trim();
 
     if (!name) {
-      alert("テンプレート名を入力してください");
+      this.showError("テンプレート名を入力してください");
+      nameInput.focus();
       return;
     }
 
     // 現在のスタイルを取得（外部から渡される想定）
     if (!this.onApply) {
-      alert("スタイル情報を取得できませんでした");
+      this.showError("スタイル情報を取得できませんでした");
       return;
     }
 
@@ -198,7 +224,7 @@ export class TemplatePanel {
   handleLoad(templateId) {
     const template = this.repository.getById(templateId);
     if (!template) {
-      alert("テンプレートが見つかりませんでした");
+      this.showError("テンプレートが見つかりませんでした");
       return;
     }
 
@@ -213,12 +239,169 @@ export class TemplatePanel {
     const template = this.repository.getById(templateId);
     if (!template) return;
 
-    if (!confirm(`「${template.name}」を削除しますか？`)) {
-      return;
+    // W1: カスタムモーダルで削除確認
+    this.showDeleteModal(template);
+  }
+
+  /**
+   * W1: 削除モーダル表示
+   */
+  showDeleteModal(template) {
+    this.deleteTargetId = template.id;
+    
+    const modal = this.panel.querySelector(".delete-modal");
+    const description = modal.querySelector("#delete-modal-description");
+    
+    description.textContent = `「${template.name}」を削除しますか？`;
+    modal.style.display = "flex";
+    modal.style.position = "fixed";
+    modal.style.top = "0";
+    modal.style.left = "0";
+    modal.style.width = "100%";
+    modal.style.height = "100%";
+    modal.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
+    modal.style.justifyContent = "center";
+    modal.style.alignItems = "center";
+    modal.style.zIndex = "10000";
+
+    // モーダル内の削除ボタンにフォーカス
+    const deleteBtn = modal.querySelector('[data-action="confirm-delete"]');
+    setTimeout(() => deleteBtn.focus(), 100);
+  }
+
+  /**
+   * W1: 削除実行
+   */
+  confirmDelete() {
+    if (!this.deleteTargetId) return;
+
+    if (this.repository.delete(this.deleteTargetId)) {
+      this.refresh();
+      this.showSuccess("テンプレートを削除しました");
     }
 
-    if (this.repository.delete(templateId)) {
-      this.refresh();
+    this.cancelDelete();
+  }
+
+  /**
+   * W1: 削除キャンセル
+   */
+  cancelDelete() {
+    const modal = this.panel.querySelector(".delete-modal");
+    modal.style.display = "none";
+    this.deleteTargetId = null;
+  }
+
+  /**
+   * C4: エラーメッセージ表示（aria-live使用）
+   */
+  showError(message) {
+    const errorContainer = this.panel.querySelector(".error-messages");
+    if (!errorContainer) return;
+
+    errorContainer.textContent = message;
+    errorContainer.style.display = "block";
+    errorContainer.style.padding = "10px";
+    errorContainer.style.marginBottom = "10px";
+    errorContainer.style.backgroundColor = "#f8d7da";
+    errorContainer.style.border = "1px solid #dc3545";
+    errorContainer.style.borderRadius = "4px";
+    errorContainer.style.color = "#721c24";
+
+    setTimeout(() => {
+      errorContainer.style.display = "none";
+      errorContainer.textContent = "";
+    }, 5000);
+  }
+
+  /**
+   * C4: 成功メッセージ表示（aria-live使用）
+   */
+  showSuccess(message) {
+    const errorContainer = this.panel.querySelector(".error-messages");
+    if (!errorContainer) return;
+
+    errorContainer.textContent = message;
+    errorContainer.style.display = "block";
+    errorContainer.style.padding = "10px";
+    errorContainer.style.marginBottom = "10px";
+    errorContainer.style.backgroundColor = "#d4edda";
+    errorContainer.style.border = "1px solid #28a745";
+    errorContainer.style.borderRadius = "4px";
+    errorContainer.style.color = "#155724";
+
+    setTimeout(() => {
+      errorContainer.style.display = "none";
+      errorContainer.textContent = "";
+    }, 3000);
+  }
+
+  /**
+   * W3: キーボードナビゲーション設定
+   */
+  setupKeyboardNavigation() {
+    const panel = this.panel;
+    if (!panel) return;
+
+    // ESCキーでパネルを閉じる
+    panel.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        // モーダル表示中ならモーダルを閉じる
+        const modal = panel.querySelector(".delete-modal");
+        if (modal && modal.style.display === "flex") {
+          this.cancelDelete();
+        } else {
+          this.hide();
+        }
+      }
+    });
+
+    // フォーカストラップ（Tab循環）
+    const focusableElements = panel.querySelectorAll(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    
+    if (focusableElements.length === 0) return;
+
+    const firstElement = focusableElements[0];
+    const lastElement = focusableElements[focusableElements.length - 1];
+
+    panel.addEventListener("keydown", (e) => {
+      if (e.key === "Tab") {
+        if (e.shiftKey) {
+          // Shift+Tab: 最初の要素から戻る場合は最後の要素へ
+          if (document.activeElement === firstElement) {
+            e.preventDefault();
+            lastElement.focus();
+          }
+        } else {
+          // Tab: 最後の要素から進む場合は最初の要素へ
+          if (document.activeElement === lastElement) {
+            e.preventDefault();
+            firstElement.focus();
+          }
+        }
+      }
+    });
+
+    // 初期フォーカス設定
+    this.setInitialFocus();
+  }
+
+  /**
+   * W3: 初期フォーカス設定
+   */
+  setInitialFocus() {
+    const panel = this.panel;
+    if (!panel) return;
+
+    // パネル表示時に最初のフォーカス可能要素にフォーカス
+    const firstFocusable = panel.querySelector(
+      'button:not(.panel-close), [href], input, select, textarea'
+    );
+    
+    if (firstFocusable) {
+      setTimeout(() => firstFocusable.focus(), 100);
     }
   }
 
@@ -232,7 +415,7 @@ export class TemplatePanel {
       this.hide();
     } catch (error) {
       console.error("Failed to load preset:", error);
-      alert("プリセットの読み込みに失敗しました");
+      this.showError("プリセットの読み込みに失敗しました");
     }
   }
 
@@ -244,7 +427,7 @@ export class TemplatePanel {
       const templates = this.repository.getAll();
 
       if (templates.length === 0) {
-        alert("エクスポートするテンプレートがありません");
+        this.showError("エクスポートするテンプレートがありません");
         return;
       }
 
@@ -254,10 +437,10 @@ export class TemplatePanel {
         `obs-text-templates-${Date.now()}.json`,
       );
 
-      alert(`${templates.length}件のテンプレートをエクスポートしました`);
+      this.showSuccess(`${templates.length}件のテンプレートをエクスポートしました`);
     } catch (error) {
       console.error("Export failed:", error);
-      alert(error.message || "エクスポートに失敗しました");
+      this.showError(error.message || "エクスポートに失敗しました");
     }
   }
 
@@ -271,15 +454,15 @@ export class TemplatePanel {
       // バリデーション
       const validation = ExportService.validateTemplateJSON(jsonString);
       if (!validation.valid) {
-        alert(`無効なファイル形式です: ${validation.error}`);
+        this.showError(`無効なファイル形式です: ${validation.error}`);
         return;
       }
 
       const data = ExportService.importTemplates(jsonString);
 
-      // 確認
+      // W1: カスタム確認モーダルの代わりに標準confirm（インポート用）
       const confirmed = confirm(
-        `${data.length}件のテンプレートをインポートしますか？\n既存の同じIDのテンプレートは上書きされます。`,
+        `${data.length}件のテンプレートをインポートしますか?\n既存の同じIDのテンプレートは上書きされます。`,
       );
 
       if (!confirmed) return;
@@ -293,11 +476,11 @@ export class TemplatePanel {
         }
       }
 
-      alert(`${successCount}件のテンプレートをインポートしました`);
+      this.showSuccess(`${successCount}件のテンプレートをインポートしました`);
       this.refresh();
     } catch (error) {
       console.error("Import failed:", error);
-      alert(error.message || "インポートに失敗しました");
+      this.showError(error.message || "インポートに失敗しました");
     }
   }
 
@@ -308,6 +491,7 @@ export class TemplatePanel {
     if (this.panel) {
       this.refresh();
       this.panel.parentElement.style.display = "block";
+      this.setInitialFocus();
     }
   }
 

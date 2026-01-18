@@ -28,11 +28,14 @@ export class CustomizePanel {
    */
   render() {
     this.container.innerHTML = `
-      <div class="customize-panel">
+      <div class="customize-panel" role="dialog" aria-labelledby="customize-panel-title">
         <div class="panel-header">
-          <h3>スタイルカスタマイズ</h3>
+          <h3 id="customize-panel-title">スタイルカスタマイズ</h3>
           <button class="panel-close" aria-label="閉じる">×</button>
         </div>
+
+        <!-- W3: エラーメッセージ表示領域（aria-live） -->
+        <div class="error-messages" aria-live="polite" aria-atomic="true" style="display: none;"></div>
 
         <div class="panel-content">
           <section class="panel-section">
@@ -45,7 +48,7 @@ export class CustomizePanel {
           <section class="panel-section">
             <h4>フォント</h4>
             <div class="form-group">
-              <label>フォントファミリー</label>
+              <label for="fontFamily">フォントファミリー</label>
               <select id="fontFamily" class="form-control">
                 <option value="Arial">Arial</option>
                 <option value="Arial Black">Arial Black</option>
@@ -56,11 +59,11 @@ export class CustomizePanel {
               </select>
             </div>
             <div class="form-group">
-              <label>フォントサイズ: <span id="fontSizeValue">48</span>px</label>
-              <input type="range" id="fontSize" class="form-control" min="12" max="120" value="48">
+              <label for="fontSize">フォントサイズ: <span id="fontSizeValue">48</span>px</label>
+              <input type="range" id="fontSize" class="form-control" min="12" max="120" value="48" aria-valuemin="12" aria-valuemax="120" aria-valuenow="48">
             </div>
             <div class="form-group">
-              <label>文字色</label>
+              <label for="color">文字色</label>
               <input type="color" id="color" class="form-control" value="#FFFFFF">
             </div>
           </section>
@@ -74,20 +77,20 @@ export class CustomizePanel {
             </h4>
             <div id="shadowControls" class="sub-controls">
               <div class="form-group">
-                <label>色</label>
+                <label for="shadowColor">色</label>
                 <input type="color" id="shadowColor" class="form-control" value="#000000">
               </div>
               <div class="form-group">
-                <label>ぼかし: <span id="shadowBlurValue">4</span>px</label>
-                <input type="range" id="shadowBlur" class="form-control" min="0" max="20" value="4">
+                <label for="shadowBlur">ぼかし: <span id="shadowBlurValue">4</span>px</label>
+                <input type="range" id="shadowBlur" class="form-control" min="0" max="20" value="4" aria-valuemin="0" aria-valuemax="20" aria-valuenow="4">
               </div>
               <div class="form-group">
-                <label>X方向: <span id="shadowXValue">2</span>px</label>
-                <input type="range" id="shadowX" class="form-control" min="-20" max="20" value="2">
+                <label for="shadowX">X方向: <span id="shadowXValue">2</span>px</label>
+                <input type="range" id="shadowX" class="form-control" min="-20" max="20" value="2" aria-valuemin="-20" aria-valuemax="20" aria-valuenow="2">
               </div>
               <div class="form-group">
-                <label>Y方向: <span id="shadowYValue">2</span>px</label>
-                <input type="range" id="shadowY" class="form-control" min="-20" max="20" value="2">
+                <label for="shadowY">Y方向: <span id="shadowYValue">2</span>px</label>
+                <input type="range" id="shadowY" class="form-control" min="-20" max="20" value="2" aria-valuemin="-20" aria-valuemax="20" aria-valuenow="2">
               </div>
             </div>
           </section>
@@ -101,12 +104,12 @@ export class CustomizePanel {
             </h4>
             <div id="strokeControls" class="sub-controls">
               <div class="form-group">
-                <label>色</label>
+                <label for="strokeColor">色</label>
                 <input type="color" id="strokeColor" class="form-control" value="#000000">
               </div>
               <div class="form-group">
-                <label>太さ: <span id="strokeWidthValue">2</span>px</label>
-                <input type="range" id="strokeWidth" class="form-control" min="1" max="10" value="2">
+                <label for="strokeWidth">太さ: <span id="strokeWidthValue">2</span>px</label>
+                <input type="range" id="strokeWidth" class="form-control" min="1" max="10" value="2" aria-valuemin="1" aria-valuemax="10" aria-valuenow="2">
               </div>
             </div>
           </section>
@@ -114,15 +117,15 @@ export class CustomizePanel {
           <section class="panel-section">
             <h4>位置</h4>
             <div class="form-group">
-              <label>水平位置: <span id="posXValue">50</span>%</label>
-              <input type="range" id="posX" class="form-control" min="0" max="100" value="50">
+              <label for="posX">水平位置: <span id="posXValue">50</span>%</label>
+              <input type="range" id="posX" class="form-control" min="0" max="100" value="50" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
             </div>
             <div class="form-group">
-              <label>垂直位置: <span id="posYValue">50</span>%</label>
-              <input type="range" id="posY" class="form-control" min="0" max="100" value="50">
+              <label for="posY">垂直位置: <span id="posYValue">50</span>%</label>
+              <input type="range" id="posY" class="form-control" min="0" max="100" value="50" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
             </div>
             <div class="form-group">
-              <label>揃え</label>
+              <label for="posAlign">揃え</label>
               <select id="posAlign" class="form-control">
                 <option value="left">左揃え</option>
                 <option value="center" selected>中央揃え</option>
@@ -139,7 +142,7 @@ export class CustomizePanel {
             </h4>
             <div id="effectControls" class="sub-controls">
               <div class="form-group">
-                <label>タイプ</label>
+                <label for="effectType">タイプ</label>
                 <select id="effectType" class="form-control">
                   <option value="none">なし</option>
                   <option value="fadeIn">フェードイン</option>
@@ -249,12 +252,17 @@ export class CustomizePanel {
         // 色入力の場合は緑色チェック
         if (input.type === "color" && this.isChromaKeyGreen(input.value)) {
           const safeColor = this.convertFromGreen(input.value);
-          alert(
-            `⚠️ クロマキー警告\n\n緑系統の色はOBSのクロマキーで透明化されます。\n自動的に安全な色（${safeColor}）に変換しました。`,
+          this.showError(
+            `⚠️ クロマキー警告\n\n緑系統の色はOBSのクロマキーで透明化されます。\n自動的に安全な色（${safeColor}）に変換しました。`
           );
           input.value = safeColor;
         }
         this.updatePreview();
+        
+        // スライダーのaria-valuenow更新
+        if (input.type === "range") {
+          input.setAttribute("aria-valuenow", input.value);
+        }
       });
     });
 
@@ -297,6 +305,9 @@ export class CustomizePanel {
     this.container.querySelector("#resetBtn").addEventListener("click", () => {
       this.reset();
     });
+
+    // W3: キーボードトラップ防止
+    this.setupKeyboardNavigation();
   }
 
   /**
@@ -308,6 +319,92 @@ export class CustomizePanel {
     range.addEventListener("input", () => {
       valueSpan.textContent = range.value;
     });
+  }
+
+  /**
+   * エラーメッセージ表示（C4: aria-live使用）
+   */
+  showError(message) {
+    const errorContainer = this.container.querySelector(".error-messages");
+    if (!errorContainer) return;
+
+    errorContainer.textContent = message;
+    errorContainer.style.display = "block";
+    errorContainer.style.padding = "10px";
+    errorContainer.style.marginBottom = "10px";
+    errorContainer.style.backgroundColor = "#fff3cd";
+    errorContainer.style.border = "1px solid #ffc107";
+    errorContainer.style.borderRadius = "4px";
+    errorContainer.style.color = "#856404";
+
+    // 5秒後に自動消去
+    setTimeout(() => {
+      errorContainer.style.display = "none";
+      errorContainer.textContent = "";
+    }, 5000);
+  }
+
+  /**
+   * W3: キーボードナビゲーション設定
+   */
+  setupKeyboardNavigation() {
+    const panel = this.container.querySelector(".customize-panel");
+    if (!panel) return;
+
+    // ESCキーでパネルを閉じる
+    panel.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        this.hide();
+      }
+    });
+
+    // フォーカストラップ（Tab循環）
+    const focusableElements = panel.querySelectorAll(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    
+    if (focusableElements.length === 0) return;
+
+    const firstElement = focusableElements[0];
+    const lastElement = focusableElements[focusableElements.length - 1];
+
+    panel.addEventListener("keydown", (e) => {
+      if (e.key === "Tab") {
+        if (e.shiftKey) {
+          // Shift+Tab: 最初の要素から戻る場合は最後の要素へ
+          if (document.activeElement === firstElement) {
+            e.preventDefault();
+            lastElement.focus();
+          }
+        } else {
+          // Tab: 最後の要素から進む場合は最初の要素へ
+          if (document.activeElement === lastElement) {
+            e.preventDefault();
+            firstElement.focus();
+          }
+        }
+      }
+    });
+
+    // 初期フォーカス設定
+    this.setInitialFocus();
+  }
+
+  /**
+   * W3: 初期フォーカス設定
+   */
+  setInitialFocus() {
+    const panel = this.container.querySelector(".customize-panel");
+    if (!panel) return;
+
+    // パネル表示時に最初のフォーカス可能要素にフォーカス
+    const firstFocusable = panel.querySelector(
+      'button:not(.panel-close), [href], input, select, textarea'
+    );
+    
+    if (firstFocusable) {
+      setTimeout(() => firstFocusable.focus(), 100);
+    }
   }
 
   /**
@@ -437,6 +534,7 @@ export class CustomizePanel {
    */
   show() {
     this.container.style.display = "block";
+    this.setInitialFocus();
   }
 
   /**
