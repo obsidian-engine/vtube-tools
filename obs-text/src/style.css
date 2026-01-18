@@ -9,9 +9,18 @@
   --obsidian-accent-dark: #1f6feb;
   --obsidian-purple: #8b5cf6;
   --obsidian-text: #e6edf3;
-  --obsidian-text-muted: #8b949e;
+  --obsidian-text-muted: #a8b1bd; /* C7: コントラスト4.5:1確保 */
   --success-color: #4caf50;
   --error-color: #f44336;
+  --danger-color: #dc2626; /* W5: danger用カラー */
+  
+  /* 透過度付きカラー（W8: ハードコード削減） */
+  --accent-bg-10: rgba(88, 166, 255, 0.1);
+  --accent-bg-20: rgba(88, 166, 255, 0.2);
+  --error-bg-10: rgba(244, 67, 54, 0.1);
+  --success-bg-10: rgba(76, 175, 80, 0.1);
+  --purple-bg-10: rgba(139, 92, 246, 0.1);
+  --purple-shadow: rgba(139, 92, 246, 0.3);
   
   /* グラデーション */
   --gradient-bg: linear-gradient(135deg, #0d1117 0%, #161b22 50%, #1c2128 100%);
@@ -31,15 +40,16 @@
   --radius-lg: 20px;
   
   /* スペーシング */
-  --spacing-xs: 0.75rem;
-  --spacing-sm: 1.5rem;
-  --spacing-md: 2rem;
-  --spacing-lg: 3rem;
+  --spacing-xs: 0.5rem;  /* 8px - C5: 4px倍数統一 */
+  --spacing-sm: 1rem;    /* 16px */
+  --spacing-md: 1.5rem;  /* 24px */
+  --spacing-lg: 2rem;    /* 32px */
   
   /* フォント */
   --font-family: 'Segoe UI', 'Noto Sans JP', sans-serif;
   
   /* トランジション */
+  --transition-fast: 0.15s ease; /* W9: 高速トランジション */
   --transition-normal: 0.3s ease;
   --transition-smooth: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -170,7 +180,7 @@ body {
 .form-input:focus {
   outline: none;
   border-color: var(--obsidian-accent);
-  box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.1);
+  box-shadow: 0 0 0 3px var(--accent-bg-10); /* W8 */
 }
 
 .form-textarea:focus-visible,
@@ -194,7 +204,7 @@ body {
 
 .form-textarea.error:focus,
 .form-input.error:focus {
-  box-shadow: 0 0 0 3px rgba(244, 67, 54, 0.1);
+  box-shadow: 0 0 0 3px var(--error-bg-10); /* W8 */
 }
 
 .form-hint {
@@ -314,6 +324,78 @@ body {
   opacity: 0.6;
 }
 
+/* W5: Dangerボタン */
+.btn-danger {
+  background: var(--danger-color);
+  color: white;
+  padding: 1rem 1.5rem;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+}
+
+.btn-danger:hover {
+  background: #b91c1c;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-danger:focus-visible {
+  outline: 2px solid var(--danger-color);
+  outline-offset: 2px;
+}
+
+.btn-danger:active {
+  background: #991b1b;
+  transform: translateY(1px);
+}
+
+.btn-danger:disabled {
+  background: var(--obsidian-gray-light);
+  color: var(--obsidian-text-muted);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* C3: ボタン状態クラス */
+.btn.loading {
+  position: relative;
+  color: transparent;
+  pointer-events: none;
+}
+
+.btn.loading::after {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 50%;
+  left: 50%;
+  margin-left: -8px;
+  margin-top: -8px;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  border-top-color: transparent;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.btn.success {
+  background: var(--success-color);
+  color: white;
+}
+
+.btn.error {
+  background: var(--error-color);
+  color: white;
+}
+
 /* フッター */
 .footer {
   text-align: center;
@@ -332,6 +414,12 @@ body {
 
 .footer a:hover {
   color: var(--obsidian-purple);
+}
+
+.footer a:focus-visible { /* C6 */
+  outline: 2px solid var(--obsidian-accent);
+  outline-offset: 2px;
+  border-radius: 2px;
 }
 
 /* セレクト */
@@ -355,7 +443,7 @@ body {
 .form-select:focus {
   outline: none;
   border-color: var(--obsidian-accent);
-  box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.1);
+  box-shadow: 0 0 0 3px var(--accent-bg-10); /* W8 */
 }
 
 .form-select:focus-visible {
@@ -380,6 +468,8 @@ body {
 .color-picker {
   width: 60px;
   height: 44px;
+  min-width: 44px;  /* C2: WCAGタッチターゲット */
+  min-height: 44px; /* C2: WCAGタッチターゲット */
   padding: 0;
   border: 2px solid var(--obsidian-border);
   border-radius: var(--radius-sm);
@@ -391,7 +481,12 @@ body {
 .color-picker:focus {
   outline: none;
   border-color: var(--obsidian-accent);
-  box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.1);
+  box-shadow: 0 0 0 3px var(--accent-bg-10);
+}
+
+.color-picker:focus-visible { /* C6: アクセシビリティ統一 */
+  outline: 2px solid var(--obsidian-accent);
+  outline-offset: 2px;
 }
 
 .color-text-input {
@@ -419,6 +514,12 @@ body {
   background: var(--obsidian-accent);
   cursor: pointer;
   border-radius: 50%;
+  transition: all var(--transition-fast); /* W9 */
+}
+
+.form-range::-webkit-slider-thumb:focus-visible { /* C6 */
+  outline: 2px solid var(--obsidian-accent);
+  outline-offset: 2px;
 }
 
 .form-range::-moz-range-thumb {
@@ -428,6 +529,12 @@ body {
   cursor: pointer;
   border-radius: 50%;
   border: none;
+  transition: all var(--transition-fast); /* W9 */
+}
+
+.form-range::-moz-range-thumb:focus-visible { /* C6 */
+  outline: 2px solid var(--obsidian-accent);
+  outline-offset: 2px;
 }
 
 /* ステップセクション */
@@ -464,7 +571,7 @@ body {
 .guide-text {
   margin-top: var(--spacing-md);
   padding: var(--spacing-sm);
-  background: rgba(88, 166, 255, 0.1);
+  background: var(--accent-bg-10); /* W8 */
   border-left: 3px solid var(--obsidian-accent);
   border-radius: var(--radius-sm);
   color: var(--obsidian-text);
@@ -498,6 +605,12 @@ body {
 
 .advanced-info summary:hover {
   color: var(--obsidian-accent);
+}
+
+.advanced-info summary:focus-visible { /* C6 */
+  outline: 2px solid var(--obsidian-accent);
+  outline-offset: 2px;
+  border-radius: 4px;
 }
 
 .advanced-info[open] summary {
@@ -564,6 +677,12 @@ body {
   color: var(--obsidian-accent);
 }
 
+.guide-modal-close:focus-visible { /* C6 */
+  outline: 2px solid var(--obsidian-accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
 .guide-steps {
   display: flex;
   flex-direction: column;
@@ -595,7 +714,7 @@ body {
 }
 
 .guide-complete {
-  background: rgba(76, 175, 80, 0.1);
+  background: var(--success-bg-10); /* W8 */
   border: 1px solid var(--success-color);
   border-radius: var(--radius-sm);
   padding: var(--spacing-md);
@@ -676,8 +795,8 @@ body {
   height: 8px;
   background: var(--gradient-accent);
   border-radius: 4px;
-  transition: width 0.3s ease;
-  box-shadow: 0 0 10px rgba(88, 166, 255, 0.3);
+  transition: width var(--transition-normal); /* W9: 統一 */
+  box-shadow: 0 0 10px var(--accent-bg-20); /* W8 - プログレスバーglow */
 }
 
 .wizard-progress-text {
@@ -718,7 +837,7 @@ body {
 
 .wizard-option {
   padding: var(--spacing-sm) var(--spacing-md);
-  background: rgba(88, 166, 255, 0.1);
+  background: var(--accent-bg-10); /* W8 */
   border: 2px solid var(--obsidian-border);
   border-radius: var(--radius-md);
   color: var(--obsidian-text);
@@ -730,10 +849,15 @@ body {
 }
 
 .wizard-option:hover {
-  background: rgba(88, 166, 255, 0.2);
+  background: var(--accent-bg-20); /* W8 */
   border-color: var(--obsidian-accent);
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
+}
+
+.wizard-option:focus-visible { /* C6 */
+  outline: 2px solid var(--obsidian-accent);
+  outline-offset: 2px;
 }
 
 .wizard-option small {
@@ -748,7 +872,7 @@ body {
 .wizard-help {
   margin-top: var(--spacing-md);
   padding: var(--spacing-sm);
-  background: rgba(244, 67, 54, 0.1);
+  background: var(--error-bg-10); /* W8 */
   border-left: 3px solid var(--error-color);
   border-radius: var(--radius-sm);
   color: var(--obsidian-text);
@@ -795,6 +919,11 @@ body {
   box-shadow: var(--shadow-md);
 }
 
+.wizard-color-preset:focus-visible { /* C6 */
+  outline: 2px solid var(--obsidian-accent);
+  outline-offset: 2px;
+}
+
 .wizard-color-custom {
   width: 80px;
   height: 60px;
@@ -808,6 +937,11 @@ body {
 
 .wizard-color-custom:hover {
   border-color: var(--obsidian-accent);
+}
+
+.wizard-color-custom:focus-visible { /* C6 */
+  outline: 2px solid var(--obsidian-accent);
+  outline-offset: 2px;
 }
 
 /* プレビュー */
@@ -851,7 +985,7 @@ body {
 .wizard-guide-section {
   margin-top: var(--spacing-lg);
   padding: var(--spacing-md);
-  background: rgba(88, 166, 255, 0.1);
+  background: var(--accent-bg-10); /* W8 */
   border: 1px solid var(--obsidian-accent);
   border-radius: var(--radius-sm);
 }
@@ -910,6 +1044,12 @@ body {
   color: var(--obsidian-accent);
 }
 
+.wizard-skip:focus-visible { /* C6 */
+  outline: 2px solid var(--obsidian-accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
 /* 背景カラーピッカー */
 #background-color-picker {
   margin-top: var(--spacing-sm);
@@ -963,7 +1103,7 @@ body {
 
 .btn-customize:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 16px rgba(139, 92, 246, 0.3);
+  box-shadow: 0 8px 16px var(--purple-shadow); /* W8 */
 }
 
 /* カスタマイズパネル */
@@ -1024,6 +1164,12 @@ body {
   color: var(--obsidian-text-normal);
 }
 
+.panel-close:focus-visible { /* C6 */
+  outline: 2px solid var(--obsidian-accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
 /* パネルコンテンツ */
 .panel-content {
   flex: 1;
@@ -1071,6 +1217,11 @@ body {
 
 .template-btn:active {
   transform: translateY(0);
+}
+
+.template-btn:focus-visible { /* C6 */
+  outline: 2px solid var(--obsidian-accent);
+  outline-offset: 2px;
 }
 
 /* サブコントロール */
@@ -1123,7 +1274,7 @@ body {
 .customize-panel .form-control:focus {
   outline: none;
   border-color: var(--obsidian-accent);
-  box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.2);
+  box-shadow: 0 0 0 2px var(--purple-bg-10); /* W8 */
 }
 
 .customize-panel input[type="range"] {
@@ -1147,6 +1298,11 @@ body {
 
 .customize-panel input[type="range"]::-webkit-slider-thumb:hover {
   transform: scale(1.2);
+}
+
+.customize-panel input[type="range"]::-webkit-slider-thumb:focus-visible { /* C6 */
+  outline: 2px solid var(--obsidian-accent);
+  outline-offset: 2px;
 }
 
 .customize-panel input[type="checkbox"] {
@@ -1205,4 +1361,63 @@ body {
   border: 6px solid transparent;
   border-top-color: var(--obsidian-gray);
   z-index: 1000;
+}
+
+/* トースト通知（W4: システム状態可視化） */
+.toast-notification {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  padding: 1rem 1.5rem;
+  background: var(--obsidian-gray);
+  color: var(--obsidian-text);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-lg);
+  font-size: 0.875rem;
+  font-weight: 500;
+  z-index: 10000;
+  opacity: 0;
+  transform: translateY(1rem);
+  transition: opacity var(--transition-normal), transform var(--transition-normal);
+  pointer-events: none;
+}
+
+.toast-notification.toast-show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.toast-notification.toast-success {
+  background: var(--success-color);
+  color: white;
+}
+
+.toast-notification.toast-error {
+  background: var(--error-color);
+  color: white;
+}
+
+.toast-notification.toast-info {
+  background: var(--obsidian-accent);
+  color: white;
+}
+
+/* ステップアイコン（W6: 絵文字削減） */
+.step-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  background: var(--obsidian-accent);
+  color: white;
+  border-radius: 50%;
+  font-size: 1rem;
+  font-weight: 700;
+  margin-right: 0.5rem;
+}
+
+.step-icon[aria-hidden="true"] {
+  opacity: 0.7;
 }

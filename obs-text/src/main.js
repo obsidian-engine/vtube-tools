@@ -12,6 +12,66 @@ import { TemplateRepository } from "./infrastructure/templateRepository.js";
  * TextEditorApp - OBSテキスト編集画面アプリケーション
  * discord-cssのClass構造パターンを踏襲
  */
+/**
+ * W2: Undo機能を提供するマネージャークラス
+ */
+class UndoManager {
+  constructor(maxHistorySize = 10) {
+    this.history = [];
+    this.maxHistorySize = maxHistorySize;
+  }
+
+  /**
+   * 現在の状態を履歴に追加
+   * @param {Object} state - 保存する状態（text, style等）
+   */
+  push(state) {
+    // 最新の状態と同じ場合は追加しない
+    if (this.history.length > 0) {
+      const lastState = this.history[this.history.length - 1];
+      if (JSON.stringify(lastState) === JSON.stringify(state)) {
+        return;
+      }
+    }
+
+    this.history.push(JSON.parse(JSON.stringify(state))); // Deep copy
+
+    // 履歴サイズ制限
+    if (this.history.length > this.maxHistorySize) {
+      this.history.shift();
+    }
+  }
+
+  /**
+   * 1つ前の状態に戻す
+   * @returns {Object|null} - 復元する状態、履歴がない場合はnull
+   */
+  undo() {
+    if (this.history.length <= 1) {
+      return null; // 最初の状態までしかない場合は何もしない
+    }
+
+    // 現在の状態を削除し、1つ前の状態を返す
+    this.history.pop();
+    return JSON.parse(JSON.stringify(this.history[this.history.length - 1]));
+  }
+
+  /**
+   * Undo可能かどうか
+   * @returns {boolean}
+   */
+  canUndo() {
+    return this.history.length > 1;
+  }
+
+  /**
+   * 履歴をクリア
+   */
+  clear() {
+    this.history = [];
+  }
+}
+
 class TextEditorApp {
   constructor() {
     this.elements = {};
@@ -35,6 +95,9 @@ class TextEditorApp {
     this.debounceTimer = null;
     this.unsubscribe = null;
     this.isLoadingSettings = false;
+
+    // W2: Undo機能
+    this.undoManager = new UndoManager(10);
 
     this.init();
   }
@@ -65,6 +128,7 @@ class TextEditorApp {
     this.initTemplatePanel(); // Phase 3-2: テンプレートパネル初期化
     this.initEffectPanel(); // Phase 3-3: エフェクトパネル初期化
     this.attachEventListeners();
+    this.setupUndoShortcut(); // W2: Undoショートカット設定
     await this.loadSettings();
     this.updatePreview();
     this.updateDisplayUrl();
@@ -113,6 +177,9 @@ class TextEditorApp {
 
       // 初回ロード完了
       this.isLoadingSettings = false;
+
+      // W2: 初期状態をUndo履歴に保存
+      this.saveStateToHistory();
     } catch (error) {
       console.error("Settings load error:", error);
       this.isLoadingSettings = false;
@@ -451,10 +518,90 @@ class TextEditorApp {
     }
   }
 
+
+  /**
+   * W2: Undo機能のキーボードショートカット設定
+   */
+  setupUndoShortcut() {
+    document.addEventListener("keydown", (e) => {
+      // Ctrl+Z (Windows/Linux) または Cmd+Z (Mac)
+      if ((e.ctrlKey || e.metaKey) && e.key === "z" && !e.shiftKey) {
+        e.preventDefault();
+        this.performUndo();
+      }
+    });
+  }
+
+  /**
+   * W2: Undo実行
+   */
+  performUndo() {
+    if (!this.undoManager.canUndo()) {
+      this.showToast("これ以上戻せません", "info");
+      return;
+    }
+
+    const previousState = this.undoManager.undo();
+    if (previousState) {
+      // 状態を復元
+      this.applySettings(previousState);
+      this.showToast("元に戻しました", "success");
+    }
+  }
+
+  /**
+   * W2: 現在の状態をUndo履歴に保存
+   */
+  saveStateToHistory() {
+    const currentState = {
+      text: this.settings.text,
+      style: { ...this.settings.style },
+      effect: this.effect ? this.effect.toFirestore() : null,
+    };
+    this.undoManager.push(currentState);
+  }
+
+  /**
+   * W4: トースト通知を表示
+   * @param {string} message - 表示するメッセージ
+   * @param {string} type - 通知タイプ ('success', 'error', 'info')
+   */
+  showToast(message, type = "info") {
+    // 既存のトーストを削除
+    const existingToast = document.querySelector(".toast-notification");
+    if (existingToast) {
+      existingToast.remove();
+    }
+
+    // トースト要素を作成
+    const toast = document.createElement("div");
+    toast.className = `toast-notification toast-${type}`;
+    toast.textContent = message;
+
+    // bodyに追加
+    document.body.appendChild(toast);
+
+    // アニメーション用にクラスを追加
+    setTimeout(() => {
+      toast.classList.add("toast-show");
+    }, 10);
+
+    // 2秒後に削除
+    setTimeout(() => {
+      toast.classList.remove("toast-show");
+      setTimeout(() => {
+        toast.remove();
+      }, 300); // フェードアウトアニメーション時間
+    }, 2000);
+  }
+
   /**
    * テキスト変更時の処理（デバウンス300ms）
    */
   onTextChange() {
+    // W2: 変更前の状態を保存
+    this.saveStateToHistory();
+
     // テキスト更新
     this.settings.text = this.elements.textInput.value;
 
@@ -485,6 +632,9 @@ class TextEditorApp {
    * スタイル変更時の処理（デバウンス300ms）
    */
   onStyleChange() {
+    // W2: 変更前の状態を保存
+    this.saveStateToHistory();
+
     // settings.styleを更新
     this.settings.style.fontFamily = this.elements.fontSelect.value;
     this.settings.style.color = this.elements.colorPicker.value;
@@ -590,6 +740,13 @@ class TextEditorApp {
    * Firebaseに同期（+ localStorage保存）
    */
   async syncToFirebase() {
+    // C3: ボタンをloading状態にする（存在する場合）
+    const syncButton = document.getElementById("sync-btn");
+    if (syncButton) {
+      syncButton.classList.add("btn-loading");
+      syncButton.disabled = true;
+    }
+
     try {
       // Phase 3-3: effectを含める
       const dataToSave = {
@@ -605,9 +762,35 @@ class TextEditorApp {
       localStorage.setItem(localKey, JSON.stringify(dataToSave));
 
       this.setConnectionStatus("connected");
+
+      // C3: 成功状態を表示
+      if (syncButton) {
+        syncButton.classList.remove("btn-loading");
+        syncButton.classList.add("btn-success");
+        setTimeout(() => {
+          syncButton.classList.remove("btn-success");
+          syncButton.disabled = false;
+        }, 2000);
+      }
+
+      // W4: 成功トースト表示
+      this.showToast("保存しました", "success");
     } catch (error) {
       console.error("Firebase sync error:", error);
       this.setConnectionStatus("error");
+
+      // C3: エラー状態を表示
+      if (syncButton) {
+        syncButton.classList.remove("btn-loading");
+        syncButton.classList.add("btn-error");
+        setTimeout(() => {
+          syncButton.classList.remove("btn-error");
+          syncButton.disabled = false;
+        }, 2000);
+      }
+
+      // W4: エラートースト表示
+      this.showToast("保存に失敗しました", "error");
     }
   }
 
@@ -639,12 +822,18 @@ class TextEditorApp {
       setTimeout(() => {
         this.elements.copyUrlBtn.textContent = originalText;
       }, 2000);
+
+      // W4: 成功トースト表示
+      this.showToast("URLをコピーしました", "success");
     } catch (error) {
       console.error("Copy error:", error);
       this.elements.copyUrlBtn.textContent = "コピー失敗";
       setTimeout(() => {
         this.elements.copyUrlBtn.textContent = "コピー";
       }, 2000);
+
+      // W4: エラートースト表示
+      this.showToast("コピーに失敗しました", "error");
     }
   }
 
@@ -820,8 +1009,8 @@ class TextEditorApp {
     // Firebase同期
     this.syncToFirebase();
 
-    // 成功通知
-    console.log(`テンプレート「${template.name}」を適用しました`);
+    // W4: 成功通知
+    this.showToast(`テンプレート「${template.name}」を適用しました`, "success");
   }
 
   /**

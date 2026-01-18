@@ -33,7 +33,7 @@
         <!-- Step 1: テキスト入力とスタイル調整 -->
         <section class="step-section step-1">
           <h2 class="step-title">
-            <span class="step-number">1️⃣</span>
+            <span class="step-number step-icon">1</span>
             テキストを入力してスタイルを調整
           </h2>
 
@@ -49,6 +49,7 @@
                 placeholder="ここにテキストを入力してください..."
                 rows="5"
                 maxlength="1000"
+                title="OBSで表示するテキストを入力してください（最大1000文字）"
               ></textarea>
               <small class="form-hint">
                 <span id="char-count">0</span> / 1000文字
@@ -61,7 +62,7 @@
             <!-- フォント選択 -->
             <div class="form-group">
               <label for="font-select" class="form-label">フォント</label>
-              <select id="font-select" class="form-select">
+              <select id="font-select" class="form-select" title="表示に使用するフォントを選択してください">
                 <option value="Noto Sans JP">Noto Sans JP</option>
                 <option value="M PLUS Rounded 1c">M PLUS Rounded 1c</option>
                 <option value="Kosugi Maru">Kosugi Maru</option>
@@ -74,15 +75,15 @@
             <div class="form-group">
               <label for="color-picker" class="form-label">文字色</label>
               <div class="color-picker-group">
-                <input type="color" id="color-picker" class="color-picker" value="#ffffff">
-                <input type="text" id="color-text" class="form-input color-text-input" value="#ffffff" maxlength="7" pattern="^#[0-9A-Fa-f]{6}$">
+                <input type="color" id="color-picker" class="color-picker" value="#ffffff" title="カラーピッカーで文字色を選択">
+                <input type="text" id="color-text" class="form-input color-text-input" value="#ffffff" maxlength="7" pattern="^#[0-9A-Fa-f]{6}$" title="16進数カラーコード（例: #ffffff）">
               </div>
             </div>
 
             <!-- 文字太さ -->
             <div class="form-group">
               <label for="weight-select" class="form-label">文字太さ</label>
-              <select id="weight-select" class="form-select">
+              <select id="weight-select" class="form-select" title="文字の太さを選択してください">
                 <option value="400">通常 (400)</option>
                 <option value="700">太字 (700)</option>
                 <option value="900">極太 (900)</option>
@@ -102,27 +103,32 @@
                 max="200"
                 step="1"
                 value="48"
+                title="スライダーで文字サイズを調整（12〜200px）"
+                aria-label="文字サイズ調整"
+                aria-valuemin="12"
+                aria-valuemax="200"
+                aria-valuenow="48"
               >
             </div>
 
             <!-- Phase 3-1: カスタマイズボタン -->
             <div class="form-group">
-              <button id="customize-btn" class="btn btn-customize">
-                🎨 高度なカスタマイズ
+              <button id="customize-btn" class="btn btn-customize" title="文字の影、アウトライン、背景などの詳細設定を行います">
+                <span class="step-icon" aria-hidden="true">🎨</span> 高度なカスタマイズ
               </button>
             </div>
 
             <!-- Phase 3-2: テンプレートボタン -->
             <div class="form-group">
-              <button id="template-btn" class="btn btn-customize">
-                📁 テンプレート
+              <button id="template-btn" class="btn btn-customize" title="保存済みのスタイル設定を読み込みます">
+                <span class="step-icon" aria-hidden="true">📁</span> テンプレート
               </button>
             </div>
 
             <!-- Phase 3-3: エフェクトボタン -->
             <div class="form-group">
-              <button id="effect-btn" class="btn btn-customize">
-                ✨ エフェクト
+              <button id="effect-btn" class="btn btn-customize" title="フェードイン、スライドなどのアニメーション効果を設定します">
+                <span class="step-icon" aria-hidden="true">✨</span> エフェクト
               </button>
             </div>
 
@@ -132,7 +138,7 @@
         <!-- Step 2: プレビュー確認 -->
         <section class="step-section step-2">
           <h2 class="step-title">
-            <span class="step-number">2️⃣</span>
+            <span class="step-number step-icon">2</span>
             プレビューで確認
           </h2>
 
@@ -151,7 +157,7 @@
         <!-- Step 3: OBSに設定 -->
         <section class="step-section step-3">
           <h2 class="step-title">
-            <span class="step-number">3️⃣</span>
+            <span class="step-number step-icon">3</span>
             OBSに設定
           </h2>
 
@@ -165,8 +171,10 @@
                   class="form-input"
                   readonly
                   value="読み込み中..."
+                  title="OBSブラウザソースに設定するURL"
+                  aria-label="ブラウザソース用URL"
                 >
-                <button id="copy-url-btn" class="btn btn-secondary">
+                <button id="copy-url-btn" class="btn btn-secondary" title="URLをクリップボードにコピーします">
                   コピー
                 </button>
               </div>
@@ -174,8 +182,8 @@
             </div>
 
             <div class="guide-actions">
-              <button id="show-guide-btn" class="btn btn-primary">
-                📖 OBS設定ガイドを見る
+              <button id="show-guide-btn" class="btn btn-primary" title="OBSでブラウザソースを設定する手順を表示します">
+                <span class="step-icon" aria-hidden="true">📖</span> OBS設定ガイドを見る
               </button>
             </div>
           </div>
