@@ -105,7 +105,7 @@ body {
   overflow: hidden;
   display: flex;
   align-items: center;
-  min-height: 100vh;
+  min-height: 35vh;
 }
 
 .hero-content {
@@ -569,46 +569,6 @@ body {
 .tool-card:nth-child(4) { transition-delay: 0.4s; }
 .tool-card:nth-child(5) { transition-delay: 0.5s; }
 
-/* スクロールインジケーター（CTAボタン） */
-.scroll-indicator {
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  margin-top: 2rem;
-  padding: 0.75rem 1.5rem;
-  color: var(--obsidian-accent);
-  text-decoration: none;
-  border: 2px solid var(--obsidian-accent);
-  border-radius: 50px;
-  background: rgba(88, 166, 255, 0.1);
-  transition: all 0.3s ease;
-  cursor: pointer;
-}
-
-.scroll-indicator:hover {
-  background: var(--obsidian-accent);
-  color: white;
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-glow);
-}
-
-.scroll-text {
-  font-size: 0.9rem;
-  font-weight: 600;
-  letter-spacing: 0.5px;
-}
-
-.scroll-arrow {
-  font-size: 1.2rem;
-  animation: bounce 2s infinite;
-}
-
-@keyframes bounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(6px); }
-}
-
 /* レスポンシブデザイン */
 @media (max-width: 768px) {
   :root {
@@ -617,7 +577,7 @@ body {
   }
   
   .hero {
-    min-height: 80vh;
+    min-height: 50vh;
     padding: var(--spacing-xl) 0;
   }
   
