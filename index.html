@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🖤 Obsidian Engine - 配信者向けツール集</title>
+    <title>Obsidian Engine - 配信者向けツール集</title>
     <meta name="description" content="VTuber・配信者向け便利ツール集 by Obsidian Engine">
     <meta name="keywords" content="VTuber,配信,ツール,Discord,OBS,YouTube">
     <meta name="author" content="Obsidian Engine">
@@ -16,7 +16,12 @@
     
     <!-- Favicon -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🖤</text></svg>">
-    
+
+    <!-- Material Symbols (Outlined) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=auto_awesome,casino,chat_bubble,check_circle,edit_note,error,favorite,group,handyman,hourglass_empty,open_in_new,search,theater_comedy&display=block" rel="stylesheet" />
+
     <!-- CSS -->
     <link rel="stylesheet" href="style.css">
 </head>
@@ -27,14 +32,17 @@
             <div class="container">
                 <section class="tools-section">
                     <h2 class="section-title">
-                        🛠️ 利用可能なツール
+                        <span class="material-symbols-outlined section-title-icon" aria-hidden="true">handyman</span>
+                        利用可能なツール
                     </h2>
                     
                     <div class="tools-grid">
                         <!-- Discord立ち絵CSS生成ツール -->
                         <article class="tool-card">
                             <div class="tool-header">
-                                <div class="tool-icon">🎭</div>
+                                <div class="tool-icon">
+                                    <span class="material-symbols-outlined" aria-hidden="true">theater_comedy</span>
+                                </div>
                                 <div class="tool-status">
                                     <span class="status-badge ready">Ready</span>
                                 </div>
@@ -47,7 +55,8 @@
                             </div>
                             <div class="tool-actions">
                                 <a href="discord-css/" class="btn btn-primary">
-                                    ✨ 使用する
+                                    <span class="material-symbols-outlined btn-icon" aria-hidden="true">open_in_new</span>
+                                    使用する
                                 </a>
                             </div>
                         </article>
@@ -55,7 +64,9 @@
                         <!-- 配信用くじびきツール -->
                         <article class="tool-card">
                             <div class="tool-header">
-                                <div class="tool-icon">🎲</div>
+                                <div class="tool-icon">
+                                    <span class="material-symbols-outlined" aria-hidden="true">casino</span>
+                                </div>
                                 <div class="tool-status">
                                     <span class="status-badge ready">Ready</span>
                                 </div>
@@ -68,7 +79,8 @@
                             </div>
                             <div class="tool-actions">
                                 <a href="https://obsidian-engine.github.io/live-kujibiki/" class="btn btn-primary">
-                                    ✨ 使用する
+                                    <span class="material-symbols-outlined btn-icon" aria-hidden="true">open_in_new</span>
+                                    使用する
                                 </a>
                             </div>
                         </article>
@@ -76,7 +88,9 @@
                         <!-- 名前読み上げ用ツール -->
                         <article class="tool-card">
                             <div class="tool-header">
-                                <div class="tool-icon">🧑‍🤝‍🧑</div>
+                                <div class="tool-icon">
+                                    <span class="material-symbols-outlined" aria-hidden="true">group</span>
+                                </div>
                                 <div class="tool-status">
                                     <span class="status-badge ready">Ready</span>
                                 </div>
@@ -84,13 +98,14 @@
                             <div class="tool-content">
                                 <h3 class="tool-title">名前読み上げ用ツール</h3>
                                 <p class="tool-description">
-                                    配信中のコメントユーザー一覧表示に加えて、🔍 <strong>コメント検索機能を追加！</strong><br>
+                                    配信中のコメントユーザー一覧表示に加えて、<span class="material-symbols-outlined inline-icon" aria-hidden="true">search</span> <strong>コメント検索機能を追加！</strong><br>
                                     キーワードでコメントを絞り込み、特定の話題や質問をすぐに見つけられます。
                                 </p>
                             </div>
                             <div class="tool-actions">
                                 <a href="https://youtube-comment-user-list.vercel.app/" class="btn btn-primary">
-                                    ✨ 使用する
+                                    <span class="material-symbols-outlined btn-icon" aria-hidden="true">open_in_new</span>
+                                    使用する
                                 </a>
                             </div>
                         </article>
@@ -98,7 +113,9 @@
                         <!-- コメント用CSS -->
                         <article class="tool-card">
                             <div class="tool-header">
-                                <div class="tool-icon">💬</div>
+                                <div class="tool-icon">
+                                    <span class="material-symbols-outlined" aria-hidden="true">chat_bubble</span>
+                                </div>
                                 <div class="tool-status">
                                     <span class="status-badge ready">Ready</span>
                                 </div>
@@ -111,7 +128,8 @@
                             </div>
                             <div class="tool-actions">
                                 <a href="comment-css/" class="btn btn-primary">
-                                    ✨ 使用する
+                                    <span class="material-symbols-outlined btn-icon" aria-hidden="true">open_in_new</span>
+                                    使用する
                                 </a>
                             </div>
                         </article>
@@ -119,7 +137,9 @@
                         <!-- OBSテキスト表示ツール -->
                         <article class="tool-card">
                             <div class="tool-header">
-                                <div class="tool-icon">📝</div>
+                                <div class="tool-icon">
+                                    <span class="material-symbols-outlined" aria-hidden="true">edit_note</span>
+                                </div>
                                 <div class="tool-status">
                                     <span class="status-badge ready">Ready</span>
                                 </div>
@@ -132,7 +152,8 @@
                             </div>
                             <div class="tool-actions">
                                 <a href="obs-text/" class="btn btn-primary">
-                                    ✨ 使用する
+                                    <span class="material-symbols-outlined btn-icon" aria-hidden="true">open_in_new</span>
+                                    使用する
                                 </a>
                             </div>
                         </article>
@@ -148,7 +169,9 @@
                 <div class="footer-content">
                     <div class="footer-section">
                         <div class="footer-brand">
-                            <span class="footer-logo">🖤</span>
+                            <span class="footer-logo">
+                                <span class="material-symbols-outlined" aria-hidden="true">favorite</span>
+                            </span>
                             <span class="footer-name">Obsidian Engine</span>
                         </div>
                         <p class="footer-description">
