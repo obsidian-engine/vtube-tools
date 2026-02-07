@@ -27,17 +27,6 @@
           :data-membership="!!comment.data.membership"
         >
           <div class="comment-block">
-            <div class="comment-body">
-              <div v-if="comment.data.paidText" class="paid-text">
-                <strong>{{comment.data.paidText}}</strong>
-              </div>
-              <div v-if="comment.data.membership" class="paid-text">
-                {{comment.data.membership.sub}} {{comment.data.membership.primary}}
-              </div>
-              <one-marquee>
-                <div class="comment-text" v-html="comment.data.comment"></div>
-              </one-marquee>
-            </div>
             <div class="name">
               {{comment.data.displayName}}
               <div
@@ -53,6 +42,17 @@
                 />
                 <span v-if="!badge.url">{{badge.label}}</span>
               </div>
+            </div>
+            <div class="comment-body">
+              <div v-if="comment.data.paidText" class="paid-text">
+                <strong>{{comment.data.paidText}}</strong>
+              </div>
+              <div v-if="comment.data.membership" class="paid-text">
+                {{comment.data.membership.sub}} {{comment.data.membership.primary}}
+              </div>
+              <one-marquee>
+                <div class="comment-text" v-html="comment.data.comment"></div>
+              </one-marquee>
             </div>
           </div>
         </div>
