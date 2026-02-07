@@ -232,6 +232,12 @@ body {
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
+.form-input:focus-visible,
+.form-select:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
 .form-input:invalid {
   border-color: var(--error-color);
 }
@@ -270,6 +276,11 @@ body {
   transform: scale(1.1);
 }
 
+.form-range:focus-visible::-webkit-slider-thumb {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
 .form-range::-moz-range-thumb {
   width: 20px;
   height: 20px;
@@ -277,6 +288,11 @@ body {
   border-radius: 50%;
   cursor: pointer;
   border: none;
+}
+
+.form-range:focus-visible::-moz-range-thumb {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
 }
 
 .range-value {
@@ -311,6 +327,11 @@ body {
 
 .advanced-toggle:hover {
   background: var(--border-color);
+}
+
+.advanced-toggle:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
 }
 
 .advanced-content {
@@ -368,6 +389,14 @@ body {
   background: var(--primary-color);
   color: var(--text-white);
   box-shadow: var(--md-sys-elevation-1);
+}
+
+.btn:focus-visible,
+.btn-primary:focus-visible,
+.btn-secondary:focus-visible,
+.btn-outline:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
 }
 
 .btn:disabled {
