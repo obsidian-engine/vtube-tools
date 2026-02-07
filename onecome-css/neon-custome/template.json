@@ -1,6 +1,6 @@
 {
-  "name": "neon-custom",
-  "author": "Custom (based on OneComme)",
-  "link": "https://onecomme.com",
-  "description": "ネオンテンプレートのカスタム版 - 軽量化・可読性向上"
+  "name": "neon-custome",
+  "author": "Obsidian Engine",
+  "link": "https://github.com/obsidian-engine/vtube-tools/tree/master/onecome-css",
+  "description": "Neon Custome - ネオンカラーを基調としたカスタムテーマ"
 }
