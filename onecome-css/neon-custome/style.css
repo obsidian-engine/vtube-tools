@@ -10,8 +10,15 @@
     --neon-color: rgba(255,0,252,1);
     --lcv-text-color: rgba(255, 255, 255, 0.95);  /* 白に戻す（ガラスUI用） */
     --lcv-name-color: rgba(255, 255, 255, 0.85);  /* ユーザー名もやや薄い白 */
-    --lcv-neon-shadow: 0 0 3px #fff, 0 0 6px var(--neon-color), 0 0 9px var(--neon-color);  /* 3層に削減 */
-    --lcv-neon-box-shadow: drop-shadow(0 0 2px #fff) drop-shadow(0 0 4px var(--neon-color));  /* 2層に削減 */
+    --lcv-neon-shadow:
+        0 0 1px #fff,  /* 白のグローを細く（3px→1px） */
+        0 0 6px var(--neon-color),
+        0 0 9px var(--neon-color),
+        1px 1px 2px rgba(0, 0, 0, 0.8),
+        -1px -1px 2px rgba(0, 0, 0, 0.8),
+        1px -1px 2px rgba(0, 0, 0, 0.8),
+        -1px 1px 2px rgba(0, 0, 0, 0.8);  /* 黒い縁取りシャドウを追加 */
+    --lcv-neon-box-shadow: drop-shadow(0 0 1px #fff) drop-shadow(0 0 4px var(--neon-color));  /* 白グローを細く */
 }
 
 /* コメントコンテナを横並びに（元テンプレートを上書き） */
@@ -21,7 +28,7 @@
     overflow-x: auto !important;     /* 元テンプレート上書きのため必須 */
     overflow-y: visible;             /* 追加プロパティ */
     gap: 16px;
-    padding: 20px 12px;
+    padding: 80px 12px 20px 12px;  /* 上部余白を増やして下に下げる */
     align-items: flex-end !important; /* 元テンプレート上書きのため必須 */
 }
 
@@ -41,8 +48,8 @@
 /* 各コメントを横方向に配置 - ガラスUI風（元テンプレート上書き） */
 .comment {
     flex-shrink: 0 !important;      /* 元テンプレート上書きのため必須 */
-    min-width: 200px;
-    max-width: 400px;
+    min-width: 250px;
+    max-width: 650px;  /* 35文字（約630px）+ パディング分 */
 
     /* ガラスUI - 暗めの半透明背景（透明度調整） */
     background-color: rgba(40, 40, 45, 0.75) !important; /* 元テンプレート上書きのため必須 */
@@ -68,13 +75,24 @@
 /* 全ての子要素が枠からはみ出ないように */
 .comment .comment-block,
 .comment .comment-body,
-.comment .comment-text,
-.comment .name,
-.comment one-marquee {
+.comment .name {
     max-width: 100% !important;
     word-wrap: break-word !important;
     overflow-wrap: break-word !important;
     box-sizing: border-box !important;
+}
+
+/* one-marqueeは幅制限を外す（スクロールを妨げないため） */
+.comment one-marquee {
+    display: block !important;
+    width: 100% !important;
+    overflow: hidden !important;
+}
+
+/* comment-textは折り返し設定を削除（マーキー内なので） */
+.comment .comment-text {
+    white-space: nowrap !important;
+    text-shadow: var(--lcv-neon-shadow) !important;
 }
 
 /* バッジコンテナも幅制限 */
@@ -89,6 +107,8 @@
     max-width: 24px !important;
     max-height: 24px !important;
     object-fit: contain !important;
+    transform: scale(1.2) !important;
+    display: inline-block !important;
 }
 
 /* スパチャ・メンシプの金額・メッセージ部分も色を統一 */
@@ -99,7 +119,14 @@
 .comment[data-membership="true"] .paid-text strong,
 .comment[data-membership="true"] .comment-text {
     color: rgba(255, 255, 255, 0.95) !important;
-    text-shadow: 0 0 3px #fff, 0 0 6px var(--neon-color), 0 0 9px var(--neon-color) !important;
+    text-shadow:
+        0 0 1px #fff,
+        0 0 6px var(--neon-color),
+        0 0 9px var(--neon-color),
+        1px 1px 2px rgba(0, 0, 0, 0.8),
+        -1px -1px 2px rgba(0, 0, 0, 0.8),
+        1px -1px 2px rgba(0, 0, 0, 0.8),
+        -1px 1px 2px rgba(0, 0, 0, 0.8) !important;  /* 黒い縁取りシャドウを追加 */
 }
 
 /* スパチャ・メンシプの金額とメッセージの間隔調整（隣接兄弟セレクタで確実に） */
@@ -110,6 +137,8 @@
     max-width: 100% !important;  /* 親要素の幅を超えないように */
     word-wrap: break-word !important;  /* 長い単語を折り返す */
     overflow-wrap: break-word !important;  /* 最新の折り返しプロパティ */
+    overflow: hidden !important;  /* 確実にはみ出しを防止 */
+    text-overflow: ellipsis !important;  /* 長すぎる場合は省略記号 */
 }
 
 /* 金額の直後のone-marquee要素に上部スペースを確保（詳細度最大化） */
@@ -124,6 +153,31 @@
 .comment[data-paid="true"],
 .comment[data-membership="true"] {
     padding: 24px 16px !important;  /* 上下24px、左右16pxで均等に */
+}
+
+/* ユーザー名にも黒い縁取りを追加 */
+.comment .name {
+    text-shadow:
+        0 0 1px #fff,
+        0 0 6px var(--neon-color),
+        0 0 9px var(--neon-color),
+        1px 1px 2px rgba(0, 0, 0, 0.8),
+        -1px -1px 2px rgba(0, 0, 0, 0.8),
+        1px -1px 2px rgba(0, 0, 0, 0.8),
+        -1px 1px 2px rgba(0, 0, 0, 0.8) !important;
+}
+
+/* 絵文字を1.2倍に拡大 */
+.comment .comment-text img,
+.comment .comment-text .emoji,
+.comment .paid-text img,
+.comment .paid-text .emoji {
+    transform: scale(1.2) !important;
+    display: inline-block !important;
+    vertical-align: middle !important;
+    margin: 0 4px !important;  /* 左右に4pxの余白 */
+    filter: drop-shadow(0 0 1px rgba(255, 255, 255, 0.3))
+            drop-shadow(0 0 2px rgba(255, 0, 252, 0.3)) !important;  /* ネオンを弱める */
 }
 
 /* キーボードフォーカス対応（アクセシビリティ） */

@@ -20,7 +20,7 @@
     /* padding定義 */
     --padding-container: 8px 12px;
     --padding-name-tag: 8px 12px;
-    --padding-message: 12px 16px;
+    --padding-message: 12px 12px;
     --padding-superchat: 16px;
     --padding-comments: 20px;
 
@@ -73,7 +73,8 @@
     letter-spacing: 0.3px !important;
     animation: fadeIn 0.2s ease-out forwards;
     margin-bottom: 0;
-    width: 100% !important;
+    width: auto !important;
+    max-width: 90%;
 }
 
 @keyframes fadeIn {
@@ -94,12 +95,11 @@
     flex-direction: column;
     align-items: flex-start;
     gap: var(--gap-block);
-    width: 100%;
 }
 
 /* 7. 名前タグ - グラデーション背景 */
 .name {
-    display: inline-block;
+    display: block;
     width: fit-content;
     padding: var(--padding-name-tag) !important;
     border-radius: var(--radius-default) !important;

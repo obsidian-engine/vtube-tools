@@ -34,7 +34,7 @@
               <div v-if="comment.data.membership" class="paid-text">
                 {{comment.data.membership.sub}} {{comment.data.membership.primary}}
               </div>
-              <one-marquee>
+              <one-marquee :loop="true" :threshold="630">
                 <div class="comment-text" v-html="comment.data.comment"></div>
               </one-marquee>
             </div>
