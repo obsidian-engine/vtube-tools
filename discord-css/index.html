@@ -25,7 +25,7 @@
     <!-- Material Symbols (Outlined) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=auto_awesome,content_copy,description,download,fingerprint,image,palette,refresh,settings,straighten,theater_comedy,tune&display=block" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=auto_awesome,content_copy,description,download,fingerprint,folder_open,image,palette,refresh,settings,straighten,theater_comedy,tune&display=block" rel="stylesheet" />
 
     <!-- CSS -->
     <link rel="stylesheet" href="/shared/md3-tokens.css">
@@ -60,7 +60,7 @@
                         <!-- ユーザーID -->
                         <div class="form-group">
                             <label for="user-id" class="form-label">
-                                🆔 DiscordユーザーID <span class="required">*</span>
+                                &lt;span class="material-symbols-outlined inline-icon" aria-hidden="true"&gt;fingerprint&lt;/span&gt; DiscordユーザーID <span class="required">*</span>
                             </label>
                             <input 
                                 type="text" 
@@ -71,15 +71,15 @@
                                 required
                             >
                             <small class="form-hint">
-                                💡 <strong>ID取得方法</strong>: Discord設定 → 詳細設定 → 「開発者モード」をON → 自分を右クリック → 「ユーザーIDをコピー」<br>
-                                📍 18桁の数字・StreamKit設定で使用するIDです
+                                <span class="material-symbols-outlined inline-icon" aria-hidden="true">description</span> <strong>ID取得方法</strong>: Discord設定 → 詳細設定 → 「開発者モード」をON → 自分を右クリック → 「ユーザーIDをコピー」<br>
+                                &lt;span class="material-symbols-outlined inline-icon" aria-hidden="true"&gt;description&lt;/span&gt; 18桁の数字・StreamKit設定で使用するIDです
                             </small>
                         </div>
 
                         <!-- 画像URL -->
                         <div class="form-group">
                             <label for="image-url" class="form-label">
-                                🖼️ 立ち絵画像URL <span class="required">*</span>
+                                &lt;span class="material-symbols-outlined inline-icon" aria-hidden="true"&gt;image&lt;/span&gt; 立ち絵画像URL <span class="required">*</span>
                             </label>
                             <input 
                                 type="url" 
@@ -89,15 +89,15 @@
                                 required
                             >
                             <small class="form-hint">
-                                💡 Discord添付ファイルリンクまたは外部画像URL<br>
-                                🖼️ 透過PNG推奨（背景なし立ち絵）
+                                <span class="material-symbols-outlined inline-icon" aria-hidden="true">description</span> Discord添付ファイルリンクまたは外部画像URL<br>
+                                <span class="material-symbols-outlined inline-icon" aria-hidden="true">image</span> 透過PNG推奨（背景なし立ち絵）
                             </small>
                         </div>
 
                         <!-- 詳細設定（折りたたみ） -->
                         <details class="advanced-settings">
                             <summary class="advanced-toggle">
-                                🔧 詳細設定
+                                &lt;span class="material-symbols-outlined inline-icon" aria-hidden="true"&gt;tune&lt;/span&gt; 詳細設定
                             </summary>
                             
                             <div class="advanced-content">
@@ -105,7 +105,7 @@
                                 <div class="form-row">
                                     <div class="form-group">
                                         <label for="image-width" class="form-label">
-                                            📏 幅 (px)
+                                            &lt;span class="material-symbols-outlined inline-icon" aria-hidden="true"&gt;straighten&lt;/span&gt; 幅 (px)
                                         </label>
                                         <input 
                                             type="range" 
@@ -120,7 +120,7 @@
                                     
                                     <div class="form-group">
                                         <label for="image-height" class="form-label">
-                                            📐 高さ (px)
+                                            &lt;span class="material-symbols-outlined inline-icon" aria-hidden="true"&gt;straighten&lt;/span&gt; 高さ (px)
                                         </label>
                                         <input 
                                             type="range" 
@@ -137,7 +137,7 @@
                                 <!-- アニメーション設定 -->
                                 <div class="form-group">
                                     <label for="bounce-height" class="form-label">
-                                        🦘 跳ねる高さ (px)
+                                        跳ねる高さ (px)
                                     </label>
                                     <input 
                                         type="range" 
@@ -153,7 +153,7 @@
                                 <!-- プリセット -->
                                 <div class="form-group">
                                     <label for="preset" class="form-label">
-                                        🎨 プリセット
+                                        &lt;span class="material-symbols-outlined inline-icon" aria-hidden="true"&gt;palette&lt;/span&gt; プリセット
                                     </label>
                                     <select id="preset" class="form-select">
                                         <option value="">カスタム</option>
@@ -167,7 +167,7 @@
                                 <!-- ファイル名設定 -->
                                 <div class="form-group">
                                     <label for="filename" class="form-label">
-                                        📁 ファイル名
+                                        &lt;span class="material-symbols-outlined inline-icon" aria-hidden="true"&gt;folder_open&lt;/span&gt; ファイル名
                                     </label>
                                     <input 
                                         type="text" 
@@ -177,8 +177,8 @@
                                         maxlength="50"
                                     >
                                     <small class="form-hint">
-                                        💡 空欄の場合は「discord_tachie_ユーザーID」になります<br>
-                                        🚫 使用不可文字: \ / : * ? " &lt; &gt; |
+                                        <span class="material-symbols-outlined inline-icon" aria-hidden="true">description</span> 空欄の場合は「discord_tachie_ユーザーID」になります<br>
+                                        使用不可文字: \ / : * ? " &lt; &gt; |
                                     </small>
                                 </div>
                             </div>
@@ -254,7 +254,7 @@
                                     ブラウザソースの「カスタムCSS」に上記で生成されたCSSをコピー&ペースト
                                 </li>
                                 <li>
-                                    🎉 完成！発話時に立ち絵が跳ねて光ります
+                                    完成！発話時に立ち絵が跳ねて光ります
                                 </li>
                             </ol>
                             
@@ -267,7 +267,7 @@
                                     <li><strong>複数サーバー</strong>：サーバー切り替え時は必ずSERVER/CHANNELを再選択</li>
                                 </ul>
                                 
-                                <h4 style="margin: 0 0 0.5rem 0; color: #4facfe;">🎛️ OBS推奨設定</h4>
+                                <h4 style="margin: 0 0 0.5rem 0; color: #4facfe;">&lt;span class="material-symbols-outlined inline-icon" aria-hidden="true"&gt;tune&lt;/span&gt; OBS推奨設定</h4>
                                 <div style="overflow-x: auto;">
                                     <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
                                         <tr style="background: rgba(79, 172, 254, 0.1);">
