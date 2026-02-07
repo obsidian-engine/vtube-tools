@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎭 Discord立ち絵CSS生成ツール</title>
+    <title>Discord立ち絵CSS生成ツール</title>
     <meta name="description" content="2025年最新！Discord StreamKit→OBS配信用立ち絵CSS生成。発話で跳ね・光るアニメ対応">
     <meta name="keywords" content="Discord,立ち絵,CSS,OBS,配信,VTuber,StreamKit">
     <meta name="author" content="Discord CSS Generator">
@@ -22,7 +22,13 @@
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#667eea">
     
+    <!-- Material Symbols (Outlined) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=auto_awesome,content_copy,description,download,fingerprint,image,palette,refresh,settings,straighten,theater_comedy,tune&display=block" rel="stylesheet" />
+
     <!-- CSS -->
+    <link rel="stylesheet" href="/shared/md3-tokens.css">
     <link rel="stylesheet" href="/src/style.css">
 </head>
 <body>
@@ -31,7 +37,8 @@
         <header class="header">
             <div class="header-content">
                 <h1 class="header-title">
-                    🎭 Discord立ち絵CSS生成ツール
+                    <span class="material-symbols-outlined" aria-hidden="true">theater_comedy</span>
+                    Discord立ち絵CSS生成ツール
                 </h1>
                 <p class="header-subtitle">
                     OBS配信でリアルタイム立ち絵表示
@@ -46,7 +53,8 @@
                 <section class="input-section">
                     <div class="form-card">
                         <h2 class="section-title">
-                            ⚙️ 設定
+                            <span class="material-symbols-outlined" aria-hidden="true">settings</span>
+                            設定
                         </h2>
                         
                         <!-- ユーザーID -->
@@ -179,10 +187,12 @@
                         <!-- アクションボタン -->
                         <div class="form-actions">
                             <button type="button" id="generate-btn" class="btn btn-primary">
-                                ✨ CSS生成
+                                <span class="material-symbols-outlined btn-icon" aria-hidden="true">auto_awesome</span>
+                                CSS生成
                             </button>
                             <button type="button" id="reset-btn" class="btn btn-secondary">
-                                🔄 リセット
+                                <span class="material-symbols-outlined btn-icon" aria-hidden="true">refresh</span>
+                                リセット
                             </button>
                         </div>
                     </div>
@@ -192,7 +202,8 @@
                 <section class="output-section">
                     <div class="output-card">
                         <h2 class="section-title">
-                            📋 生成されたCSS
+                            <span class="material-symbols-outlined" aria-hidden="true">description</span>
+                            生成されたCSS
                         </h2>
                         
                         <!-- CSS出力 -->
@@ -201,10 +212,12 @@
                                 <span class="file-name" id="css-filename">discord_tachie.css</span>
                                 <div class="output-actions">
                                     <button type="button" id="copy-btn" class="btn btn-outline" title="クリップボードにコピー">
-                                        📋 コピー
+                                        <span class="material-symbols-outlined btn-icon" aria-hidden="true">content_copy</span>
+                                        コピー
                                     </button>
                                     <button type="button" id="download-btn" class="btn btn-outline" title="CSSファイルをダウンロード">
-                                        💾 ダウンロード
+                                        <span class="material-symbols-outlined btn-icon" aria-hidden="true">download</span>
+                                        ダウンロード
                                     </button>
                                 </div>
                             </div>
@@ -214,7 +227,8 @@
                         <!-- 使い方ガイド -->
                         <div class="usage-guide">
                             <h3 class="guide-title">
-                                📖 使い方
+                                <span class="material-symbols-outlined" aria-hidden="true">description</span>
+                                使い方
                             </h3>
                             <ol class="guide-steps">
                                 <li>

@@ -1,0 +1,169 @@
+/* ============================================
+ * Material Design 3 Design Tokens
+ * Obsidian Engine - vtube-tools共通トークン
+ * ============================================ */
+
+/* ダークモード（デフォルト：Obsidianテーマベース） */
+:root {
+  /* Obsidianカラーパレット（ベースカラー） */
+  --obsidian-black: #0d1117;
+  --obsidian-dark: #161b22;
+  --obsidian-gray: #21262d;
+  --obsidian-gray-light: #30363d;
+  --obsidian-border: #444c56;
+
+  /* Surface roles */
+  --md-sys-color-surface: var(--obsidian-black);
+  --md-sys-color-surface-dim: #0a0e13;
+  --md-sys-color-surface-bright: #1c2128;
+  --md-sys-color-surface-container-lowest: #010409;
+  --md-sys-color-surface-container-low: var(--obsidian-dark);
+  --md-sys-color-surface-container: var(--obsidian-gray);
+  --md-sys-color-surface-container-high: var(--obsidian-gray-light);
+  --md-sys-color-surface-container-highest: #484f58;
+
+  /* Content on surface */
+  --md-sys-color-on-surface: #f0f6fc;
+  --md-sys-color-on-surface-variant: #8b949e;
+
+  /* Primary（プロジェクトごとにカスタマイズ可能） */
+  --md-sys-color-primary: #58a6ff;
+  --md-sys-color-on-primary: #0a1929;
+  --md-sys-color-primary-container: #1c3a5e;
+  --md-sys-color-on-primary-container: #cae6ff;
+
+  /* Secondary */
+  --md-sys-color-secondary: #768390;
+  --md-sys-color-on-secondary: #0d1117;
+
+  /* Outline */
+  --md-sys-color-outline: #6e7681;
+  --md-sys-color-outline-variant: var(--obsidian-border);
+
+  /* Error */
+  --md-sys-color-error: #f85149;
+  --md-sys-color-on-error: #ffffff;
+
+  /* Success */
+  --md-sys-color-success: #3fb950;
+  --md-sys-color-on-success: #ffffff;
+
+  /* Elevation（ダークモード） */
+  --md-sys-elevation-0: none;
+  --md-sys-elevation-1: 0 1px 4px 0 rgba(0, 0, 0, 0.37);
+  --md-sys-elevation-2: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.3);
+  --md-sys-elevation-3: 0 4px 8px 0 rgba(0, 0, 0, 0.3), 0 8px 16px 0 rgba(0, 0, 0, 0.4);
+  --md-sys-elevation-4: 0 8px 16px 0 rgba(0, 0, 0, 0.4), 0 16px 32px 0 rgba(0, 0, 0, 0.5);
+
+  /* Shape */
+  --md-sys-shape-corner-extra-small: 4px;
+  --md-sys-shape-corner-small: 8px;
+  --md-sys-shape-corner-medium: 12px;
+  --md-sys-shape-corner-large: 16px;
+  --md-sys-shape-corner-extra-large: 28px;
+  --md-sys-shape-corner-full: 9999px;
+
+  /* Typography */
+  --md-sys-typescale-display-large-size: 57px;
+  --md-sys-typescale-display-large-weight: 400;
+  --md-sys-typescale-display-large-tracking: -0.25px;
+
+  --md-sys-typescale-headline-large-size: 32px;
+  --md-sys-typescale-headline-large-weight: 400;
+  --md-sys-typescale-headline-large-tracking: 0;
+
+  --md-sys-typescale-title-large-size: 22px;
+  --md-sys-typescale-title-large-weight: 400;
+  --md-sys-typescale-title-large-tracking: 0;
+
+  --md-sys-typescale-body-large-size: 16px;
+  --md-sys-typescale-body-large-weight: 400;
+  --md-sys-typescale-body-large-tracking: 0.15px;
+
+  --md-sys-typescale-label-large-size: 14px;
+  --md-sys-typescale-label-large-weight: 500;
+  --md-sys-typescale-label-large-tracking: 0.1px;
+
+  /* State layers（ホバー・フォーカス・プレス時の透過度） */
+  --md-sys-state-hover-opacity: 0.08;
+  --md-sys-state-focus-opacity: 0.12;
+  --md-sys-state-pressed-opacity: 0.12;
+  --md-sys-state-dragged-opacity: 0.16;
+}
+
+/* ライトモード */
+@media (prefers-color-scheme: light) {
+  :root {
+    /* Surface roles */
+    --md-sys-color-surface: #fefbff;
+    --md-sys-color-surface-dim: #ded8e1;
+    --md-sys-color-surface-bright: #fefbff;
+    --md-sys-color-surface-container-lowest: #ffffff;
+    --md-sys-color-surface-container-low: #f6f8fa;
+    --md-sys-color-surface-container: #ffffff;
+    --md-sys-color-surface-container-high: #e6edf3;
+    --md-sys-color-surface-container-highest: #dde2e9;
+
+    /* Content on surface */
+    --md-sys-color-on-surface: #24292f;
+    --md-sys-color-on-surface-variant: #57606a;
+
+    /* Primary（プロジェクトごとにカスタマイズ可能） */
+    --md-sys-color-primary: #0969da;
+    --md-sys-color-on-primary: #ffffff;
+    --md-sys-color-primary-container: #ddf4ff;
+    --md-sys-color-on-primary-container: #0550ae;
+
+    /* Secondary */
+    --md-sys-color-secondary: #57606a;
+    --md-sys-color-on-secondary: #ffffff;
+
+    /* Outline */
+    --md-sys-color-outline: #8b949e;
+    --md-sys-color-outline-variant: #d0d7de;
+
+    /* Error */
+    --md-sys-color-error: #d1242f;
+    --md-sys-color-on-error: #ffffff;
+
+    /* Success */
+    --md-sys-color-success: #1a7f37;
+    --md-sys-color-on-success: #ffffff;
+
+    /* Elevation（ライトモード） */
+    --md-sys-elevation-1: 0 1px 4px 0 rgba(0, 0, 0, 0.1);
+    --md-sys-elevation-2: 0 2px 8px 0 rgba(0, 0, 0, 0.15);
+    --md-sys-elevation-3: 0 4px 16px 0 rgba(0, 0, 0, 0.2);
+    --md-sys-elevation-4: 0 8px 32px 0 rgba(0, 0, 0, 0.25);
+  }
+}
+
+/* Material Symbols基本スタイル */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  vertical-align: middle;
+  user-select: none;
+}
+
+/* アイコンサイズバリエーション */
+.material-symbols-outlined.icon-sm {
+  font-size: 18px;
+}
+
+.material-symbols-outlined.icon-md {
+  font-size: 24px;
+}
+
+.material-symbols-outlined.icon-lg {
+  font-size: 32px;
+}
+
+/* アクセシビリティ */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
