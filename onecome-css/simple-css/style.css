@@ -54,7 +54,7 @@
     flex-direction: column !important;
     align-items: flex-start !important;  /* 左揃え */
     gap: var(--gap-comments);
-    padding: 20px 20px 20px 1635px;  /* 左側に余白 */
+    padding: 20px 20px 20px 1615px;  /* 左側に余白 */
     overflow-y: auto !important;
 }
 
@@ -74,7 +74,7 @@
     animation: fadeIn 0.2s ease-out forwards;
     margin-bottom: 0;
     width: auto !important;
-    max-width: 260px !important;  /* 13文字分の幅（約20px/文字） */
+    max-width: 500px !important;  /* テスト用に広げる */
 }
 
 @keyframes fadeIn {
@@ -88,7 +88,6 @@
     flex-direction: column;
     align-items: flex-start;  /* 子要素を左寄せ */
     gap: var(--gap-block);
-    width: 100%;  /* 親要素の幅いっぱいに */
 }
 
 .comment-body {
@@ -96,7 +95,7 @@
     flex-direction: column;
     align-items: flex-start;  /* 子要素を左寄せ */
     gap: var(--gap-block);
-    width: 100%;  /* 親要素の幅いっぱいに */
+    max-width: none !important;
 }
 
 /* 7. 名前タグ - グラデーション背景 */
@@ -126,16 +125,15 @@
     border-radius: var(--radius-default) !important;
     box-shadow: var(--shadow-default) !important;
     padding: var(--padding-message) !important;
-    max-width: 100%;
+    max-width: none !important;
     word-wrap: break-word !important;
     overflow-wrap: break-word !important;
     text-align: left !important;  /* 左揃え */
-    width: 100%;  /* 親要素の幅いっぱいに */
 }
 
 /* 9. スーパーチャット - 全体グラデーション */
 .comment[data-paid="true"] {
-    min-width: 400px;
+    max-width: 500px !important;
     background: var(--superchat-bg) !important;
     border-radius: var(--radius-default) !important;
     box-shadow: var(--shadow-default) !important;
@@ -167,6 +165,7 @@
 
 /* 10. メンバーシップ - スパチャと同じ見た目 */
 .comment[data-membership="true"] {
+    max-width: 500px !important;
     background: var(--membership-bg) !important;
     border-radius: var(--radius-default) !important;
     box-shadow: var(--shadow-default) !important;
@@ -198,7 +197,18 @@
 
 
 
-/* 11. バッジ */
+/* 11. 絵文字 */
+.comment .comment-text img,
+.comment .comment-text .emoji,
+.comment .paid-text img,
+.comment .paid-text .emoji {
+    transform: scale(1.2) !important;
+    display: inline-block !important;
+    vertical-align: middle !important;
+    margin: 0 4px !important;  /* 左右に4pxの余白 */
+}
+
+/* 12. バッジ */
 .badge {
     display: inline-block;
     margin-left: 4px;
@@ -216,13 +226,15 @@
 /* 12. 幅制限（はみ出し防止） */
 .comment .comment-block,
 .comment .comment-body,
-.comment .comment-text,
-.comment .name,
-.comment one-marquee {
+.comment .name {
     max-width: 100% !important;
     word-wrap: break-word !important;
     overflow-wrap: break-word !important;
     box-sizing: border-box !important;
+}
+
+.comment one-marquee {
+    max-width: none !important;
 }
 
 /* 13. スクロールバーを隠す */
