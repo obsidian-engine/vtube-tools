@@ -17,6 +17,20 @@
     /* シャドウ */
     --shadow-default: 0 1px 3px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
 
+    /* padding定義 */
+    --padding-container: 8px 12px;
+    --padding-name-tag: 8px 12px;
+    --padding-message: 12px 16px;
+    --padding-superchat: 16px;
+    --padding-comments: 20px;
+
+    /* 角丸 */
+    --radius-default: 12px;
+
+    /* 間隔 */
+    --gap-comments: 10px;
+    --gap-block: 4px;
+
     /* 通常コメント（listener） */
     --listener-name: #FFFFFF;
     --listener-name-bg: var(--g);
@@ -37,9 +51,10 @@
 /* 4. コンテナレイアウト - 縦並び */
 .comments {
     display: flex !important;
-    flex-direction: column !important;  /* 縦並び */
-    gap: 12px;
-    padding: 20px;
+    flex-direction: column !important;
+    align-items: flex-end !important;
+    gap: var(--gap-comments);
+    padding: var(--padding-comments);
     overflow-y: auto !important;
 }
 
@@ -58,6 +73,7 @@
     letter-spacing: 0.3px !important;
     animation: fadeIn 0.2s ease-out forwards;
     margin-bottom: 0;
+    width: 100% !important;
 }
 
 @keyframes fadeIn {
@@ -69,21 +85,24 @@
 .comment-block {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    align-items: flex-start;
+    gap: var(--gap-block);
 }
 
 .comment-body {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    align-items: flex-start;
+    gap: var(--gap-block);
+    width: 100%;
 }
 
 /* 7. 名前タグ - グラデーション背景 */
 .name {
     display: inline-block;
     width: fit-content;
-    padding: 8px 12px !important;
-    border-radius: 12px !important;
+    padding: var(--padding-name-tag) !important;
+    border-radius: var(--radius-default) !important;
     background: var(--listener-name-bg) !important;
     color: var(--listener-name) !important;
     font-size: 16px !important;
@@ -101,10 +120,9 @@
 .comment-text {
     background: var(--listener-comment-bg) !important;
     color: var(--listener-comment) !important;
-    border-radius: 12px !important;
+    border-radius: var(--radius-default) !important;
     box-shadow: var(--shadow-default) !important;
-    padding: 12px 16px !important;
-    width: fit-content !important;
+    padding: var(--padding-message) !important;
     max-width: 100%;
     word-wrap: break-word !important;
     overflow-wrap: break-word !important;
@@ -113,9 +131,10 @@
 /* 9. スーパーチャット - 全体グラデーション */
 .comment[data-paid="true"] {
     background: var(--superchat-bg) !important;
-    border-radius: 12px !important;
+    border-radius: var(--radius-default) !important;
     box-shadow: var(--shadow-default) !important;
-    padding: 16px !important;
+    padding: var(--padding-superchat) !important;
+    box-sizing: border-box !important;
 }
 
 .comment[data-paid="true"] .name {
@@ -141,9 +160,10 @@
 /* 10. メンバーシップ - スパチャと同じ見た目 */
 .comment[data-membership="true"] {
     background: var(--membership-bg) !important;
-    border-radius: 12px !important;
+    border-radius: var(--radius-default) !important;
     box-shadow: var(--shadow-default) !important;
-    padding: 16px !important;
+    padding: var(--padding-superchat) !important;
+    box-sizing: border-box !important;
 }
 
 .comment[data-membership="true"] .name {
