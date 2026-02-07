@@ -13,30 +13,30 @@
   --obsidian-purple: #8b5cf6;
   --obsidian-glow: #7c3aed;
 
-  /* セマンティックカラー */
-  --bg-primary: var(--obsidian-black);
-  --bg-secondary: var(--obsidian-dark);
-  --bg-card: var(--obsidian-gray);
-  --bg-hover: var(--obsidian-light);
-  
-  --text-primary: #f0f6fc;
-  --text-secondary: #8b949e;
-  --text-muted: #6e7681;
-  --text-accent: var(--obsidian-accent);
-  
-  --border-color: #30363d;
-  --border-accent: var(--obsidian-accent);
-  
-  /* グラデーション */
-  --gradient-hero: linear-gradient(135deg, var(--obsidian-black) 0%, var(--obsidian-dark) 50%, var(--obsidian-gray) 100%);
-  --gradient-card: linear-gradient(145deg, var(--obsidian-gray) 0%, var(--obsidian-dark) 100%);
-  --gradient-accent: linear-gradient(135deg, var(--obsidian-accent) 0%, var(--obsidian-purple) 100%);
-  --gradient-glow: linear-gradient(135deg, var(--obsidian-purple) 0%, var(--obsidian-glow) 100%);
+  /* セマンティックカラー (MD3トークン参照) */
+  --bg-primary: var(--md-sys-color-surface);
+  --bg-secondary: var(--md-sys-color-surface-container-low);
+  --bg-card: var(--md-sys-color-surface-container);
+  --bg-hover: var(--md-sys-color-surface-container-high);
 
-  /* シャドウ */
-  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
-  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+  --text-primary: var(--md-sys-color-on-surface);
+  --text-secondary: var(--md-sys-color-on-surface-variant);
+  --text-muted: var(--md-sys-color-outline);
+  --text-accent: var(--md-sys-color-primary);
+
+  --border-color: var(--md-sys-color-outline-variant);
+  --border-accent: var(--md-sys-color-primary);
+
+  /* グラデーション (後方互換用・MD3では基本的に不使用) */
+  --gradient-hero: linear-gradient(135deg, var(--md-sys-color-surface) 0%, var(--md-sys-color-surface-container-low) 50%, var(--md-sys-color-surface-container) 100%);
+  --gradient-card: linear-gradient(145deg, var(--md-sys-color-surface-container) 0%, var(--md-sys-color-surface-container-low) 100%);
+  --gradient-accent: linear-gradient(135deg, var(--md-sys-color-primary) 0%, var(--md-sys-color-secondary) 100%);
+  --gradient-glow: linear-gradient(135deg, var(--md-sys-color-secondary) 0%, var(--obsidian-glow) 100%);
+
+  /* シャドウ (MD3 Elevation参照) */
+  --shadow-sm: var(--md-sys-elevation-1);
+  --shadow-md: var(--md-sys-elevation-2);
+  --shadow-lg: var(--md-sys-elevation-3);
   --shadow-glow: 0 0 20px rgba(139, 92, 246, 0.3);
 
   /* スペーシング */
@@ -47,11 +47,11 @@
   --spacing-xl: 3rem;
   --spacing-2xl: 4rem;
 
-  /* ボーダーラディウス */
-  --radius-sm: 6px;
-  --radius-md: 12px;
-  --radius-lg: 20px;
-  --radius-full: 9999px;
+  /* ボーダーラディウス (MD3 Shape参照) */
+  --radius-sm: var(--md-sys-shape-corner-small);
+  --radius-md: var(--md-sys-shape-corner-medium);
+  --radius-lg: var(--md-sys-shape-corner-large);
+  --radius-full: var(--md-sys-shape-corner-full);
 
   /* フォント */
   --font-family: 'Segoe UI', 'Helvetica Neue', -apple-system, BlinkMacSystemFont, 'Noto Sans JP', sans-serif;
@@ -61,6 +61,67 @@
   --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ============================================
+   * MD3 Design Tokens (mapped from Obsidian palette)
+   * ============================================ */
+
+  /* Surface roles */
+  --md-sys-color-surface: var(--obsidian-black);
+  --md-sys-color-surface-dim: #090c10;
+  --md-sys-color-surface-bright: #1c2128;
+  --md-sys-color-surface-container-lowest: #080b0f;
+  --md-sys-color-surface-container-low: var(--obsidian-dark);
+  --md-sys-color-surface-container: var(--obsidian-gray);
+  --md-sys-color-surface-container-high: var(--obsidian-light);
+  --md-sys-color-surface-container-highest: #3a424d;
+
+  /* Content on surface */
+  --md-sys-color-on-surface: #f0f6fc;
+  --md-sys-color-on-surface-variant: #8b949e;
+
+  /* Primary */
+  --md-sys-color-primary: var(--obsidian-accent);
+  --md-sys-color-on-primary: #0a1929;
+  --md-sys-color-primary-container: #1a3a5c;
+  --md-sys-color-on-primary-container: #a8d1ff;
+
+  /* Secondary (purple) */
+  --md-sys-color-secondary: var(--obsidian-purple);
+  --md-sys-color-on-secondary: #1a0a3e;
+  --md-sys-color-secondary-container: #2d1a6b;
+  --md-sys-color-on-secondary-container: #c9b8ff;
+
+  /* Outline */
+  --md-sys-color-outline: #6e7681;
+  --md-sys-color-outline-variant: #30363d;
+
+  /* Error */
+  --md-sys-color-error: #ef4444;
+  --md-sys-color-on-error: #ffffff;
+  --md-sys-color-error-container: #93000a;
+  --md-sys-color-on-error-container: #ffdad6;
+
+  /* MD3 Elevation (box-shadow) */
+  --md-sys-elevation-0: none;
+  --md-sys-elevation-1: 0 1px 4px 0 rgba(0, 0, 0, 0.37);
+  --md-sys-elevation-2: 0 2px 2px 0 rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.3);
+  --md-sys-elevation-3: 0 11px 7px 0 rgba(0, 0, 0, 0.19), 0 13px 25px 0 rgba(0, 0, 0, 0.3);
+  --md-sys-elevation-4: 0 14px 12px 0 rgba(0, 0, 0, 0.17), 0 20px 40px 0 rgba(0, 0, 0, 0.3);
+
+  /* MD3 Shape */
+  --md-sys-shape-corner-none: 0;
+  --md-sys-shape-corner-extra-small: 4px;
+  --md-sys-shape-corner-small: 8px;
+  --md-sys-shape-corner-medium: 12px;
+  --md-sys-shape-corner-large: 16px;
+  --md-sys-shape-corner-extra-large: 28px;
+  --md-sys-shape-corner-full: 9999px;
+
+  /* MD3 Typography (Label Large - ボタン用) */
+  --md-sys-typescale-label-large-size: 0.875rem;
+  --md-sys-typescale-label-large-weight: 500;
+  --md-sys-typescale-label-large-tracking: 0.1px;
 }
 
 /* リセット・基本設定 */
@@ -207,11 +268,15 @@ body {
 }
 
 .section-title {
-  font-size: 2.5rem;
-  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-size: 2rem;
+  font-weight: 400;
   text-align: center;
   margin-bottom: var(--spacing-2xl);
-  color: var(--text-primary);
+  color: var(--md-sys-color-on-surface);
 }
 
 .tools-grid {
@@ -221,13 +286,13 @@ body {
   margin-bottom: var(--spacing-2xl);
 }
 
-/* Tool Cards */
+/* Tool Cards - MD3 Elevated Style */
 .tool-card {
-  background: var(--gradient-card);
-  border-radius: var(--radius-lg);
+  background: var(--md-sys-color-surface-container-low);
+  border-radius: var(--md-sys-shape-corner-medium);
   padding: var(--spacing-lg);
-  border: 1px solid var(--border-color);
-  box-shadow: var(--shadow-md);
+  border: none;
+  box-shadow: var(--md-sys-elevation-1);
   transition: all var(--transition-normal);
   position: relative;
   overflow: hidden;
@@ -239,8 +304,8 @@ body {
   top: 0;
   left: 0;
   right: 0;
-  height: 3px;
-  background: var(--gradient-accent);
+  height: 2px;
+  background: var(--md-sys-color-primary);
   opacity: 0;
   transition: opacity var(--transition-normal);
 }
@@ -250,9 +315,7 @@ body {
 }
 
 .tool-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-lg);
-  border-color: var(--border-accent);
+  box-shadow: var(--md-sys-elevation-2);
 }
 
 .tool-card.coming-soon {
@@ -268,29 +331,37 @@ body {
 }
 
 .tool-icon {
-  font-size: 2.5rem;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--md-sys-shape-corner-medium);
+  background: var(--md-sys-color-surface-container-high);
+}
+
+.tool-icon .material-symbols-outlined {
+  font-size: 28px;
+  color: var(--md-sys-color-primary);
 }
 
 .status-badge {
-  padding: var(--spacing-xs) var(--spacing-sm);
-  border-radius: var(--radius-full);
-  font-size: 0.75rem;
-  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: var(--md-sys-shape-corner-full);
+  font-size: 0.6875rem;
+  font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .status-badge.ready {
-  background: linear-gradient(135deg, #10b981, #059669);
-  color: white;
-  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+  background: #10b981;
+  color: #ffffff;
 }
 
 .status-badge.soon {
-  background: linear-gradient(135deg, #f59e0b, #d97706);
-  color: white;
-  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+  background: #f59e0b;
+  color: #ffffff;
 }
 
 .tool-content {
@@ -332,61 +403,85 @@ body {
   flex-wrap: wrap;
 }
 
-/* Buttons */
+/* Buttons - MD3 Style */
 .btn {
   display: inline-flex;
   align-items: center;
-  gap: var(--spacing-xs);
-  padding: var(--spacing-sm) var(--spacing-md);
-  border-radius: var(--radius-md);
-  font-size: 0.9rem;
-  font-weight: 600;
+  justify-content: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 24px;
+  border-radius: var(--md-sys-shape-corner-full);
+  font-size: var(--md-sys-typescale-label-large-size);
+  font-weight: var(--md-sys-typescale-label-large-weight);
+  letter-spacing: var(--md-sys-typescale-label-large-tracking);
   text-decoration: none;
   border: none;
   cursor: pointer;
   transition: all var(--transition-normal);
   white-space: nowrap;
+  position: relative;
+  overflow: hidden;
+}
+
+/* アイコン付きボタンの左パディング調整 */
+.btn:has(.material-symbols-outlined) {
+  padding-left: 16px;
 }
 
 .btn-primary {
-  background: var(--gradient-accent);
-  color: white;
-  box-shadow: var(--shadow-md);
+  background: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+  box-shadow: var(--md-sys-elevation-0);
 }
 
 .btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-lg);
-  filter: brightness(1.1);
+  box-shadow: var(--md-sys-elevation-1);
+  filter: brightness(1.08);
+}
+
+.btn-primary:active {
+  box-shadow: var(--md-sys-elevation-0);
+  filter: brightness(0.92);
+}
+
+.btn-primary:focus-visible {
+  outline: 2px solid var(--md-sys-color-primary);
+  outline-offset: 2px;
 }
 
 .btn-outline {
   background: transparent;
-  color: var(--text-accent);
-  border: 2px solid var(--border-accent);
+  color: var(--md-sys-color-primary);
+  border: 1px solid var(--md-sys-color-outline);
 }
 
 .btn-outline:hover {
-  background: var(--obsidian-accent);
-  color: white;
-  transform: translateY(-2px);
+  background: rgba(88, 166, 255, 0.08);
+}
+
+.btn-outline:active {
+  background: rgba(88, 166, 255, 0.12);
 }
 
 .btn-disabled {
-  background: var(--bg-hover);
-  color: var(--text-muted);
+  background: rgba(240, 246, 252, 0.12);
+  color: rgba(240, 246, 252, 0.38);
   cursor: not-allowed;
-  opacity: 0.6;
+  pointer-events: none;
+  box-shadow: none;
 }
 
 /* ボタンの成功・エラー状態のスタイル */
 .btn-success {
-  background: linear-gradient(135deg, #10b981, #059669) !important;
+  background: #10b981 !important;
+  color: #ffffff !important;
   animation: pulse-success 0.3s ease;
 }
 
 .btn-error {
-  background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+  background: var(--md-sys-color-error) !important;
+  color: var(--md-sys-color-on-error) !important;
   animation: pulse-error 0.3s ease;
 }
 
@@ -440,8 +535,8 @@ body {
 
 /* Footer */
 .footer {
-  background: var(--obsidian-black);
-  border-top: 1px solid var(--border-color);
+  background: var(--md-sys-color-surface);
+  border-top: 1px solid var(--md-sys-color-outline-variant);
   padding: var(--spacing-2xl) 0 var(--spacing-lg);
   margin-top: auto;
 }
@@ -462,6 +557,12 @@ body {
 
 .footer-logo {
   font-size: 1.5rem;
+  color: var(--md-sys-color-primary);
+}
+
+.footer-logo .material-symbols-outlined {
+  font-size: 24px;
+  color: var(--md-sys-color-primary);
 }
 
 .footer-name {
@@ -491,13 +592,13 @@ body {
 }
 
 .footer-links a {
-  color: var(--text-secondary);
+  color: var(--md-sys-color-on-surface-variant);
   text-decoration: none;
-  transition: color var(--transition-normal);
+  transition: color var(--transition-fast);
 }
 
 .footer-links a:hover {
-  color: var(--text-accent);
+  color: var(--md-sys-color-primary);
 }
 
 .footer-bottom {
@@ -682,22 +783,48 @@ body {
 /* ライトモード対応（システム設定に応じて） */
 @media (prefers-color-scheme: light) {
   :root {
-    --bg-primary: #ffffff;
-    --bg-secondary: #f6f8fa;
-    --bg-card: #ffffff;
-    --bg-hover: #f3f4f6;
-    
-    --text-primary: #24292f;
-    --text-secondary: #57606a;
-    --text-muted: #8b949e;
-    
-    --border-color: #d0d7de;
-    
-    --gradient-hero: linear-gradient(135deg, #ffffff 0%, #f6f8fa 50%, #f3f4f6 100%);
-    --gradient-card: linear-gradient(145deg, #ffffff 0%, #f6f8fa 100%);
+    /* MD3 Light Mode Tokens */
+    --md-sys-color-surface: #fefbff;
+    --md-sys-color-surface-container-low: #f6f8fa;
+    --md-sys-color-surface-container: #ffffff;
+    --md-sys-color-surface-container-high: #f3f4f6;
+    --md-sys-color-surface-container-highest: #e8eaed;
+    --md-sys-color-on-surface: #24292f;
+    --md-sys-color-on-surface-variant: #57606a;
+    --md-sys-color-outline: #8b949e;
+    --md-sys-color-outline-variant: #d0d7de;
+
+    /* セマンティック変数（MD3参照のため自動追従） */
+    --gradient-hero: linear-gradient(135deg, var(--md-sys-color-surface) 0%, var(--md-sys-color-surface-container-low) 50%, var(--md-sys-color-surface-container-high) 100%);
+    --gradient-card: linear-gradient(145deg, var(--md-sys-color-surface-container) 0%, var(--md-sys-color-surface-container-low) 100%);
   }
-  
+
   .hero-background {
     opacity: 0.1;
   }
+}
+
+/* ============================================
+ * Material Symbols Outlined - Base Styles
+ * ============================================ */
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  vertical-align: middle;
+  user-select: none;
+}
+
+/* セクションタイトル内アイコン */
+.section-title-icon {
+  font-size: 2rem;
+}
+
+/* ボタン内アイコン */
+.btn-icon {
+  font-size: 18px;
+}
+
+/* 本文中インラインアイコン */
+.inline-icon {
+  font-size: 1em;
+  vertical-align: -0.125em;
 }
