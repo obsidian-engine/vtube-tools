@@ -1,0 +1,96 @@
+/* わんこめネオンテンプレート - オリジナル */
+
+:root {
+    --lcv-text-color: rgba(255, 255, 255, 1);
+}
+
+:root {
+    --neon-color: rgba(255, 0, 252, 1);
+}
+
+:root {
+    --lcv-enter-duration: 256ms;
+    --lcv-text-color: #fff;
+    --lcv-name-color: #fff;
+    --neon-color: #0ff;
+    --neon-base-color: #fff;
+    --lcv-max-width: 50%;
+
+    /* ネオンシャドウ - 7層（非常に強い） */
+    --lcv-neon-shadow:
+        0 0 4px var(--neon-base-color),
+        0 0 8px var(--neon-base-color),
+        0 0 12px var(--neon-base-color),
+        0 0 16px var(--neon-color),
+        0 0 20px var(--neon-color),
+        0 0 24px var(--neon-color),
+        0 0 28px var(--neon-color);
+
+    /* ネオンボックスシャドウ - 3層 */
+    --lcv-neon-box-shadow:
+        drop-shadow(0 0 2px var(--neon-base-color))
+        drop-shadow(0 0 4px var(--neon-base-color))
+        drop-shadow(0 0 6px var(--neon-color));
+}
+
+:root {
+    --lcv-name-shadow: var(--lcv-name-shadow-1);
+    --lcv-comment-shadow: var(--lcv-comment-shadow-1);
+}
+
+:root {
+    --lcv-background-color: transparent;
+    --lcv-name-color: #000;
+    --lcv-text-color: #000;
+    --lcv-avatar-size: 42px;
+    --lcv-badge-size: 1em;
+    --lcv-font-size: 24px;
+    --lcv-image-size: 1em;
+    --lcv-gift-size: 2em;
+    --lcv-enter-duration: 150ms;
+    --lcv-enter-easing: ease-out;
+    --lcv-move-duration: 150ms;
+    --lcv-move-easing: ease-out;
+    --lcv-comment-direction: column-reverse;
+    --lcv-comment-direction-reverse: column;
+    --lcv-direction: var(--lcv-comment-direction);
+    --lcv-name-shadow-color: #fff;
+    --lcv-comment-shadow-color: #fff;
+    --lcv-name-shadow: var(--lcv-name-shadow-0);
+    --lcv-comment-shadow: var(--lcv-comment-shadow-0);
+    --lcv-name-shadow-0: none;
+
+    /* 以下、name-shadow-1〜5、comment-shadow-1〜5 の定義（省略） */
+}
+
+.comment {
+    padding-top: 28px;
+    overflow: visible;
+    max-width: var(--lcv-max-width);
+    flex: auto 0 0;
+    box-sizing: border-box;
+    white-space: default;
+    overflow: hidden;
+    box-shadow: var(--lcv-box-shadow, none);
+    margin: 0;
+    border-radius: 4px;
+    white-space: nowrap;
+    background-color: var(--lcv-background-color);
+    display: flex;
+    padding: 8px;
+    flex: 0 0 auto;
+}
+
+body {
+    font-family: 'Exo 2', sans-serif;
+}
+
+html, body {
+    font-size: var(--lcv-font-size);
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    line-height: 1.5;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+}

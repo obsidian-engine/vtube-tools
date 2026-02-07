@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>わんこめネオンCSS - Before/After プレビュー（個人カスタマイズ）</title>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Exo 2', sans-serif;
+            background: #1a1a1a;
+            color: #fff;
+            padding: 40px;
+            margin: 0;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .preview-section {
+            background: #2a2a2a;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+        .preview-section h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .preview-section h2.before {
+            color: #ff6b6b;
+        }
+
+        .preview-section h2.after {
+            color: #51cf66;
+        }
+
+        .preview-area {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 30px;
+            border-radius: 4px;
+            min-height: 400px;
+        }
+
+        /* オリジナル版（7層） */
+        .comment-original {
+            padding: 8px 16px;
+            margin-bottom: 16px;
+            background-color: transparent;
+            border-radius: 4px;
+            max-width: 80%;
+        }
+
+        .comment-original .user-name {
+            font-weight: bold;
+            color: #fff;
+            text-shadow:
+                0 0 4px #fff,
+                0 0 8px #fff,
+                0 0 12px #fff,
+                0 0 16px #0ff,
+                0 0 20px #0ff,
+                0 0 24px #0ff,
+                0 0 28px #0ff;
+            margin-bottom: 4px;
+        }
+
+        .comment-original .comment-text {
+            color: #fff;
+            text-shadow:
+                0 0 4px #fff,
+                0 0 8px #fff,
+                0 0 12px #fff,
+                0 0 16px #0ff,
+                0 0 20px #0ff,
+                0 0 24px #0ff,
+                0 0 28px #0ff;
+        }
+
+        /* 調整版（3層 + グレー背景） */
+        .comment-adjusted {
+            padding: 8px 16px;
+            margin-bottom: 16px;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            max-width: 80%;
+        }
+
+        .comment-adjusted .user-name {
+            font-weight: bold;
+            color: #000;
+            text-shadow:
+                0 0 3px #fff,
+                0 0 6px #0ff,
+                0 0 9px #0ff;
+            margin-bottom: 4px;
+        }
+
+        .comment-adjusted .comment-text {
+            color: #000;
+            text-shadow:
+                0 0 3px #fff,
+                0 0 6px #0ff,
+                0 0 9px #0ff;
+        }
+
+        /* 比較メトリクス */
+        .metrics {
+            margin-top: 30px;
+            padding: 20px;
+            background: #333;
+            border-radius: 4px;
+        }
+
+        .metrics h3 {
+            margin-top: 0;
+            color: #51cf66;
+        }
+
+        .metrics table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .metrics th, .metrics td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #444;
+        }
+
+        .metrics th {
+            background: #444;
+            font-weight: bold;
+        }
+
+        .metrics .improvement {
+            color: #51cf66;
+            font-weight: bold;
+        }
+
+        /* 注意書き */
+        .note {
+            background: #ff922b;
+            color: #000;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        /* ダウンロードボタンのスタイルは削除（個人的なバックアップのため不要） */
+    </style>
+</head>
+<body>
+    <h1>🎨 わんこめネオンCSS - Before/After プレビュー（個人カスタマイズ）</h1>
+    
+    <div style="background: #ff922b; color: #000; padding: 20px; border-radius: 8px; margin: 0 auto 30px; max-width: 1400px; font-weight: bold; text-align: center;">
+        ⚠️ これは個人的なカスタマイズのバックアップです。配布目的ではありません。<br>
+        公式テンプレートは <a href="https://onecomme.com" style="color: #000; text-decoration: underline;">https://onecomme.com</a> をご利用ください。
+    </div>
+
+    <div class="container">
+        <!-- Before -->
+        <div class="preview-section">
+            <h2 class="before">❌ Before（オリジナル - 7層）</h2>
+            <div class="preview-area">
+                <div class="comment-original">
+                    <div class="user-name">配信者太郎</div>
+                    <div class="comment-text">こんにちは！コメントテストです</div>
+                </div>
+                <div class="comment-original">
+                    <div class="user-name">視聴者花子</div>
+                    <div class="comment-text">ネオン効果すごい！✨</div>
+                </div>
+                <div class="comment-original">
+                    <div class="user-name">ゲーマー次郎</div>
+                    <div class="comment-text">長いコメントだとどうなるかな？文字数が多くても読みやすいといいですね。</div>
+                </div>
+            </div>
+
+            <div class="note">
+                ⚠️ 問題点: 背景透明で見づらい、光彩が強すぎる（7層）
+            </div>
+        </div>
+
+        <!-- After -->
+        <div class="preview-section">
+            <h2 class="after">✅ After（調整版 - 3層 + グレー背景）</h2>
+            <div class="preview-area">
+                <div class="comment-adjusted">
+                    <div class="user-name">配信者太郎</div>
+                    <div class="comment-text">こんにちは！コメントテストです</div>
+                </div>
+                <div class="comment-adjusted">
+                    <div class="user-name">視聴者花子</div>
+                    <div class="comment-text">ネオン効果すごい！✨</div>
+                </div>
+                <div class="comment-adjusted">
+                    <div class="user-name">ゲーマー次郎</div>
+                    <div class="comment-text">長いコメントだとどうなるかな？文字数が多くても読みやすいといいですね。</div>
+                </div>
+            </div>
+
+            <div class="note" style="background: #51cf66;">
+                ✅ 改善: グレー背景で読みやすく、光彩を控えめに（3層）
+            </div>
+        </div>
+    </div>
+
+    <!-- メトリクス比較 -->
+    <div class="metrics">
+        <h3>📊 技術的比較</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>項目</th>
+                    <th>Before（オリジナル）</th>
+                    <th>After（調整版）</th>
+                    <th>改善率</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>text-shadow レイヤー数</td>
+                    <td>7層</td>
+                    <td>3層</td>
+                    <td class="improvement">▼ 57%</td>
+                </tr>
+                <tr>
+                    <td>最大ぼかし半径</td>
+                    <td>28px</td>
+                    <td>9px</td>
+                    <td class="improvement">▼ 68%</td>
+                </tr>
+                <tr>
+                    <td>背景色</td>
+                    <td>transparent（透明）</td>
+                    <td>#e0e0e0（薄グレー）</td>
+                    <td class="improvement">✅ 改善</td>
+                </tr>
+                <tr>
+                    <td>テキスト色</td>
+                    <td>#fff（白）</td>
+                    <td>#000（黒）</td>
+                    <td class="improvement">✅ コントラスト向上</td>
+                </tr>
+                <tr>
+                    <td>GPU負荷（推定）</td>
+                    <td>高</td>
+                    <td>軽減</td>
+                    <td class="improvement">▼ 約60%</td>
+                </tr>
+                <tr>
+                    <td>可読性</td>
+                    <td>背景と被ると読めない</td>
+                    <td>常時読みやすい</td>
+                    <td class="improvement">✅ 大幅向上</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- 個人的なメモ: ファイルはローカルに保存済み -->
+
+    <!-- 個人的な使用メモ -->
+    <div class="metrics">
+        <h3>📝 個人的な使用メモ</h3>
+        <ol>
+            <li><strong>OBSを開く</strong> → Browser Source を追加</li>
+            <li><strong>CSSファイルを選択</strong>:
+                <ul>
+                    <li>推奨: <code>adjusted_neon.css</code>（控えめ・読みやすい）</li>
+                    <li>元に戻す: <code>original_neon.css</code>（強烈・派手）</li>
+                </ul>
+            </li>
+            <li><strong>Browser Sourceをリロード</strong> → 変更が反映されます</li>
+        </ol>
+
+        <h3>⚙️ さらなる調整メモ</h3>
+        <p>さらに調整したい場合は、<code>adjusted_neon.css</code> を開いて以下を変更:</p>
+        <ul>
+            <li><strong>背景色</strong>: <code>--lcv-background-color: #e0e0e0;</code> → お好みの色に</li>
+            <li><strong>光彩を強く</strong>: <code>0 0 9px</code> → <code>0 0 12px</code> など数値を大きく</li>
+            <li><strong>光彩を弱く</strong>: <code>0 0 9px</code> → <code>0 0 6px</code> など数値を小さく</li>
+        </ul>
+        
+        <div style="background: #ff922b; color: #000; padding: 15px; border-radius: 4px; margin-top: 20px; font-weight: bold;">
+            ⚠️ 注意: このカスタマイズは個人的なバックアップです。他の方への配布・共有は推奨しません。<br>
+            公式テンプレートは <a href="https://onecomme.com" style="color: #000; text-decoration: underline;">https://onecomme.com</a> をご利用ください。
+        </div>
+    </div>
+
+    <footer style="text-align: center; margin-top: 40px; color: #888;">
+        <p>わんこめネオンCSS - 個人的なカスタマイズ | 2026-01-18</p>
+        <p style="font-size: 14px;">⚠️ これは個人的なバックアップです。配布目的ではありません。</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,204 @@
+/* Aqua Gradient Theme - Obsidian Engine ベース */
+
+/* 1. フォント読み込み */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&display=swap');
+
+/* 2. わんこめ共通CSS */
+@import url('../__origin/css/common.css');
+@import url('../__origin/css/theme/basic.css');
+@import url('../__origin/css/animation/slide-right.css');
+@import url('../__origin/css/ext/marquee.css');
+
+/* 3. Obsidian Engine デザイントークン */
+:root {
+    /* メイングラデーション */
+    --g: linear-gradient(104deg, #53B7FF 0%, #81E3DD 94.77%);
+
+    /* シャドウ */
+    --shadow-default: 0 1px 3px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
+
+    /* 通常コメント（listener） */
+    --listener-name: #FFFFFF;
+    --listener-name-bg: var(--g);
+    --listener-comment: #333333;
+    --listener-comment-bg: #FFFFFF;
+
+    /* スーパーチャット */
+    --superchat-name: #FFFFFF;
+    --superchat-bg: var(--g);
+    --superchat-comment: #FFFFFF;
+
+    /* メンバーシップ */
+    --membership-name: #FFFFFF;
+    --membership-bg: var(--g);
+    --membership-comment: #FFFFFF;
+}
+
+/* 4. コンテナレイアウト - 縦並び */
+.comments {
+    display: flex !important;
+    flex-direction: column !important;  /* 縦並び */
+    gap: 12px;
+    padding: 20px;
+    overflow-y: auto !important;
+}
+
+.container {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100vh !important;
+}
+
+/* 5. 基本コメントスタイル */
+.comment {
+    font-family: "Noto Sans JP", system-ui, -apple-system, sans-serif !important;
+    font-size: 18px !important;
+    font-weight: 500 !important;
+    line-height: 1.6 !important;
+    letter-spacing: 0.3px !important;
+    animation: fadeIn 0.2s ease-out forwards;
+    margin-bottom: 0;
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+/* 6. コメントブロック */
+.comment-block {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.comment-body {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+/* 7. 名前タグ - グラデーション背景 */
+.name {
+    display: inline-block;
+    width: fit-content;
+    padding: 8px 12px !important;
+    border-radius: 12px !important;
+    background: var(--listener-name-bg) !important;
+    color: var(--listener-name) !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* メンバーも同じグラデーション */
+.comment[data-member="true"] .name {
+    background: var(--listener-name-bg) !important;
+    color: var(--listener-name) !important;
+}
+
+/* 8. コメント本文 - 白背景 */
+.comment-text {
+    background: var(--listener-comment-bg) !important;
+    color: var(--listener-comment) !important;
+    border-radius: 12px !important;
+    box-shadow: var(--shadow-default) !important;
+    padding: 12px 16px !important;
+    width: fit-content !important;
+    max-width: 100%;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+}
+
+/* 9. スーパーチャット - 全体グラデーション */
+.comment[data-paid="true"] {
+    background: var(--superchat-bg) !important;
+    border-radius: 12px !important;
+    box-shadow: var(--shadow-default) !important;
+    padding: 16px !important;
+}
+
+.comment[data-paid="true"] .name {
+    background: transparent !important;
+    color: var(--superchat-name) !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.comment[data-paid="true"] .comment-text {
+    background: transparent !important;
+    color: var(--superchat-comment) !important;
+    box-shadow: none !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.comment[data-paid="true"] .paid-text {
+    color: var(--superchat-comment) !important;
+    font-weight: 600 !important;
+    margin-bottom: 8px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* 10. メンバーシップ - スパチャと同じ見た目 */
+.comment[data-membership="true"] {
+    background: var(--membership-bg) !important;
+    border-radius: 12px !important;
+    box-shadow: var(--shadow-default) !important;
+    padding: 16px !important;
+}
+
+.comment[data-membership="true"] .name {
+    background: transparent !important;
+    color: var(--membership-name) !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.comment[data-membership="true"] .comment-text {
+    background: transparent !important;
+    color: var(--membership-comment) !important;
+    box-shadow: none !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.comment[data-membership="true"] .paid-text {
+    color: var(--membership-comment) !important;
+    font-weight: 600 !important;
+    margin-bottom: 8px;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* 11. バッジ */
+.badge {
+    display: inline-block;
+    margin-left: 4px;
+    vertical-align: middle;
+}
+
+.badge img {
+    max-width: 20px;
+    max-height: 20px;
+    object-fit: contain;
+    vertical-align: middle;
+}
+
+/* 12. 幅制限（はみ出し防止） */
+.comment .comment-block,
+.comment .comment-body,
+.comment .comment-text,
+.comment .name,
+.comment one-marquee {
+    max-width: 100% !important;
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+    box-sizing: border-box !important;
+}
+
+/* 13. スクロールバーを隠す */
+.comments::-webkit-scrollbar {
+    display: none;
+}
+
+/* 14. アクセシビリティ */
+.comment:focus-visible {
+    outline: 2px solid #53B7FF;
+    outline-offset: 2px;
+}

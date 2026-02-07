@@ -1,0 +1,103 @@
+/* わんこめネオンテンプレート - 調整版 */
+/* 変更内容: 背景グレー追加、ネオン光彩を弱める */
+
+:root {
+    --lcv-text-color: rgba(255, 255, 255, 1);
+}
+
+:root {
+    --neon-color: rgba(255, 0, 252, 1);
+}
+
+:root {
+    --lcv-enter-duration: 256ms;
+    --lcv-text-color: #fff;
+    --lcv-name-color: #fff;
+    --neon-color: #0ff;
+    --neon-base-color: #fff;
+    --lcv-max-width: 50%;
+
+    /* 🔧 調整: ネオンシャドウを弱める（7層 → 3層） */
+    --lcv-neon-shadow:
+        0 0 3px var(--neon-base-color),   /* 白ベース: 4px → 3px */
+        0 0 6px var(--neon-color),        /* シアン1: 8px → 6px */
+        0 0 9px var(--neon-color);        /* シアン2: 12px → 9px */
+    /* 削除: 16px, 20px, 24px, 28px のレイヤー */
+
+    /* 🔧 調整: ボックスシャドウも弱める（3層 → 2層） */
+    --lcv-neon-box-shadow:
+        drop-shadow(0 0 2px var(--neon-base-color))
+        drop-shadow(0 0 4px var(--neon-color));
+    /* 削除: 6px のレイヤー */
+}
+
+:root {
+    --lcv-name-shadow: var(--lcv-name-shadow-1);
+    --lcv-comment-shadow: var(--lcv-comment-shadow-1);
+}
+
+:root {
+    /* 🔧 調整: 背景を薄いグレーに変更 */
+    --lcv-background-color: #e0e0e0; /* transparent → #e0e0e0 */
+
+    --lcv-name-color: #000;
+    --lcv-text-color: #000;
+    --lcv-avatar-size: 42px;
+    --lcv-badge-size: 1em;
+    --lcv-font-size: 24px;
+    --lcv-image-size: 1em;
+    --lcv-gift-size: 2em;
+    --lcv-enter-duration: 150ms;
+    --lcv-enter-easing: ease-out;
+    --lcv-move-duration: 150ms;
+    --lcv-move-easing: ease-out;
+    --lcv-comment-direction: column-reverse;
+    --lcv-comment-direction-reverse: column;
+    --lcv-direction: var(--lcv-comment-direction);
+    --lcv-name-shadow-color: #fff;
+    --lcv-comment-shadow-color: #fff;
+    --lcv-name-shadow: var(--lcv-name-shadow-0);
+    --lcv-comment-shadow: var(--lcv-comment-shadow-0);
+    --lcv-name-shadow-0: none;
+
+    /* 以下、name-shadow-1〜5、comment-shadow-1〜5 の定義（省略） */
+    /* 注: これらは --lcv-neon-shadow とは別のシステムのようです */
+}
+
+.comment {
+    padding-top: 28px;
+    overflow: visible;
+    max-width: var(--lcv-max-width);
+    flex: auto 0 0;
+    box-sizing: border-box;
+    white-space: default;
+    overflow: hidden;
+    box-shadow: var(--lcv-box-shadow, none);
+    margin: 0;
+    border-radius: 4px;
+    white-space: nowrap;
+    background-color: var(--lcv-background-color);
+    display: flex;
+    padding: 8px;
+    flex: 0 0 auto;
+}
+
+body {
+    font-family: 'Exo 2', sans-serif;
+}
+
+html, body {
+    font-size: var(--lcv-font-size);
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    line-height: 1.5;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* 📝 使用方法:
+   1. このCSSファイルをOBSのBrowser Sourceで読み込む
+   2. ネオン効果が弱まり、背景がグレーになります
+   3. さらに調整したい場合は --lcv-neon-shadow の値を変更してください
+*/
