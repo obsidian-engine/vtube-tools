@@ -18,9 +18,11 @@ VTuber・配信者向けの便利ツール集です。
 
 #### 🎭 わんこめツール集
 - **リポジトリ**: [onecomme-tools](https://github.com/DaichiHoshina/onecomme-tools)
-- **機能**: わんこめ（onecomme）プラグイン・ツール集
+- **機能**: わんこめ（onecomme）プラグイン・CSSテンプレート集
 - **主要ツール**:
   - **waiting-count**: 参加型機能の人数をOBS画面にリアルタイム表示
+  - **simple-css**: シンプルなコメント表示用CSSテンプレート
+  - **neon-custome**: ネオンエフェクトカスタマイズ版
 
 ### 🆕 新規開発予定
 
