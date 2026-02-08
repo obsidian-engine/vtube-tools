@@ -47,15 +47,10 @@
     --listener-comment: #333333;
     --listener-comment-bg: #FFFFFF;
 
-    /* スーパーチャット */
+    /* スーパーチャット・メンバーシップ（共通） */
     --superchat-name: #FFFFFF;
     --superchat-bg: var(--g);
     --superchat-comment: #FFFFFF;
-
-    /* メンバーシップ */
-    --membership-name: #FFFFFF;
-    --membership-bg: var(--g);
-    --membership-comment: #FFFFFF;
 }
 
 /* 4. コンテナレイアウト - 縦並び */
@@ -144,12 +139,16 @@
 
 /* 9. スーパーチャット - 全体グラデーション */
 .comment[data-paid="true"] {
-    max-width: var(--comment-max-width) !important;
+    width: 100% !important;
+    max-width: 100% !important;
     background: var(--superchat-bg) !important;
     border-radius: var(--radius-default) !important;
     box-shadow: var(--shadow-default) !important;
-    padding: var(--padding-superchat) !important;
     box-sizing: border-box !important;
+}
+
+.comment[data-paid="true"] .comment-block {
+    padding: var(--gap-block) !important;
 }
 
 .comment[data-paid="true"] .name {
@@ -167,43 +166,67 @@
 
 .comment[data-paid="true"] .paid-text {
     color: var(--superchat-comment) !important;
-    font-size: 20px !important;
+    font-size: 24px !important;
     font-weight: 700 !important;
     margin-bottom: 8px;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
     width: 100% !important;
 }
 
+.comment[data-paid="true"] .comment-text:empty {
+    display: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.comment[data-paid="true"] one-marquee:empty {
+    display: none !important;
+}
+
 /* 10. メンバーシップ - スパチャと同じ見た目 */
 .comment[data-membership="true"] {
-    max-width: var(--comment-max-width) !important;
-    background: var(--membership-bg) !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    background: var(--superchat-bg) !important;
     border-radius: var(--radius-default) !important;
     box-shadow: var(--shadow-default) !important;
-    padding: var(--padding-superchat) !important;
     box-sizing: border-box !important;
+}
+
+.comment[data-membership="true"] .comment-block {
+    padding: var(--gap-block) !important;
 }
 
 .comment[data-membership="true"] .name {
     background: transparent !important;
-    color: var(--membership-name) !important;
+    color: var(--superchat-name) !important;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .comment[data-membership="true"] .comment-text {
     background: transparent !important;
-    color: var(--membership-comment) !important;
+    color: var(--superchat-comment) !important;
     box-shadow: none !important;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .comment[data-membership="true"] .paid-text {
-    color: var(--membership-comment) !important;
-    font-size: 20px !important;
+    color: var(--superchat-comment) !important;
+    font-size: 24px !important;
     font-weight: 700 !important;
     margin-bottom: 8px;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
     width: 100% !important;
+}
+
+.comment[data-membership="true"] .comment-text:empty {
+    display: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.comment[data-membership="true"] one-marquee:empty {
+    display: none !important;
 }
 
 
