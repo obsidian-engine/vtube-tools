@@ -1,0 +1,22 @@
+{
+  "name": "onecomme-waiting-count-plugin",
+  "version": "1.0.0",
+  "description": "わんこめ参加型機能の人数をOBSにリアルタイム表示するプラグイン",
+  "main": "plugin.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "onecomme",
+    "わんこめ",
+    "plugin",
+    "obs",
+    "waiting",
+    "count"
+  ],
+  "author": "VTube Tools",
+  "license": "MIT",
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
