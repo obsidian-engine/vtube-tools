@@ -202,10 +202,10 @@
 .comment .comment-text .emoji,
 .comment .paid-text img,
 .comment .paid-text .emoji {
-    transform: scale(1.2) !important;
+    transform: scale(1.5) translateY(-2px) !important;
     display: inline-block !important;
     vertical-align: middle !important;
-    margin: 0 4px !important;  /* 左右に4pxの余白 */
+    margin: 0 6px !important;  /* 左右に6pxの余白 */
 }
 
 /* 12. バッジ */
@@ -215,12 +215,12 @@
     vertical-align: middle;
 }
 
-.badge img {
-    max-width: 20px;
-    max-height: 20px;
+.name .badge img {
+    width: 40px !important;
+    height: 40px !important;
     object-fit: contain;
     vertical-align: middle;
-    transform: scale(1.2) !important;
+    transform: translateY(-2px) !important;
 }
 
 /* 12. 幅制限（はみ出し防止） */
