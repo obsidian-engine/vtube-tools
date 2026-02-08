@@ -11,10 +11,16 @@ VTuber・配信者向けの便利ツール集です。
 - **機能**: Discord StreamKit → OBS配信用立ち絵CSS生成
 - **特徴**: 発話で跳ね・光るアニメーション対応
 
-#### 🎬 立ち絵移動CSS生成ツール  
+#### 🎬 立ち絵移動CSS生成ツール
 - **場所**: `app/create-tachie-move-css/`
 - **機能**: 立ち絵移動アニメーション用CSS生成
 - **特徴**: シェルスクリプトによる自動生成
+
+#### 🎭 わんこめツール集
+- **リポジトリ**: [onecomme-tools](https://github.com/DaichiHoshina/onecomme-tools)
+- **機能**: わんこめ（onecomme）プラグイン・ツール集
+- **主要ツール**:
+  - **waiting-count**: 参加型機能の人数をOBS画面にリアルタイム表示
 
 ### 🆕 新規開発予定
 
@@ -70,7 +76,8 @@ vtube-tools/
 | ツール | 状況 | 進捗 |
 |--------|------|------|
 | Discord CSS生成 | ✅ リリース済み | 100% |
-| 立ち絵移動CSS | ✅ リリース済み | 100% |  
+| 立ち絵移動CSS | ✅ リリース済み | 100% |
+| わんこめツール集 | ✅ リリース済み ([別リポジトリ](https://github.com/DaichiHoshina/onecomme-tools)) | - |
 | LINE公式アカウント管理 | 🏗️ 仕様設計完了 | 10% |
 
 ## 🎉 貢献・フィードバック
