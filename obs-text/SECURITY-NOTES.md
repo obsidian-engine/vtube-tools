@@ -2,15 +2,15 @@
 
 ## Known unresolved vulnerabilities
 
-### undici (high severity)
+### undici (high severity) — RESOLVED
 
 | Field | Detail |
 |-------|--------|
 | Package | `undici` |
-| Severity | High |
+| Severity | High (resolved) |
 | Source | Transitive dependency via `@firebase/auth`, `@firebase/firestore`, `@firebase/functions`, `@firebase/storage` |
-| Status | **accepted** — fix planned (separate task) |
-| Rationale | Firebase v10 系列が古い undici バージョンを transitive pin している。Firebase v11 への major bump は breaking change リスクがあるため、別タスクで対応予定。直接依存ではなく本番コードへの影響経路は Firebase SDK 内部に限定される。 |
+| Status | **resolved** — firebase ^10.7.0 → ^12.14.0 bump により high 解消 (2026-06-08, commit `a00b7a2`) |
+| Rationale | Firebase v12 系列が最新 undici を取り込み、transitive high が消滅した。build pass (vite 655ms)、残存は moderate 2 件のみ。 |
 | Review date | 2026-06-08 |
 
 ### esbuild (moderate severity)
@@ -26,4 +26,4 @@
 
 ---
 
-次回レビュー推奨: 2026-09-08 (または Firebase v11 / vite v7 リリース時)
+次回レビュー推奨: 2026-09-08 (または vite v7 リリース時)
