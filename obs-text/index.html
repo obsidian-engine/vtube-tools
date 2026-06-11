@@ -1,214 +1,243 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OBSテキスト表示ツール - 編集画面</title>
-  
-  <!-- SEO・OGP -->
-  <meta name="description" content="OBSブラウザソース用テキストをリアルタイム編集">
-  <meta property="og:title" content="OBSテキスト表示ツール">
-  <meta property="og:description" content="配信中にテキストをリアルタイム更新">
-  <meta property="og:type" content="website">
-  
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Kosugi+Maru&family=M+PLUS+Rounded+1c:wght@400;700;900&family=Noto+Sans+JP:wght@400;700;900&family=Sawarabi+Gothic&family=Zen+Maru+Gothic:wght@400;700;900&display=swap" rel="stylesheet">
-  
-  <!-- Material Symbols -->
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=auto_awesome,description,edit_note,folder_open,palette&display=block" rel="stylesheet">
-  
-  <!-- CSS読み込み -->
-  <link rel="stylesheet" href="/shared/md3-tokens.css">
-  <link rel="stylesheet" href="/src/style.css">
-  <link rel="stylesheet" href="/src/effects.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OBSテキスト表示 // OBSIDIAN ENGINE</title>
+
+    <meta name="description" content="OBSブラウザソース用テキストをリアルタイム編集 - Obsidian Engine">
+    <meta property="og:title" content="OBSテキスト表示 // OBSIDIAN ENGINE">
+    <meta property="og:description" content="配信中にテキストをリアルタイム更新">
+    <meta property="og:type" content="website">
+
+    <!-- Fonts: editorial chrome + 表示用フォント(preview対象) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Dots&family=JetBrains+Mono:wght@400;500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&family=Kosugi+Maru&family=M+PLUS+Rounded+1c:wght@400;700;900&family=Noto+Sans+JP:wght@400;700;900&family=Sawarabi+Gothic&family=Zen+Maru+Gothic:wght@400;700;900&display=swap" rel="stylesheet">
+
+    <!-- Material Symbols -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=arrow_back,auto_awesome,content_copy,description,edit_note,folder_open,info,palette,radio_button_checked,settings,terminal&display=block" rel="stylesheet">
+
+    <!-- CSS: editorial 専用 (md3-tokens は display 側のみ参照) -->
+    <link rel="stylesheet" href="/src/style.css">
+    <link rel="stylesheet" href="/src/effects.css">
 </head>
 <body>
-  <div class="app">
-    <header class="header">
-      <h1 class="header-title">OBSテキスト表示ツール</h1>
-      <p class="header-subtitle">配信中のテキストをリアルタイム更新</p>
-      <div id="connection-status" class="connection-status connected">接続中</div>
-    </header>
-    
-    <main class="main">
-      <div class="container">
-        <!-- Step 1: テキスト入力とスタイル調整 -->
-        <section class="step-section step-1">
-          <h2 class="step-title">
-            <span class="step-number step-icon">1</span>
-            テキストを入力してスタイルを調整
-          </h2>
+    <!-- Topbar -->
+    <div class="topbar">
+        <div class="topbar__left">
+            <span class="topbar__dot" aria-hidden="true"></span>
+            <a href="../" class="topbar__brand">OBSIDIAN ENGINE</a>
+        </div>
+        <div class="topbar__center" aria-hidden="true">配信卓の隣にあるツール箱</div>
+        <div class="topbar__right">
+            <a href="https://github.com/obsidian-engine/vtube-tools" target="_blank" rel="noopener" class="topbar__link">
+                <span class="material-symbols-outlined" aria-hidden="true">terminal</span>
+                <span>SOURCE</span>
+            </a>
+        </div>
+    </div>
 
-          <div class="form-card">
-            <!-- テキスト入力 -->
-            <div class="form-group">
-              <label for="text-input" class="form-label">
-                表示テキスト <span class="required">*</span>
-              </label>
-              <textarea
-                id="text-input"
-                class="form-textarea"
-                placeholder="ここにテキストを入力してください..."
-                rows="5"
-                maxlength="1000"
-                title="OBSで表示するテキストを入力してください（最大1000文字）"
-              ></textarea>
-              <small class="form-hint">
-                <span id="char-count">0</span> / 1000文字
-              </small>
+    <div class="app">
+        <!-- Page head -->
+        <header class="page-head container">
+            <div class="page-head__top">
+                <div class="page-head__label">
+                    <span class="material-symbols-outlined" aria-hidden="true">edit_note</span>
+                    <span>TOOL_05 // OBS TEXT</span>
+                </div>
+                <div id="connection-status" class="connection-status connected">
+                    <span class="material-symbols-outlined" aria-hidden="true">radio_button_checked</span>
+                    <span>接続中</span>
+                </div>
             </div>
-
-            <!-- スタイル設定 -->
-            <h3 class="subsection-title">スタイル設定</h3>
-
-            <!-- フォント選択 -->
-            <div class="form-group">
-              <label for="font-select" class="form-label">フォント</label>
-              <select id="font-select" class="form-select" title="表示に使用するフォントを選択してください">
-                <option value="Noto Sans JP">Noto Sans JP</option>
-                <option value="M PLUS Rounded 1c">M PLUS Rounded 1c</option>
-                <option value="Kosugi Maru">Kosugi Maru</option>
-                <option value="Sawarabi Gothic">Sawarabi Gothic</option>
-                <option value="Zen Maru Gothic">Zen Maru Gothic</option>
-              </select>
-            </div>
-
-            <!-- 文字色 -->
-            <div class="form-group">
-              <label for="color-picker" class="form-label">文字色</label>
-              <div class="color-picker-group">
-                <input type="color" id="color-picker" class="color-picker" value="#ffffff" title="カラーピッカーで文字色を選択">
-                <input type="text" id="color-text" class="form-input color-text-input" value="#ffffff" maxlength="7" pattern="^#[0-9A-Fa-f]{6}$" title="16進数カラーコード（例: #ffffff）">
-              </div>
-            </div>
-
-            <!-- 文字太さ -->
-            <div class="form-group">
-              <label for="weight-select" class="form-label">文字太さ</label>
-              <select id="weight-select" class="form-select" title="文字の太さを選択してください">
-                <option value="400">通常 (400)</option>
-                <option value="700">太字 (700)</option>
-                <option value="900">極太 (900)</option>
-              </select>
-            </div>
-
-            <!-- 文字サイズ -->
-            <div class="form-group">
-              <label for="size-slider" class="form-label">
-                文字サイズ: <span id="size-value">48</span>px
-              </label>
-              <input
-                type="range"
-                id="size-slider"
-                class="form-range"
-                min="12"
-                max="200"
-                step="1"
-                value="48"
-                title="スライダーで文字サイズを調整（12〜200px）"
-                aria-label="文字サイズ調整"
-                aria-valuemin="12"
-                aria-valuemax="200"
-                aria-valuenow="48"
-              >
-            </div>
-
-            <!-- Phase 3-1: カスタマイズボタン -->
-            <div class="form-group">
-              <button id="customize-btn" class="btn btn-customize" title="文字の影、アウトライン、背景などの詳細設定を行います">
-                <span class="material-symbols-outlined" aria-hidden="true">palette</span> 高度なカスタマイズ
-              </button>
-            </div>
-
-            <!-- Phase 3-2: テンプレートボタン -->
-            <div class="form-group">
-              <button id="template-btn" class="btn btn-customize" title="保存済みのスタイル設定を読み込みます">
-                <span class="material-symbols-outlined" aria-hidden="true">folder_open</span> テンプレート
-              </button>
-            </div>
-
-            <!-- Phase 3-3: エフェクトボタン -->
-            <div class="form-group">
-              <button id="effect-btn" class="btn btn-customize" title="フェードイン、スライドなどのアニメーション効果を設定します">
-                <span class="material-symbols-outlined" aria-hidden="true">auto_awesome</span> エフェクト
-              </button>
-            </div>
-
-          </div>
-        </section>
-
-        <!-- Step 2: プレビュー確認 -->
-        <section class="step-section step-2">
-          <h2 class="step-title">
-            <span class="step-number step-icon">2</span>
-            プレビューで確認
-          </h2>
-
-          <div class="form-card">
-            <div class="preview-container">
-              <div id="preview" class="preview-text">
-                プレビュー表示
-              </div>
-            </div>
-            <p class="guide-text">
-              このプレビューと同じ見た目がOBSに表示されます
+            <h1 class="page-head__title">OBSテキスト表示ツール</h1>
+            <p class="page-head__sub">
+                編集画面でテキストを入力すると、<strong>OBSブラウザソース側に即座に反映</strong>。
+                配信中にメッセージをリアルタイム差し替えできる。
             </p>
-          </div>
-        </section>
+        </header>
 
-        <!-- Step 3: OBSに設定 -->
-        <section class="step-section step-3">
-          <h2 class="step-title">
-            <span class="step-number step-icon">3</span>
-            OBSに設定
-          </h2>
+        <!-- Main: 3 step layout -->
+        <main class="main container">
+            <!-- Step 1 -->
+            <section class="step step-1">
+                <div class="step__head">
+                    <span class="step__num">01</span>
+                    <h2 class="step__title">テキストを入力してスタイルを調整</h2>
+                </div>
 
-          <div class="form-card">
-            <div class="form-group">
-              <label for="display-url" class="form-label">ブラウザソース用URL</label>
-              <div class="url-display-group">
-                <input
-                  type="text"
-                  id="display-url"
-                  class="form-input"
-                  readonly
-                  value="読み込み中..."
-                  title="OBSブラウザソースに設定するURL"
-                  aria-label="ブラウザソース用URL"
-                >
-                <button id="copy-url-btn" class="btn btn-secondary" title="URLをクリップボードにコピーします">
-                  コピー
-                </button>
-              </div>
-              <small class="form-hint">このURLをOBSの「ブラウザソース」に貼り付けてください</small>
+                <div class="card">
+                    <!-- テキスト入力 -->
+                    <div class="form-group">
+                        <label for="text-input" class="form-label">
+                            <span>表示テキスト</span>
+                            <span class="required" aria-label="必須">*</span>
+                        </label>
+                        <textarea
+                            id="text-input"
+                            class="form-textarea"
+                            placeholder="ここにテキストを入力してください..."
+                            rows="5"
+                            maxlength="1000"
+                            title="OBSで表示するテキストを入力してください（最大1000文字）"
+                        ></textarea>
+                        <small class="form-hint">
+                            <span id="char-count">0</span> / 1000文字
+                        </small>
+                    </div>
+
+                    <div class="subsection-divider">
+                        <span>STYLE</span>
+                    </div>
+
+                    <!-- フォント -->
+                    <div class="form-group">
+                        <label for="font-select" class="form-label">フォント</label>
+                        <select id="font-select" class="form-select" title="表示に使用するフォントを選択してください">
+                            <option value="Noto Sans JP">Noto Sans JP</option>
+                            <option value="M PLUS Rounded 1c">M PLUS Rounded 1c</option>
+                            <option value="Kosugi Maru">Kosugi Maru</option>
+                            <option value="Sawarabi Gothic">Sawarabi Gothic</option>
+                            <option value="Zen Maru Gothic">Zen Maru Gothic</option>
+                        </select>
+                    </div>
+
+                    <!-- 文字色 -->
+                    <div class="form-group">
+                        <label for="color-picker" class="form-label">文字色</label>
+                        <div class="color-picker-group">
+                            <input type="color" id="color-picker" class="color-picker" value="#ffffff" title="カラーピッカーで文字色を選択">
+                            <input type="text" id="color-text" class="form-input color-text-input" value="#ffffff" maxlength="7" pattern="^#[0-9A-Fa-f]{6}$" title="16進数カラーコード（例: #ffffff）">
+                        </div>
+                    </div>
+
+                    <!-- 文字太さ -->
+                    <div class="form-group">
+                        <label for="weight-select" class="form-label">文字太さ</label>
+                        <select id="weight-select" class="form-select" title="文字の太さを選択してください">
+                            <option value="400">通常 (400)</option>
+                            <option value="700">太字 (700)</option>
+                            <option value="900">極太 (900)</option>
+                        </select>
+                    </div>
+
+                    <!-- 文字サイズ -->
+                    <div class="form-group">
+                        <label for="size-slider" class="form-label">
+                            <span>文字サイズ:</span>
+                            <span class="range-value-inline"><span id="size-value">48</span>px</span>
+                        </label>
+                        <input
+                            type="range"
+                            id="size-slider"
+                            class="form-range"
+                            min="12"
+                            max="200"
+                            step="1"
+                            value="48"
+                            title="スライダーで文字サイズを調整（12〜200px）"
+                            aria-label="文字サイズ調整"
+                            aria-valuemin="12"
+                            aria-valuemax="200"
+                            aria-valuenow="48"
+                        >
+                    </div>
+
+                    <!-- 詳細ボタン -->
+                    <div class="action-row">
+                        <button id="customize-btn" class="btn btn--ghost" title="文字の影、アウトライン、背景などの詳細設定を行います">
+                            <span class="material-symbols-outlined btn-icon" aria-hidden="true">palette</span>
+                            <span>高度なカスタマイズ</span>
+                        </button>
+                        <button id="template-btn" class="btn btn--ghost" title="保存済みのスタイル設定を読み込みます">
+                            <span class="material-symbols-outlined btn-icon" aria-hidden="true">folder_open</span>
+                            <span>テンプレート</span>
+                        </button>
+                        <button id="effect-btn" class="btn btn--ghost" title="フェードイン、スライドなどのアニメーション効果を設定します">
+                            <span class="material-symbols-outlined btn-icon" aria-hidden="true">auto_awesome</span>
+                            <span>エフェクト</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Step 2 -->
+            <section class="step step-2">
+                <div class="step__head">
+                    <span class="step__num">02</span>
+                    <h2 class="step__title">プレビューで確認</h2>
+                </div>
+
+                <div class="card card--dark">
+                    <div class="preview-container">
+                        <div id="preview" class="preview-text">プレビュー表示</div>
+                    </div>
+                    <p class="preview-note">このプレビューと同じ見た目が OBS に表示されます。</p>
+                </div>
+            </section>
+
+            <!-- Step 3 -->
+            <section class="step step-3">
+                <div class="step__head">
+                    <span class="step__num">03</span>
+                    <h2 class="step__title">OBSに設定</h2>
+                </div>
+
+                <div class="card">
+                    <div class="form-group">
+                        <label for="display-url" class="form-label">ブラウザソース用URL</label>
+                        <div class="url-display-group">
+                            <input
+                                type="text"
+                                id="display-url"
+                                class="form-input url-input"
+                                readonly
+                                value="読み込み中..."
+                                title="OBSブラウザソースに設定するURL"
+                                aria-label="ブラウザソース用URL"
+                            >
+                            <button id="copy-url-btn" class="btn btn--mono" title="URLをクリップボードにコピーします">
+                                <span class="material-symbols-outlined btn-icon" aria-hidden="true">content_copy</span>
+                                <span>コピー</span>
+                            </button>
+                        </div>
+                        <small class="form-hint">このURLを OBS の「ブラウザソース」に貼り付け。</small>
+                    </div>
+
+                    <div class="action-row">
+                        <button id="show-guide-btn" class="btn btn--primary" title="OBSでブラウザソースを設定する手順を表示します">
+                            <span class="material-symbols-outlined btn-icon" aria-hidden="true">description</span>
+                            <span>OBS設定ガイドを見る</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Back link -->
+        <nav class="back-link container">
+            <a href="../">
+                <span class="material-symbols-outlined" aria-hidden="true">arrow_back</span>
+                <span>ツール一覧に戻る</span>
+            </a>
+        </nav>
+
+        <!-- フッター -->
+        <footer class="footer">
+            <div class="container">
+                <span>&copy; 2025 Obsidian Engine</span>
+                <span class="footer__dot">●</span>
+                <span>Licensed under MIT</span>
             </div>
+        </footer>
+    </div>
 
-            <div class="guide-actions">
-              <button id="show-guide-btn" class="btn btn-primary" title="OBSでブラウザソースを設定する手順を表示します">
-                <span class="material-symbols-outlined" aria-hidden="true">description</span> OBS設定ガイドを見る
-              </button>
-            </div>
-          </div>
-        </section>
-      </div>
-    </main>
-    
-    <footer class="footer">
-      <p>&copy; 2024 Obsidian Engine | <a href="https://github.com/obsidian-engine/vtube-tools">GitHub</a></p>
-    </footer>
-  </div>
+    <!-- 動的パネルコンテナ (main.js / wizard.js が injection) -->
+    <div id="customize-panel-container" style="display: none;"></div>
+    <div id="template-panel-container" style="display: none;"></div>
+    <div id="effect-panel-container" style="display: none;"></div>
 
-  <!-- Phase 3-1: カスタマイズパネルコンテナ -->
-  <div id="customize-panel-container" style="display: none;"></div>
-
-  <!-- Phase 3-2: テンプレートパネルコンテナ -->
-  <div id="template-panel-container" style="display: none;"></div>
-
-  <!-- Phase 3-3: エフェクトパネルコンテナ -->
-  <div id="effect-panel-container" style="display: none;"></div>
-
-  <script type="module" src="/src/main.js"></script>
+    <script type="module" src="/src/main.js"></script>
 </body>
 </html>

@@ -4,3 +4,5 @@ discord-css/node_modules
 /docs/
 .DS_Store
 .playwright-mcp/
+discord-css/dist/
+obs-text/dist/

@@ -3,157 +3,188 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Discord立ち絵CSS生成ツール</title>
-    <meta name="description" content="2025年最新！Discord StreamKit→OBS配信用立ち絵CSS生成。発話で跳ね・光るアニメ対応">
+    <title>Discord立ち絵CSS生成 // OBSIDIAN ENGINE</title>
+    <meta name="description" content="Discord StreamKit→OBS配信用立ち絵CSS生成。発話で跳ね・光るアニメ対応 - Obsidian Engine">
     <meta name="keywords" content="Discord,立ち絵,CSS,OBS,配信,VTuber,StreamKit">
-    <meta name="author" content="Discord CSS Generator">
-    
+    <meta name="author" content="Obsidian Engine">
+
     <!-- Open Graph -->
-    <meta property="og:title" content="Discord立ち絵CSS生成ツール">
+    <meta property="og:title" content="Discord立ち絵CSS生成 // OBSIDIAN ENGINE">
     <meta property="og:description" content="Discord StreamKit用の立ち絵CSSを簡単生成">
     <meta property="og:type" content="website">
     <meta property="og:image" content="/assets/og-image.png">
-    
+
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
     <link rel="alternate icon" href="/assets/favicon.ico">
-    
+
     <!-- PWA -->
     <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#667eea">
-    
-    <!-- Material Symbols (Outlined) -->
+    <meta name="theme-color" content="#0a0a0f">
+
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=auto_awesome,content_copy,description,download,fingerprint,folder_open,image,palette,refresh,settings,straighten,theater_comedy,tune&display=block" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Dots&family=JetBrains+Mono:wght@400;500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+    <!-- Material Symbols (Outlined) -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=arrow_back,auto_awesome,content_copy,description,download,fingerprint,folder_open,image,info,palette,refresh,settings,straighten,terminal,theater_comedy,tune&display=block" rel="stylesheet" />
 
     <!-- CSS -->
-    <link rel="stylesheet" href="/shared/md3-tokens.css">
     <link rel="stylesheet" href="/src/style.css">
 </head>
 <body>
+    <!-- Topbar -->
+    <div class="topbar">
+        <div class="topbar__left">
+            <span class="topbar__dot" aria-hidden="true"></span>
+            <a href="../" class="topbar__brand">OBSIDIAN ENGINE</a>
+        </div>
+        <div class="topbar__center" aria-hidden="true">配信卓の隣にあるツール箱</div>
+        <div class="topbar__right">
+            <a href="https://github.com/obsidian-engine/vtube-tools" target="_blank" rel="noopener" class="topbar__link">
+                <span class="material-symbols-outlined" aria-hidden="true">terminal</span>
+                <span>SOURCE</span>
+            </a>
+        </div>
+    </div>
+
     <div class="app">
-        <!-- ヘッダー -->
-        <header class="header">
-            <div class="header-content">
-                <h1 class="header-title">
-                    <span class="material-symbols-outlined" aria-hidden="true">theater_comedy</span>
-                    Discord立ち絵CSS生成ツール
-                </h1>
-                <p class="header-subtitle">
-                    OBS配信でリアルタイム立ち絵表示
-                </p>
+        <!-- Page head -->
+        <header class="page-head container">
+            <div class="page-head__label">
+                <span class="material-symbols-outlined" aria-hidden="true">theater_comedy</span>
+                <span>TOOL_01 // DISCORD TACHIE</span>
             </div>
+            <h1 class="page-head__title">Discord立ち絵CSS生成</h1>
+            <p class="page-head__sub">
+                Discord StreamKitと組み合わせて、<strong>発話時に立ち絵が跳ねて光る</strong>OBS用CSSを生成する。
+                ユーザーIDと画像URLを入れるだけ。
+            </p>
         </header>
 
-        <!-- メインコンテンツ -->
-        <main class="main">
-            <div class="container">
+        <!-- Main -->
+        <main class="main container">
+            <div class="layout">
                 <!-- 入力フォームエリア -->
                 <section class="input-section">
-                    <div class="form-card">
-                        <h2 class="section-title">
+                    <div class="card">
+                        <h2 class="card-title">
                             <span class="material-symbols-outlined" aria-hidden="true">settings</span>
-                            設定
+                            <span>設定</span>
                         </h2>
-                        
+
                         <!-- ユーザーID -->
                         <div class="form-group">
                             <label for="user-id" class="form-label">
-                                &lt;span class="material-symbols-outlined inline-icon" aria-hidden="true"&gt;fingerprint&lt;/span&gt; DiscordユーザーID <span class="required">*</span>
+                                <span class="material-symbols-outlined inline-icon" aria-hidden="true">fingerprint</span>
+                                <span>DiscordユーザーID</span>
+                                <span class="required" aria-label="必須">*</span>
                             </label>
-                            <input 
-                                type="text" 
-                                id="user-id" 
+                            <input
+                                type="text"
+                                id="user-id"
                                 class="form-input"
-                                placeholder=""
+                                placeholder="例: 123456789012345678"
                                 pattern="[0-9]+"
                                 required
                             >
                             <small class="form-hint">
-                                <span class="material-symbols-outlined inline-icon" aria-hidden="true">description</span> <strong>ID取得方法</strong>: Discord設定 → 詳細設定 → 「開発者モード」をON → 自分を右クリック → 「ユーザーIDをコピー」<br>
-                                &lt;span class="material-symbols-outlined inline-icon" aria-hidden="true"&gt;description&lt;/span&gt; 18桁の数字・StreamKit設定で使用するIDです
+                                <strong>ID取得方法</strong>: Discord設定 → 詳細設定 → 「開発者モード」をON → 自分を右クリック → 「ユーザーIDをコピー」<br>
+                                18桁の数字・StreamKit設定で使用するIDです。
                             </small>
                         </div>
 
                         <!-- 画像URL -->
                         <div class="form-group">
                             <label for="image-url" class="form-label">
-                                &lt;span class="material-symbols-outlined inline-icon" aria-hidden="true"&gt;image&lt;/span&gt; 立ち絵画像URL <span class="required">*</span>
+                                <span class="material-symbols-outlined inline-icon" aria-hidden="true">image</span>
+                                <span>立ち絵画像URL</span>
+                                <span class="required" aria-label="必須">*</span>
                             </label>
-                            <input 
-                                type="url" 
-                                id="image-url" 
+                            <input
+                                type="url"
+                                id="image-url"
                                 class="form-input"
                                 placeholder="https://cdn.discordapp.com/attachments/.../image.png"
                                 required
                             >
                             <small class="form-hint">
-                                <span class="material-symbols-outlined inline-icon" aria-hidden="true">description</span> Discord添付ファイルリンクまたは外部画像URL<br>
-                                <span class="material-symbols-outlined inline-icon" aria-hidden="true">image</span> 透過PNG推奨（背景なし立ち絵）
+                                Discord添付ファイルリンクまたは外部画像URL。<br>
+                                透過PNG推奨（背景なし立ち絵）。
                             </small>
                         </div>
 
                         <!-- 詳細設定（折りたたみ） -->
-                        <details class="advanced-settings">
-                            <summary class="advanced-toggle">
-                                &lt;span class="material-symbols-outlined inline-icon" aria-hidden="true"&gt;tune&lt;/span&gt; 詳細設定
+                        <details class="advanced">
+                            <summary class="advanced__toggle">
+                                <span class="material-symbols-outlined inline-icon" aria-hidden="true">tune</span>
+                                <span>詳細設定</span>
                             </summary>
-                            
-                            <div class="advanced-content">
+
+                            <div class="advanced__body">
                                 <!-- 画像サイズ -->
                                 <div class="form-row">
                                     <div class="form-group">
                                         <label for="image-width" class="form-label">
-                                            &lt;span class="material-symbols-outlined inline-icon" aria-hidden="true"&gt;straighten&lt;/span&gt; 幅 (px)
+                                            <span class="material-symbols-outlined inline-icon" aria-hidden="true">straighten</span>
+                                            <span>幅 (px)</span>
                                         </label>
-                                        <input 
-                                            type="range" 
-                                            id="image-width" 
-                                            class="form-range"
-                                            min="100" 
-                                            max="800" 
-                                            value="400"
-                                        >
-                                        <span class="range-value" id="width-value">400</span>
+                                        <div class="range-wrap">
+                                            <input
+                                                type="range"
+                                                id="image-width"
+                                                class="form-range"
+                                                min="100"
+                                                max="800"
+                                                value="400"
+                                            >
+                                            <span class="range-value" id="width-value">400</span>
+                                        </div>
                                     </div>
-                                    
+
                                     <div class="form-group">
                                         <label for="image-height" class="form-label">
-                                            &lt;span class="material-symbols-outlined inline-icon" aria-hidden="true"&gt;straighten&lt;/span&gt; 高さ (px)
+                                            <span class="material-symbols-outlined inline-icon" aria-hidden="true">straighten</span>
+                                            <span>高さ (px)</span>
                                         </label>
-                                        <input 
-                                            type="range" 
-                                            id="image-height" 
-                                            class="form-range"
-                                            min="100" 
-                                            max="1000" 
-                                            value="600"
-                                        >
-                                        <span class="range-value" id="height-value">600</span>
+                                        <div class="range-wrap">
+                                            <input
+                                                type="range"
+                                                id="image-height"
+                                                class="form-range"
+                                                min="100"
+                                                max="1000"
+                                                value="600"
+                                            >
+                                            <span class="range-value" id="height-value">600</span>
+                                        </div>
                                     </div>
                                 </div>
 
                                 <!-- アニメーション設定 -->
                                 <div class="form-group">
                                     <label for="bounce-height" class="form-label">
-                                        跳ねる高さ (px)
+                                        <span>跳ねる高さ (px)</span>
                                     </label>
-                                    <input 
-                                        type="range" 
-                                        id="bounce-height" 
-                                        class="form-range"
-                                        min="0" 
-                                        max="50" 
-                                        value="15"
-                                    >
-                                    <span class="range-value" id="bounce-value">15</span>
+                                    <div class="range-wrap">
+                                        <input
+                                            type="range"
+                                            id="bounce-height"
+                                            class="form-range"
+                                            min="0"
+                                            max="50"
+                                            value="15"
+                                        >
+                                        <span class="range-value" id="bounce-value">15</span>
+                                    </div>
                                 </div>
 
                                 <!-- プリセット -->
                                 <div class="form-group">
                                     <label for="preset" class="form-label">
-                                        &lt;span class="material-symbols-outlined inline-icon" aria-hidden="true"&gt;palette&lt;/span&gt; プリセット
+                                        <span class="material-symbols-outlined inline-icon" aria-hidden="true">palette</span>
+                                        <span>プリセット</span>
                                     </label>
                                     <select id="preset" class="form-select">
                                         <option value="">カスタム</option>
@@ -167,17 +198,18 @@
                                 <!-- ファイル名設定 -->
                                 <div class="form-group">
                                     <label for="filename" class="form-label">
-                                        &lt;span class="material-symbols-outlined inline-icon" aria-hidden="true"&gt;folder_open&lt;/span&gt; ファイル名
+                                        <span class="material-symbols-outlined inline-icon" aria-hidden="true">folder_open</span>
+                                        <span>ファイル名</span>
                                     </label>
-                                    <input 
-                                        type="text" 
-                                        id="filename" 
+                                    <input
+                                        type="text"
+                                        id="filename"
                                         class="form-input"
                                         placeholder="例: 立ち絵_太郎"
                                         maxlength="50"
                                     >
                                     <small class="form-hint">
-                                        <span class="material-symbols-outlined inline-icon" aria-hidden="true">description</span> 空欄の場合は「discord_tachie_ユーザーID」になります<br>
+                                        空欄の場合は「discord_tachie_ユーザーID」になります。<br>
                                         使用不可文字: \ / : * ? " &lt; &gt; |
                                     </small>
                                 </div>
@@ -186,13 +218,13 @@
 
                         <!-- アクションボタン -->
                         <div class="form-actions">
-                            <button type="button" id="generate-btn" class="btn btn-primary">
+                            <button type="button" id="generate-btn" class="btn btn--primary">
                                 <span class="material-symbols-outlined btn-icon" aria-hidden="true">auto_awesome</span>
-                                CSS生成
+                                <span>CSS生成</span>
                             </button>
-                            <button type="button" id="reset-btn" class="btn btn-secondary">
+                            <button type="button" id="reset-btn" class="btn btn--ghost">
                                 <span class="material-symbols-outlined btn-icon" aria-hidden="true">refresh</span>
-                                リセット
+                                <span>リセット</span>
                             </button>
                         </div>
                     </div>
@@ -200,98 +232,71 @@
 
                 <!-- プレビュー・出力エリア -->
                 <section class="output-section">
-                    <div class="output-card">
-                        <h2 class="section-title">
+                    <div class="card">
+                        <h2 class="card-title">
                             <span class="material-symbols-outlined" aria-hidden="true">description</span>
-                            生成されたCSS
+                            <span>生成されたCSS</span>
                         </h2>
-                        
+
                         <!-- CSS出力 -->
-                        <div class="css-output">
-                            <div class="output-header">
-                                <span class="file-name" id="css-filename">discord_tachie.css</span>
-                                <div class="output-actions">
-                                    <button type="button" id="copy-btn" class="btn btn-outline" title="クリップボードにコピー">
+                        <div class="output">
+                            <div class="output__bar">
+                                <span class="output__filename" id="css-filename">discord_tachie.css</span>
+                                <div class="output__actions">
+                                    <button type="button" id="copy-btn" class="btn btn--mono" title="クリップボードにコピー">
                                         <span class="material-symbols-outlined btn-icon" aria-hidden="true">content_copy</span>
-                                        コピー
+                                        <span>コピー</span>
                                     </button>
-                                    <button type="button" id="download-btn" class="btn btn-outline" title="CSSファイルをダウンロード">
+                                    <button type="button" id="download-btn" class="btn btn--mono" title="CSSファイルをダウンロード">
                                         <span class="material-symbols-outlined btn-icon" aria-hidden="true">download</span>
-                                        ダウンロード
+                                        <span>ダウンロード</span>
                                     </button>
                                 </div>
                             </div>
-                            <pre class="css-code" id="css-output"><code>/* CSS生成ボタンをクリックしてください */</code></pre>
+                            <pre class="output__code"><code id="css-output">/* CSS生成ボタンをクリックしてください */</code></pre>
                         </div>
 
                         <!-- 使い方ガイド -->
-                        <div class="usage-guide">
-                            <h3 class="guide-title">
+                        <div class="guide">
+                            <h3 class="guide__title">
                                 <span class="material-symbols-outlined" aria-hidden="true">description</span>
-                                使い方
+                                <span>使い方</span>
                             </h3>
-                            <ol class="guide-steps">
-                                <li>
-                                    <strong><a href="https://streamkit.discord.com/overlay" target="_blank" rel="noopener">Discord StreamKit</a></strong> にアクセス
-                                </li>
-                                <li>
-                                    <strong>「Voice Widget」</strong>を選択
-                                </li>
-                                <li>
-                                    <strong>SERVER</strong>で対象サーバー、<strong>VOICE CHANNEL</strong>で対象ボイスチャンネルを選択
-                                </li>
-                                <li>
-                                    右側プレビューを確認し、<strong>「Copy」</strong>ボタンでURLを取得<br>
-                                    <small>（例: https://streamkit.discord.com/overlay/voice/サーバーID/チャンネルID）</small>
-                                </li>
-                                <li>
-                                    <strong>OBS Studio</strong> で「ブラウザ」ソースを新規追加
-                                </li>
-                                <li>
-                                    URLにコピーしたStreamKit URLを貼り付け
-                                </li>
-                                <li>
-                                    ブラウザソースの「カスタムCSS」に上記で生成されたCSSをコピー&ペースト
-                                </li>
-                                <li>
-                                    完成！発話時に立ち絵が跳ねて光ります
-                                </li>
+                            <ol class="guide__steps">
+                                <li><strong><a href="https://streamkit.discord.com/overlay" target="_blank" rel="noopener">Discord StreamKit</a></strong> にアクセス</li>
+                                <li><strong>「Voice Widget」</strong>を選択</li>
+                                <li><strong>SERVER</strong>で対象サーバー、<strong>VOICE CHANNEL</strong>で対象ボイスチャンネルを選択</li>
+                                <li>右側プレビューを確認し、<strong>「Copy」</strong>ボタンでURLを取得<br><small>（例: https://streamkit.discord.com/overlay/voice/サーバーID/チャンネルID）</small></li>
+                                <li><strong>OBS Studio</strong> で「ブラウザ」ソースを新規追加</li>
+                                <li>URLにコピーしたStreamKit URLを貼り付け</li>
+                                <li>ブラウザソースの「カスタムCSS」に上記で生成されたCSSをコピー&ペースト</li>
+                                <li>完成。発話時に立ち絵が跳ねて光る</li>
                             </ol>
-                            
-                            <div style="margin-top: 1rem; padding: 1rem; background: rgba(79, 172, 254, 0.1); border-left: 4px solid #4facfe; border-radius: 8px;">
-                                <h4 style="margin: 0 0 0.5rem 0; color: #4facfe;">💡 StreamKit設定のコツ</h4>
-                                <ul style="margin: 0 0 1rem 0; padding-left: 1.2rem; line-height: 1.6;">
-                                    <li><strong>正確な手順</strong>：StreamKit → Voice Widget → SERVER/VOICE CHANNEL選択 → Copy</li>
-                                    <li><strong>URL構造</strong>：<code>https://streamkit.discord.com/overlay/voice/サーバーID/チャンネルID</code></li>
-                                    <li><strong>キャッシュ更新</strong>：表示されない場合はOBSでページを更新（右クリック→更新）</li>
-                                    <li><strong>複数サーバー</strong>：サーバー切り替え時は必ずSERVER/CHANNELを再選択</li>
+
+                            <div class="callout">
+                                <h4 class="callout__title">
+                                    <span class="material-symbols-outlined inline-icon" aria-hidden="true">info</span>
+                                    <span>StreamKit設定のコツ</span>
+                                </h4>
+                                <ul class="callout__list">
+                                    <li><strong>正確な手順</strong>: StreamKit → Voice Widget → SERVER/VOICE CHANNEL選択 → Copy</li>
+                                    <li><strong>URL構造</strong>: <code>https://streamkit.discord.com/overlay/voice/サーバーID/チャンネルID</code></li>
+                                    <li><strong>キャッシュ更新</strong>: 表示されない場合はOBSでページを更新（右クリック→更新）</li>
+                                    <li><strong>複数サーバー</strong>: サーバー切り替え時は必ずSERVER/CHANNELを再選択</li>
                                 </ul>
-                                
-                                <h4 style="margin: 0 0 0.5rem 0; color: #4facfe;">&lt;span class="material-symbols-outlined inline-icon" aria-hidden="true"&gt;tune&lt;/span&gt; OBS推奨設定</h4>
-                                <div style="overflow-x: auto;">
-                                    <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
-                                        <tr style="background: rgba(79, 172, 254, 0.1);">
-                                            <th style="padding: 0.5rem; border: 1px solid #ddd; text-align: left;">項目</th>
-                                            <th style="padding: 0.5rem; border: 1px solid #ddd; text-align: left;">推奨値</th>
-                                        </tr>
-                                        <tr>
-                                            <td style="padding: 0.5rem; border: 1px solid #ddd;"><strong>幅</strong></td>
-                                            <td style="padding: 0.5rem; border: 1px solid #ddd;">800</td>
-                                        </tr>
-                                        <tr style="background: rgba(79, 172, 254, 0.05);">
-                                            <td style="padding: 0.5rem; border: 1px solid #ddd;"><strong>高さ</strong></td>
-                                            <td style="padding: 0.5rem; border: 1px solid #ddd;">600</td>
-                                        </tr>
-                                        <tr>
-                                            <td style="padding: 0.5rem; border: 1px solid #ddd;"><strong>カスタムフレームレート</strong></td>
-                                            <td style="padding: 0.5rem; border: 1px solid #ddd;">30</td>
-                                        </tr>
-                                        <tr style="background: rgba(79, 172, 254, 0.05);">
-                                            <td style="padding: 0.5rem; border: 1px solid #ddd;"><strong>CSS再読み込み</strong></td>
-                                            <td style="padding: 0.5rem; border: 1px solid #ddd;">ページを更新</td>
-                                        </tr>
-                                    </table>
-                                </div>
+
+                                <h4 class="callout__title">
+                                    <span class="material-symbols-outlined inline-icon" aria-hidden="true">tune</span>
+                                    <span>OBS推奨設定</span>
+                                </h4>
+                                <table class="spec-table">
+                                    <tbody>
+                                        <tr><th>幅</th><td>800</td></tr>
+                                        <tr><th>高さ</th><td>600</td></tr>
+                                        <tr><th>カスタムフレームレート</th><td>30</td></tr>
+                                        <tr><th>CSS再読み込み</th><td>ページを更新</td></tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -299,15 +304,25 @@
             </div>
         </main>
 
+        <!-- Back link -->
+        <nav class="back-link container">
+            <a href="../">
+                <span class="material-symbols-outlined" aria-hidden="true">arrow_back</span>
+                <span>ツール一覧に戻る</span>
+            </a>
+        </nav>
+
         <!-- フッター -->
         <footer class="footer">
-            <div class="footer-content">
-                <p>&copy; 2025 Discord立ち絵CSS生成ツール</p>
+            <div class="container">
+                <span>&copy; 2025 Obsidian Engine</span>
+                <span class="footer__dot">●</span>
+                <span>Licensed under MIT</span>
             </div>
         </footer>
 
         <!-- トースト通知 -->
-        <div class="toast" id="toast">
+        <div class="toast" id="toast" role="status" aria-live="polite">
             <span class="toast-message" id="toast-message"></span>
         </div>
     </div>
