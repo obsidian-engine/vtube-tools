@@ -3,214 +3,287 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Obsidian Engine - 配信者向けツール集</title>
-    <meta name="description" content="VTuber・配信者向け便利ツール集 by Obsidian Engine">
+    <title>OBSIDIAN ENGINE // 配信卓の隣にあるツール箱</title>
+    <meta name="description" content="VTuber・配信者のための硬派なツール集。Discord立ち絵CSS、コメント表示、OBSテキスト、くじびきまで。">
     <meta name="keywords" content="VTuber,配信,ツール,Discord,OBS,YouTube">
     <meta name="author" content="Obsidian Engine">
-    
+
     <!-- Open Graph -->
-    <meta property="og:title" content="Obsidian Engine - 配信者向けツール集">
-    <meta property="og:description" content="VTuber・配信者のための便利ツール集">
+    <meta property="og:title" content="OBSIDIAN ENGINE">
+    <meta property="og:description" content="配信卓の隣にあるツール箱">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://obsidian-engine.github.io/vtube-tools/">
-    
+
     <!-- Favicon -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🖤</text></svg>">
 
-    <!-- Material Symbols (Outlined) -->
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=auto_awesome,casino,chat_bubble,check_circle,edit_note,error,favorite,group,handyman,hourglass_empty,open_in_new,search,theater_comedy&display=block" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Dots&family=JetBrains+Mono:wght@400;500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+    <!-- Material Symbols (Outlined) -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=casino,chat_bubble,check_circle,edit_note,error,group,handyman,hourglass_empty,north_east,radio_button_checked,terminal,theater_comedy&display=block" rel="stylesheet" />
 
     <!-- CSS -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Background atmosphere layers -->
+    <div class="bg-grid" aria-hidden="true"></div>
+    <div class="bg-scanlines" aria-hidden="true"></div>
+    <div class="bg-grain" aria-hidden="true"></div>
+    <div class="bg-glow bg-glow--magenta" aria-hidden="true"></div>
+    <div class="bg-glow bg-glow--cyan" aria-hidden="true"></div>
+
+    <!-- Top status bar -->
+    <div class="topbar">
+        <div class="topbar__left">
+            <span class="topbar__dot" aria-hidden="true"></span>
+            <a href="/" class="topbar__brand">OBSIDIAN ENGINE</a>
+        </div>
+        <div class="topbar__center" aria-hidden="true">配信卓の隣にあるツール箱</div>
+        <div class="topbar__right">
+            <a href="https://github.com/obsidian-engine/vtube-tools" target="_blank" rel="noopener" class="topbar__link">
+                <span class="material-symbols-outlined" aria-hidden="true">terminal</span>
+                <span>SOURCE</span>
+            </a>
+        </div>
+    </div>
+
     <div class="app">
-        <!-- Tools Section -->
-        <main class="tools">
+        <!-- TOOLS -->
+        <main class="tools" id="tools">
             <div class="container">
-                <section class="tools-section">
-                    <h2 class="section-title">
-                        <span class="material-symbols-outlined section-title-icon" aria-hidden="true">handyman</span>
-                        利用可能なツール
-                    </h2>
-                    
-                    <div class="tools-grid">
-                        <!-- Discord立ち絵CSS生成ツール -->
-                        <article class="tool-card">
-                            <div class="tool-header">
-                                <div class="tool-icon">
-                                    <span class="material-symbols-outlined" aria-hidden="true">theater_comedy</span>
-                                </div>
-                                <div class="tool-status">
-                                    <span class="status-badge ready">Ready</span>
-                                </div>
-                            </div>
-                            <div class="tool-content">
-                                <h3 class="tool-title">Discord立ち絵CSS生成</h3>
-                                <p class="tool-description">
-                                    Discord StreamKit用の立ち絵CSSを簡単生成。発話時の跳ね・光るアニメーション対応。
-                                </p>
-                            </div>
-                            <div class="tool-actions">
-                                <a href="discord-css/" class="btn btn-primary">
-                                    <span class="material-symbols-outlined btn-icon" aria-hidden="true">open_in_new</span>
-                                    使用する
-                                </a>
-                            </div>
-                        </article>
-
-                        <!-- 配信用くじびきツール -->
-                        <article class="tool-card">
-                            <div class="tool-header">
-                                <div class="tool-icon">
-                                    <span class="material-symbols-outlined" aria-hidden="true">casino</span>
-                                </div>
-                                <div class="tool-status">
-                                    <span class="status-badge ready">Ready</span>
-                                </div>
-                            </div>
-                            <div class="tool-content">
-                                <h3 class="tool-title">配信用くじびきツール</h3>
-                                <p class="tool-description">
-                                    配信で使えるくじびきツール。視聴者参加型の抽選に最適。
-                                </p>
-                            </div>
-                            <div class="tool-actions">
-                                <a href="https://obsidian-engine.github.io/live-kujibiki/" class="btn btn-primary">
-                                    <span class="material-symbols-outlined btn-icon" aria-hidden="true">open_in_new</span>
-                                    使用する
-                                </a>
-                            </div>
-                        </article>
-
-                        <!-- 名前読み上げ用ツール -->
-                        <article class="tool-card">
-                            <div class="tool-header">
-                                <div class="tool-icon">
-                                    <span class="material-symbols-outlined" aria-hidden="true">group</span>
-                                </div>
-                                <div class="tool-status">
-                                    <span class="status-badge ready">Ready</span>
-                                </div>
-                            </div>
-                            <div class="tool-content">
-                                <h3 class="tool-title">名前読み上げ用ツール</h3>
-                                <p class="tool-description">
-                                    配信中のコメントユーザー一覧表示に加えて、<span class="material-symbols-outlined inline-icon" aria-hidden="true">search</span> <strong>コメント検索機能を追加！</strong><br>
-                                    キーワードでコメントを絞り込み、特定の話題や質問をすぐに見つけられます。
-                                </p>
-                            </div>
-                            <div class="tool-actions">
-                                <a href="https://youtube-comment-user-list.vercel.app/" class="btn btn-primary">
-                                    <span class="material-symbols-outlined btn-icon" aria-hidden="true">open_in_new</span>
-                                    使用する
-                                </a>
-                            </div>
-                        </article>
-
-                        <!-- コメント用CSS -->
-                        <article class="tool-card">
-                            <div class="tool-header">
-                                <div class="tool-icon">
-                                    <span class="material-symbols-outlined" aria-hidden="true">chat_bubble</span>
-                                </div>
-                                <div class="tool-status">
-                                    <span class="status-badge ready">Ready</span>
-                                </div>
-                            </div>
-                            <div class="tool-content">
-                                <h3 class="tool-title">コメント用CSS</h3>
-                                <p class="tool-description">
-                                    YouTube/Twitchコメント欄のスタイルをカスタマイズ。OBSブラウザソース対応。
-                                </p>
-                            </div>
-                            <div class="tool-actions">
-                                <a href="comment-css/" class="btn btn-primary">
-                                    <span class="material-symbols-outlined btn-icon" aria-hidden="true">open_in_new</span>
-                                    使用する
-                                </a>
-                            </div>
-                        </article>
-
-                        <!-- OBSテキスト表示ツール -->
-                        <article class="tool-card">
-                            <div class="tool-header">
-                                <div class="tool-icon">
-                                    <span class="material-symbols-outlined" aria-hidden="true">edit_note</span>
-                                </div>
-                                <div class="tool-status">
-                                    <span class="status-badge ready">Ready</span>
-                                </div>
-                            </div>
-                            <div class="tool-content">
-                                <h3 class="tool-title">OBSテキスト表示ツール</h3>
-                                <p class="tool-description">
-                                    OBSブラウザソース用のリアルタイムテキスト表示ツール。編集画面でテキストを入力すると、表示画面に即座に反映されます。
-                                </p>
-                            </div>
-                            <div class="tool-actions">
-                                <a href="obs-text/" class="btn btn-primary">
-                                    <span class="material-symbols-outlined btn-icon" aria-hidden="true">open_in_new</span>
-                                    使用する
-                                </a>
-                            </div>
-                        </article>
-
+                <div class="section-head">
+                    <div class="section-head__label">
+                        <span class="material-symbols-outlined" aria-hidden="true">handyman</span>
+                        <span>SECTION_01</span>
                     </div>
-                </section>
+                    <h2 class="section-head__title">利用可能なツール</h2>
+                    <p class="section-head__sub">すべて無料・ブラウザで完結・配信卓に直送。</p>
+                </div>
+
+                <div class="tools-grid">
+                    <!-- 01 Discord立ち絵CSS生成 -->
+                    <article class="tool-card" data-accent="magenta" style="--card-index: 0">
+                        <div class="tool-card__corner tool-card__corner--tl"></div>
+                        <div class="tool-card__corner tool-card__corner--tr"></div>
+                        <div class="tool-card__corner tool-card__corner--bl"></div>
+                        <div class="tool-card__corner tool-card__corner--br"></div>
+
+                        <header class="tool-card__head">
+                            <span class="tool-card__index">01</span>
+                            <span class="tool-card__status">
+                                <span class="material-symbols-outlined" aria-hidden="true">radio_button_checked</span>
+                                READY
+                            </span>
+                        </header>
+                        <div class="tool-card__icon">
+                            <span class="material-symbols-outlined" aria-hidden="true">theater_comedy</span>
+                        </div>
+                        <div class="tool-card__body">
+                            <h3 class="tool-card__title">Discord立ち絵CSS生成</h3>
+                            <p class="tool-card__desc">
+                                Discord StreamKit用の立ち絵CSSを生成。発話時の跳ね・光るアニメーションに対応。
+                            </p>
+                            <ul class="tool-card__tags">
+                                <li>Discord</li><li>CSS</li><li>立ち絵</li>
+                            </ul>
+                        </div>
+                        <a href="discord-css/" class="tool-card__link">
+                            <span>ツールを起動</span>
+                            <span class="material-symbols-outlined" aria-hidden="true">north_east</span>
+                        </a>
+                    </article>
+
+                    <!-- 02 配信用くじびき -->
+                    <article class="tool-card" data-accent="cyan" style="--card-index: 1">
+                        <div class="tool-card__corner tool-card__corner--tl"></div>
+                        <div class="tool-card__corner tool-card__corner--tr"></div>
+                        <div class="tool-card__corner tool-card__corner--bl"></div>
+                        <div class="tool-card__corner tool-card__corner--br"></div>
+
+                        <header class="tool-card__head">
+                            <span class="tool-card__index">02</span>
+                            <span class="tool-card__status">
+                                <span class="material-symbols-outlined" aria-hidden="true">radio_button_checked</span>
+                                READY
+                            </span>
+                        </header>
+                        <div class="tool-card__icon">
+                            <span class="material-symbols-outlined" aria-hidden="true">casino</span>
+                        </div>
+                        <div class="tool-card__body">
+                            <h3 class="tool-card__title">配信用くじびき</h3>
+                            <p class="tool-card__desc">
+                                配信中に使える抽選ツール。視聴者参加型のくじびきに最適。
+                            </p>
+                            <ul class="tool-card__tags">
+                                <li>視聴者参加</li><li>抽選</li>
+                            </ul>
+                        </div>
+                        <a href="https://obsidian-engine.github.io/live-kujibiki/" class="tool-card__link" target="_blank" rel="noopener">
+                            <span>ツールを起動</span>
+                            <span class="material-symbols-outlined" aria-hidden="true">north_east</span>
+                        </a>
+                    </article>
+
+                    <!-- 03 名前読み上げ -->
+                    <article class="tool-card" data-accent="lime" style="--card-index: 2">
+                        <div class="tool-card__corner tool-card__corner--tl"></div>
+                        <div class="tool-card__corner tool-card__corner--tr"></div>
+                        <div class="tool-card__corner tool-card__corner--bl"></div>
+                        <div class="tool-card__corner tool-card__corner--br"></div>
+
+                        <header class="tool-card__head">
+                            <span class="tool-card__index">03</span>
+                            <span class="tool-card__status">
+                                <span class="material-symbols-outlined" aria-hidden="true">radio_button_checked</span>
+                                READY
+                            </span>
+                        </header>
+                        <div class="tool-card__icon">
+                            <span class="material-symbols-outlined" aria-hidden="true">group</span>
+                        </div>
+                        <div class="tool-card__body">
+                            <h3 class="tool-card__title">名前読み上げ</h3>
+                            <p class="tool-card__desc">
+                                コメントユーザー一覧 + <strong>キーワード検索</strong>。話題や質問を瞬時に追える。
+                            </p>
+                            <ul class="tool-card__tags">
+                                <li>YouTube</li><li>コメント</li><li>検索</li>
+                            </ul>
+                        </div>
+                        <a href="https://youtube-comment-user-list.vercel.app/" class="tool-card__link" target="_blank" rel="noopener">
+                            <span>ツールを起動</span>
+                            <span class="material-symbols-outlined" aria-hidden="true">north_east</span>
+                        </a>
+                    </article>
+
+                    <!-- 04 コメント用CSS -->
+                    <article class="tool-card" data-accent="amber" style="--card-index: 3">
+                        <div class="tool-card__corner tool-card__corner--tl"></div>
+                        <div class="tool-card__corner tool-card__corner--tr"></div>
+                        <div class="tool-card__corner tool-card__corner--bl"></div>
+                        <div class="tool-card__corner tool-card__corner--br"></div>
+
+                        <header class="tool-card__head">
+                            <span class="tool-card__index">04</span>
+                            <span class="tool-card__status">
+                                <span class="material-symbols-outlined" aria-hidden="true">radio_button_checked</span>
+                                READY
+                            </span>
+                        </header>
+                        <div class="tool-card__icon">
+                            <span class="material-symbols-outlined" aria-hidden="true">chat_bubble</span>
+                        </div>
+                        <div class="tool-card__body">
+                            <h3 class="tool-card__title">コメント用CSS</h3>
+                            <p class="tool-card__desc">
+                                YouTube/Twitchコメント欄のスタイル。OBSブラウザソースに直接貼り付け。
+                            </p>
+                            <ul class="tool-card__tags">
+                                <li>OBS</li><li>CSS</li><li>Twitch</li>
+                            </ul>
+                        </div>
+                        <a href="comment-css/" class="tool-card__link">
+                            <span>ツールを起動</span>
+                            <span class="material-symbols-outlined" aria-hidden="true">north_east</span>
+                        </a>
+                    </article>
+
+                    <!-- 05 OBSテキスト -->
+                    <article class="tool-card" data-accent="violet" style="--card-index: 4">
+                        <div class="tool-card__corner tool-card__corner--tl"></div>
+                        <div class="tool-card__corner tool-card__corner--tr"></div>
+                        <div class="tool-card__corner tool-card__corner--bl"></div>
+                        <div class="tool-card__corner tool-card__corner--br"></div>
+
+                        <header class="tool-card__head">
+                            <span class="tool-card__index">05</span>
+                            <span class="tool-card__status">
+                                <span class="material-symbols-outlined" aria-hidden="true">radio_button_checked</span>
+                                READY
+                            </span>
+                        </header>
+                        <div class="tool-card__icon">
+                            <span class="material-symbols-outlined" aria-hidden="true">edit_note</span>
+                        </div>
+                        <div class="tool-card__body">
+                            <h3 class="tool-card__title">OBSテキスト表示</h3>
+                            <p class="tool-card__desc">
+                                編集画面の入力が表示画面に即反映。OBSブラウザソース用のリアルタイム表示。
+                            </p>
+                            <ul class="tool-card__tags">
+                                <li>OBS</li><li>リアルタイム</li>
+                            </ul>
+                        </div>
+                        <a href="obs-text/" class="tool-card__link">
+                            <span>ツールを起動</span>
+                            <span class="material-symbols-outlined" aria-hidden="true">north_east</span>
+                        </a>
+                    </article>
+
+                    <!-- placeholder: 増設スロット -->
+                    <article class="tool-card tool-card--ghost" aria-hidden="true">
+                        <div class="tool-card__corner tool-card__corner--tl"></div>
+                        <div class="tool-card__corner tool-card__corner--tr"></div>
+                        <div class="tool-card__corner tool-card__corner--bl"></div>
+                        <div class="tool-card__corner tool-card__corner--br"></div>
+                        <div class="ghost__plus">+</div>
+                        <p class="ghost__text">NEW TOOL<br>INCOMING</p>
+                    </article>
+                </div>
             </div>
         </main>
 
-        <!-- Footer -->
+        <!-- FOOTER -->
         <footer class="footer">
             <div class="container">
-                <div class="footer-content">
-                    <div class="footer-section">
-                        <div class="footer-brand">
-                            <span class="footer-logo">
-                                <span class="material-symbols-outlined" aria-hidden="true">favorite</span>
-                            </span>
-                            <span class="footer-name">Obsidian Engine</span>
-                        </div>
-                        <p class="footer-description">
-                            配信者・VTuberのための便利ツール集
-                        </p>
+                <div class="footer__top">
+                    <div class="footer__brand">
+                        <div class="footer__logo">OBSIDIAN<br>ENGINE</div>
+                        <p class="footer__tagline">配信者のためのツール工房。<br>静かに、確実に、配信卓を支える。</p>
                     </div>
-                    
-                    <div class="footer-section">
-                        <h4 class="footer-title">ツール</h4>
-                        <ul class="footer-links">
+
+                    <nav class="footer__col">
+                        <h4 class="footer__title">TOOLS</h4>
+                        <ul>
                             <li><a href="discord-css/">Discord立ち絵CSS</a></li>
-                            <li><a href="https://obsidian-engine.github.io/live-kujibiki/" target="_blank">配信用くじびき</a></li>
-                            <li><a href="https://youtube-comment-user-list.vercel.app/" target="_blank">名前読み上げ</a></li>
+                            <li><a href="https://obsidian-engine.github.io/live-kujibiki/" target="_blank" rel="noopener">配信用くじびき</a></li>
+                            <li><a href="https://youtube-comment-user-list.vercel.app/" target="_blank" rel="noopener">名前読み上げ</a></li>
                             <li><a href="comment-css/">コメント用CSS</a></li>
                             <li><a href="obs-text/">OBSテキスト表示</a></li>
                         </ul>
-                    </div>
-                    
-                    <div class="footer-section">
-                        <h4 class="footer-title">リンク</h4>
-                        <ul class="footer-links">
-                            <li><a href="https://github.com/obsidian-engine/vtube-tools" target="_blank">GitHub</a></li>
-                            <li><a href="https://github.com/obsidian-engine/vtube-tools/issues" target="_blank">バグ報告</a></li>
-                            <li><a href="https://github.com/obsidian-engine/vtube-tools/discussions" target="_blank">ディスカッション</a></li>
+                    </nav>
+
+                    <nav class="footer__col">
+                        <h4 class="footer__title">PROJECT</h4>
+                        <ul>
+                            <li><a href="https://github.com/obsidian-engine/vtube-tools" target="_blank" rel="noopener">GitHub</a></li>
+                            <li><a href="https://github.com/obsidian-engine/vtube-tools/issues" target="_blank" rel="noopener">バグ報告</a></li>
+                            <li><a href="https://github.com/obsidian-engine/vtube-tools/discussions" target="_blank" rel="noopener">ディスカッション</a></li>
+                            <li><a href="https://github.com/obsidian-engine/vtube-tools/blob/main/LICENSE" target="_blank" rel="noopener">ライセンス (MIT)</a></li>
                         </ul>
-                    </div>
-                    
-                    <div class="footer-section">
-                        <h4 class="footer-title">情報</h4>
-                        <ul class="footer-links">
-                            <li><a href="#privacy">プライバシーポリシー</a></li>
-                            <li><a href="#terms">利用規約</a></li>
-                            <li><a href="https://github.com/obsidian-engine/vtube-tools/blob/main/LICENSE" target="_blank">ライセンス</a></li>
-                        </ul>
+                    </nav>
+
+                    <div class="footer__col footer__terminal">
+                        <h4 class="footer__title">STATUS</h4>
+                        <pre class="terminal"><span>&gt; ping obsidian.engine</span>
+<span>&gt; 64 bytes from 127.0.0.1</span>
+<span>&gt; signal ........ <em>STRONG</em></span>
+<span>&gt; tools  ........ <em>05 / READY</em></span>
+<span>&gt; status ........ <em class="blink">ON AIR_</em></span></pre>
                     </div>
                 </div>
-                
-                <div class="footer-bottom">
-                    <p>&copy; 2025 Obsidian Engine. Licensed under MIT License.</p>
+
+                <div class="footer__bottom">
+                    <span>&copy; 2025 Obsidian Engine</span>
+                    <span class="footer__dot">●</span>
+                    <span>Licensed under MIT</span>
+                    <span class="footer__dot">●</span>
+                    <span>配信卓の隣で。</span>
                 </div>
             </div>
         </footer>
@@ -218,5 +291,27 @@
 
     <!-- JavaScript -->
     <script src="script.js"></script>
+    <script>
+        // Card tilt on mouse (subtle, motion-aware)
+        (function () {
+            const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (reduceMotion) return;
+            document.querySelectorAll('.tool-card').forEach((card) => {
+                card.addEventListener('mousemove', (e) => {
+                    const r = card.getBoundingClientRect();
+                    const x = (e.clientX - r.left) / r.width - 0.5;
+                    const y = (e.clientY - r.top) / r.height - 0.5;
+                    card.style.setProperty('--mx', `${x * 8}deg`);
+                    card.style.setProperty('--my', `${-y * 8}deg`);
+                    card.style.setProperty('--gx', `${(x + 0.5) * 100}%`);
+                    card.style.setProperty('--gy', `${(y + 0.5) * 100}%`);
+                });
+                card.addEventListener('mouseleave', () => {
+                    card.style.setProperty('--mx', `0deg`);
+                    card.style.setProperty('--my', `0deg`);
+                });
+            });
+        })();
+    </script>
 </body>
 </html>
