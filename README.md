@@ -63,6 +63,7 @@ VTuber・配信者向けの便利ツール集です。
 ### 📖 詳細仕様書
 - [LiveReserve PRD（配信予約ツール）](docs/LiveReserve-PRD.md)
 - [LiveReserve MVP 設計プラン](docs/LiveReserve-MVP-Design.md)
+- [LiveReserve 技術選定デザインドック](docs/LiveReserve-Design-Doc.md)
 - [LINE公式アカウント管理ツール仕様書](docs/LINE-Official-Manager-Specification.md)
 
 ### 🚀 開発ガイド（開発予定）
@@ -91,6 +92,7 @@ vtube-tools/
 ├── docs/                   # ドキュメント
 │   ├── LiveReserve-PRD.md
 │   ├── LiveReserve-MVP-Design.md
+│   ├── LiveReserve-Design-Doc.md
 │   └── LINE-Official-Manager-Specification.md
 └── README.md              # このファイル
 ```
