@@ -11,7 +11,10 @@
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
     "db:generate": "drizzle-kit generate",
-    "deploy": "vite build && wrangler deploy"
+    "deploy": "vite build && wrangler deploy",
+    "deploy:prod": "vite build && wrangler deploy --env production",
+    "secrets:push": "node scripts/push-secrets.mjs",
+    "secrets:push:prod": "node scripts/push-secrets.mjs --env production"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

@@ -24,7 +24,40 @@
   ],
   "vars": {
     "OAUTH_REDIRECT_URL": "http://localhost:8787/api/auth/callback"
-  }
-  // Secrets (wrangler secret put):
+  },
+  // Secrets（環境ごとに `wrangler secret put` または `pnpm secrets:push[:prod]` で投入）:
   //   GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, APP_ENCRYPTION_KEY, SESSION_SECRET
+  //
+  // 本番デプロイ: `pnpm deploy:prod`（= wrangler deploy --env production）。
+  // 注意: 名前付き環境では vars / d1_databases / r2_buckets は継承されないため、
+  //       下記のように production 側で再掲する必要がある。
+  "env": {
+    "production": {
+      // Worker 名は live-reserve-production となり、URL は
+      //   https://live-reserve-production.<your-subdomain>.workers.dev
+      // OAUTH_REDIRECT_URL は本番URLに合わせ、Google Cloud の承認済みリダイレクトURIにも追加すること。
+      "vars": {
+        "OAUTH_REDIRECT_URL": "https://live-reserve-production.<your-subdomain>.workers.dev/api/auth/callback"
+      },
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "live-reserve",
+          "database_id": "REPLACE_WITH_YOUR_D1_ID",
+          "migrations_dir": "migrations"
+        }
+      ],
+      "r2_buckets": [
+        {
+          "binding": "THUMBNAILS",
+          "bucket_name": "live-reserve-thumbnails"
+        }
+      ],
+      "assets": {
+        "directory": "./dist/client",
+        "not_found_handling": "single-page-application",
+        "run_worker_first": ["/api/*"]
+      }
+    }
+  }
 }
