@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiFetch } from "../lib/api";
+import { parseTemplateCsv } from "../lib/csv";
 
 export interface Template {
   id: string;
@@ -20,10 +21,20 @@ const emptyForm = {
   privacy: "private" as Template["privacy"],
 };
 
+interface ImportResult {
+  success: number;
+  failures: { lineNumber: number; reason: string }[];
+}
+
 export default function Templates() {
   const queryClient = useQueryClient();
   const [form, setForm] = useState<typeof emptyForm & { id?: string }>(emptyForm);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const [csvError, setCsvError] = useState<string | null>(null);
+  const [importResult, setImportResult] = useState<ImportResult | null>(null);
+  const [isImporting, setIsImporting] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { data: templates = [], isLoading } = useQuery({
     queryKey: ["templates"],
@@ -51,6 +62,65 @@ export default function Templates() {
 
   const inputClass =
     "w-full rounded-xl border border-neutral-200 bg-white px-4 py-2.5 text-sm focus:border-neutral-400 focus:outline-none";
+
+  async function handleCsvImport(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setCsvError(null);
+    setImportResult(null);
+    setIsImporting(true);
+
+    try {
+      const text = await file.text();
+      const { headerError, rows } = parseTemplateCsv(text);
+
+      if (headerError) {
+        setCsvError(headerError);
+        return;
+      }
+
+      if (rows.length === 0) {
+        setCsvError("有効な行がありません");
+        return;
+      }
+
+      const failures: ImportResult["failures"] = [];
+      // parse失敗行を先に収集
+      for (const row of rows) {
+        if (!row.ok) {
+          failures.push({ lineNumber: row.lineNumber, reason: row.error ?? "不明なエラー" });
+        }
+      }
+
+      // 有効行を順次POST
+      let success = 0;
+      for (const row of rows) {
+        if (!row.ok || !row.value) continue;
+        try {
+          await apiFetch("/api/templates", { method: "POST", json: row.value });
+          success++;
+        } catch (err) {
+          failures.push({
+            lineNumber: row.lineNumber,
+            reason: err instanceof Error ? err.message : "POSTに失敗しました",
+          });
+        }
+      }
+
+      if (success > 0) {
+        await queryClient.invalidateQueries({ queryKey: ["templates"] });
+      }
+
+      setImportResult({ success, failures });
+    } catch {
+      setCsvError("ファイルの読み込みに失敗しました");
+    } finally {
+      setIsImporting(false);
+      // 同じファイルを再度選択できるようにリセット
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  }
 
   return (
     <div className="space-y-10">
@@ -115,6 +185,59 @@ export default function Templates() {
             )}
           </div>
         </form>
+      </section>
+
+      <section>
+        <h2 className="text-xl font-semibold tracking-tight">CSVから一括作成</h2>
+        <p className="mt-2 text-xs text-neutral-400">
+          1行目はヘッダー固定:{" "}
+          <code className="rounded bg-neutral-100 px-1 py-0.5">
+            name,title,description,privacy
+          </code>
+          。privacy は <code className="rounded bg-neutral-100 px-1 py-0.5">public</code> /{" "}
+          <code className="rounded bg-neutral-100 px-1 py-0.5">unlisted</code> /{" "}
+          <code className="rounded bg-neutral-100 px-1 py-0.5">private</code>（空欄は private）。
+        </p>
+        <p className="mt-1 text-xs text-neutral-400">
+          例:{" "}
+          <code className="rounded bg-neutral-100 px-1 py-0.5">
+            毎週の雑談,雑談配信,概要テキスト,public
+          </code>
+        </p>
+        <div className="mt-3">
+          <label
+            className={`inline-block cursor-pointer rounded-full border border-neutral-300 px-6 py-2.5 text-sm text-neutral-700 transition-colors hover:bg-neutral-100 ${isImporting ? "pointer-events-none opacity-40" : ""}`}
+          >
+            {isImporting ? "インポート中…" : "CSVファイルを選択"}
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept=".csv,text/csv"
+              className="hidden"
+              onChange={handleCsvImport}
+              disabled={isImporting}
+            />
+          </label>
+        </div>
+        {csvError && (
+          <p className="mt-2 rounded-xl bg-red-50 px-4 py-2.5 text-sm text-red-600">{csvError}</p>
+        )}
+        {importResult && (
+          <div className="mt-2 rounded-xl border border-neutral-200 bg-white px-4 py-3 text-sm">
+            <p className="font-medium">
+              {importResult.success}件成功 / {importResult.failures.length}件失敗
+            </p>
+            {importResult.failures.length > 0 && (
+              <ul className="mt-2 space-y-1 text-red-600">
+                {importResult.failures.map((f) => (
+                  <li key={f.lineNumber}>
+                    {f.lineNumber}行目: {f.reason}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        )}
       </section>
 
       <section>
