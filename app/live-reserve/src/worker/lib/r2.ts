@@ -13,5 +13,8 @@ export function createR2ThumbnailStore(bucket: R2Bucket): ThumbnailStore {
         contentType: obj.httpMetadata?.contentType ?? "application/octet-stream",
       };
     },
+    async delete(key) {
+      await bucket.delete(key);
+    },
   };
 }

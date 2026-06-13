@@ -69,9 +69,10 @@ src/
 │   ├── youtube/             # YouTube API 薄型クライアント（fetch直）
 │   ├── db/                  # Drizzle スキーマ / D1 リポジトリ実装
 │   └── lib/                 # AES-GCM 暗号化 / R2
-└── web/                     # React SPA（4画面）
-    ├── pages/               # Login / Templates / CreateBroadcast / Broadcasts
-    └── lib/api.ts           # API クライアント
+└── web/                     # React SPA
+    ├── pages/               # Login / Templates / CreateBroadcast / BulkCreate / Broadcasts
+    ├── components/          # WeekBoard / TemplatePalette / CardEditor / MonthCalendar
+    └── lib/                 # api / template-vars（変数展開）/ draft（下書き）/ calendar（日付）
 ```
 
 ### 予約作成フロー
@@ -84,6 +85,21 @@ src/
 4. `thumbnails.set` — サムネイル設定（任意・失敗は警告のみ）
 5. D1 へ記録 → 配信URL / videoId / ストリームキーを返却
 
+### 一括予約（週ボード）
+
+`/bulk` 画面で、テンプレートカードを週カレンダーの曜日にドラッグ&ドロップ（モバイルはタップ配置）して1週間分をまとめて作成できる。
+
+- **タイトル変数展開**: `{{date}} {{month}} {{day}} {{weekday}} {{round}}` を配置時に自動置換（`{{round}}` は開始値からインクリメント）。生成後も各カードを手編集可能。
+- **行ごとのサムネ**: カードごとに画像を `POST /api/thumbnails/staging`（R2 `staging/{userId}/{uuid}`）へアップロードし、一括作成時に各配信へ適用。
+- **下書き自動保存**: ボードの状態を localStorage（`livereserve:bulk-draft:v1`）にデバウンス保存。画面を閉じても復元。サムネ実体は R2 にあり下書きは key 参照のみ。
+- **一括 API**: `POST /api/broadcasts/bulk`（`{ items: [...] }`、最大 12 件）。各件を逐次作成し**部分失敗を許容**（件ごとに成功/失敗を返す）。成功分は下書きから除去、失敗分は残して再実行可能。
+  - 上限 12 件は Workers 無料枠の subrequest 上限（50/req）に収めるため（1配信あたり fetch 4回 + トークン更新1回）。
+  - 消費済みの staging サムネはベストエフォートで削除。**中断した下書きの孤児対策として、R2 バケットに `staging/` を一定期間（例: 7日）で削除するライフサイクルルールの設定を推奨。**
+
+### カレンダー表示
+
+`/broadcasts` 画面はカレンダー／リストを切替可能。月グリッドに予約済み配信を日別表示し、日をクリックでその日の一覧を表示。
+
 ## テスト
 
 ビジネスロジックは依存注入 + インメモリフェイクで Node 上の Vitest 実行（workerd 不要）。
@@ -95,4 +111,8 @@ src/
 | `test/youtube-client.test.ts` | YouTube API クライアント（fetchモック） |
 | `test/orchestrator.test.ts` | 予約作成オーケストレーション・ロールバック |
 | `test/api.test.ts` | API ハンドラ（認証ガード・CRUD・予約作成・OAuth） |
+| `test/bulk.test.ts` | 一括予約・staging サムネ（部分失敗・件数上限・所有ガード） |
+| `test/template-vars.test.ts` | タイトル変数展開 |
+| `test/draft.test.ts` | 下書きの localStorage 永続化 |
+| `test/calendar.test.ts` | 週/月の日付ユーティリティ |
 | `test/web-api.test.ts` | フロント API クライアント |

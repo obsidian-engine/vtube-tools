@@ -110,4 +110,8 @@ export class InMemoryThumbnailStore implements ThumbnailStore {
   async get(key: string): Promise<{ data: ArrayBuffer; contentType: string } | null> {
     return this.store.get(key) ?? null;
   }
+
+  async delete(key: string): Promise<void> {
+    this.store.delete(key);
+  }
 }

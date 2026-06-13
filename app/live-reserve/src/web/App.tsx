@@ -4,6 +4,7 @@ import { apiFetch, ApiError } from "./lib/api";
 import Login from "./pages/Login";
 import Templates from "./pages/Templates";
 import CreateBroadcast from "./pages/CreateBroadcast";
+import BulkCreate from "./pages/BulkCreate";
 import Broadcasts from "./pages/Broadcasts";
 
 export interface Me {
@@ -40,6 +41,7 @@ export default function App() {
           <span className="text-lg font-semibold tracking-tight">LiveReserve</span>
           <nav className="flex gap-1">
             <NavLink to="/create" className={navClass}>予約作成</NavLink>
+            <NavLink to="/bulk" className={navClass}>一括予約</NavLink>
             <NavLink to="/templates" className={navClass}>テンプレート</NavLink>
             <NavLink to="/broadcasts" className={navClass}>配信一覧</NavLink>
           </nav>
@@ -58,6 +60,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Navigate to="/create" replace />} />
           <Route path="/create" element={<CreateBroadcast />} />
+          <Route path="/bulk" element={<BulkCreate />} />
           <Route path="/templates" element={<Templates />} />
           <Route path="/broadcasts" element={<Broadcasts />} />
         </Routes>

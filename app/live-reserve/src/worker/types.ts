@@ -66,4 +66,5 @@ export interface BroadcastRepo {
 export interface ThumbnailStore {
   put(key: string, data: ArrayBuffer, contentType: string): Promise<void>;
   get(key: string): Promise<{ data: ArrayBuffer; contentType: string } | null>;
+  delete(key: string): Promise<void>;
 }
