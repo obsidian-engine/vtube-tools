@@ -277,6 +277,18 @@ describe("API", () => {
       const list = await (await app.request("/api/broadcasts", { headers: { Cookie: cookie } })).json() as any;
       expect(list).toHaveLength(0);
     });
+
+    it("YouTube 作成後の DB 書き込み失敗時は broadcast を削除してロールバックし 502 を返す", async () => {
+      vi.spyOn(broadcasts, "create").mockRejectedValue(new Error("D1 write failed"));
+      const res = await app.request("/api/broadcasts", {
+        method: "POST",
+        headers: { Cookie: cookie, "Content-Type": "application/json" },
+        body: JSON.stringify({ templateId, scheduledAt: "2026-06-20T12:00:00Z" }),
+      });
+      expect(res.status).toBe(502);
+      // YouTube 側に枠が作られた後の失敗なので、作成済み broadcast を削除する
+      expect(yt.deleteBroadcast).toHaveBeenCalledWith("bcast-1");
+    });
   });
 
   describe("サムネイル", () => {
@@ -303,6 +315,24 @@ describe("API", () => {
         body: JSON.stringify({ templateId: created.id, scheduledAt: "2026-06-20T12:00:00Z" }),
       });
       expect(yt.setThumbnail).toHaveBeenCalledWith("video-1", expect.anything(), "image/png");
+    });
+
+    it("2MB を超えるサムネイルは 400 で弾く", async () => {
+      const created = await (
+        await app.request("/api/templates", {
+          method: "POST",
+          headers: { Cookie: cookie, "Content-Type": "application/json" },
+          body: JSON.stringify({ name: "n", title: "t", description: "d", privacy: "private" }),
+        })
+      ).json() as any;
+
+      const tooLarge = new Uint8Array(2 * 1024 * 1024 + 1);
+      const res = await app.request(`/api/templates/${created.id}/thumbnail`, {
+        method: "POST",
+        headers: { Cookie: cookie, "Content-Type": "image/png" },
+        body: tooLarge,
+      });
+      expect(res.status).toBe(400);
     });
   });
 

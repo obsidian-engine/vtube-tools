@@ -33,6 +33,9 @@ type Vars = { user: User };
 
 const PRIVACY_VALUES: PrivacyStatus[] = ["public", "unlisted", "private"];
 
+// YouTube のサムネイル上限は 2MB。これを超えるボディは YouTube に渡す前に弾く。
+const MAX_THUMBNAIL_BYTES = 2 * 1024 * 1024;
+
 function isPrivacy(v: unknown): v is PrivacyStatus {
   return typeof v === "string" && (PRIVACY_VALUES as string[]).includes(v);
 }
@@ -166,7 +169,14 @@ export function createApp(deps: AppDeps) {
     if (!contentType.startsWith("image/")) {
       return c.json({ error: "画像ファイルをアップロードしてください" }, 400);
     }
+    const declaredLength = Number(c.req.header("Content-Length"));
+    if (Number.isFinite(declaredLength) && declaredLength > MAX_THUMBNAIL_BYTES) {
+      return c.json({ error: "サムネイルは 2MB 以下にしてください" }, 400);
+    }
     const data = await c.req.arrayBuffer();
+    if (data.byteLength > MAX_THUMBNAIL_BYTES) {
+      return c.json({ error: "サムネイルは 2MB 以下にしてください" }, 400);
+    }
     const key = `thumbnails/${user.id}/${id}`;
     await deps.thumbnails.put(key, data, contentType);
     const updated = await deps.repos.templates.update(id, user.id, { thumbnailKey: key });
@@ -206,18 +216,29 @@ export function createApp(deps: AppDeps) {
         ...(thumbnail ? { thumbnail: { data: thumbnail.data, contentType: thumbnail.contentType } } : {}),
       });
 
-      const record = await deps.repos.broadcasts.create({
-        userId: user.id,
-        templateId: template.id,
-        videoId: result.videoId,
-        broadcastId: result.broadcastId,
-        streamId: result.streamId,
-        title: template.title,
-        scheduledAt: body.scheduledAt,
-        privacy: template.privacy,
-        watchUrl: result.watchUrl,
-        status: "created",
-      });
+      let record: Awaited<ReturnType<BroadcastRepo["create"]>>;
+      try {
+        record = await deps.repos.broadcasts.create({
+          userId: user.id,
+          templateId: template.id,
+          videoId: result.videoId,
+          broadcastId: result.broadcastId,
+          streamId: result.streamId,
+          title: template.title,
+          scheduledAt: body.scheduledAt,
+          privacy: template.privacy,
+          watchUrl: result.watchUrl,
+          status: "created",
+        });
+      } catch (dbErr) {
+        // YouTube 側は作成済みだが DB 記録に失敗した。枠が Studio にゴミとして残るため削除する。
+        try {
+          await yt.deleteBroadcast(result.broadcastId);
+        } catch {
+          // 元の DB エラーを優先して握りつぶす
+        }
+        throw dbErr;
+      }
 
       return c.json({ ...result, id: record.id }, 201);
     } catch (err) {
