@@ -1,0 +1,7 @@
+# ローカル開発用。コピーして .dev.vars を作成する（.dev.vars はコミット禁止）
+GOOGLE_CLIENT_ID=your-client-id.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=your-client-secret
+OAUTH_REDIRECT_URL=http://localhost:8787/api/auth/callback
+# 32バイトのhex（64文字）。生成例: openssl rand -hex 32
+APP_ENCRYPTION_KEY=0000000000000000000000000000000000000000000000000000000000000000
+SESSION_SECRET=change-me-to-a-long-random-string

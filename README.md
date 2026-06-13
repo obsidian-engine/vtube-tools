@@ -27,7 +27,7 @@ VTuber・配信者向けの便利ツール集です。
 ### 🆕 新規開発予定
 
 #### 📅 LiveReserve（配信予約自動作成ツール）
-- **場所**: `app/live-reserve/` (開発予定)
+- **場所**: `app/live-reserve/` (MVP実装済み)
 - **機能**: YouTube Live の配信予約をテンプレートからワンクリック作成
 - **キャッチコピー**: 「配信予約、もうStudioを開かない。」
 - **主要機能（MVP）**:
@@ -38,8 +38,8 @@ VTuber・配信者向けの便利ツール集です。
 
 #### 技術スタック
 - **フロントエンド**: React, Vite, TypeScript, TailwindCSS
-- **バックエンド**: Go
-- **データベース**: SQLite
+- **バックエンド**: Hono on Cloudflare Workers (TypeScript)
+- **データベース**: Cloudflare D1 (SQLite互換) + Drizzle ORM
 - **外部API**: YouTube Data API / Live Streaming API
 - **認証**: Google OAuth
 
@@ -104,7 +104,7 @@ vtube-tools/
 | Discord CSS生成 | ✅ リリース済み | 100% |
 | 立ち絵移動CSS | ✅ リリース済み | 100% |
 | わんこめツール集 | ✅ リリース済み ([別リポジトリ](https://github.com/DaichiHoshina/onecomme-tools)) | - |
-| LiveReserve（配信予約） | 🏗️ PRD・設計プラン完了 | 5% |
+| LiveReserve（配信予約） | 🧪 MVP実装済み（TDD・46テスト） | 70% |
 | LINE公式アカウント管理 | 🏗️ 仕様設計完了 | 10% |
 
 ## 🎉 貢献・フィードバック

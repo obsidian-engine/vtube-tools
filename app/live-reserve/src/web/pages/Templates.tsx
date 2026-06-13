@@ -1,0 +1,169 @@
+import { useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { apiFetch } from "../lib/api";
+
+export interface Template {
+  id: string;
+  name: string;
+  title: string;
+  description: string;
+  privacy: "public" | "unlisted" | "private";
+  thumbnailKey: string | null;
+}
+
+const PRIVACY_LABELS = { public: "公開", unlisted: "限定公開", private: "非公開" } as const;
+
+const emptyForm = {
+  name: "",
+  title: "",
+  description: "",
+  privacy: "private" as Template["privacy"],
+};
+
+export default function Templates() {
+  const queryClient = useQueryClient();
+  const [form, setForm] = useState<typeof emptyForm & { id?: string }>(emptyForm);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const { data: templates = [], isLoading } = useQuery({
+    queryKey: ["templates"],
+    queryFn: async () => (await apiFetch<Template[]>("/api/templates")) ?? [],
+  });
+
+  const save = useMutation({
+    mutationFn: (data: typeof form) =>
+      data.id
+        ? apiFetch(`/api/templates/${data.id}`, { method: "PUT", json: data })
+        : apiFetch("/api/templates", { method: "POST", json: data }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["templates"] });
+      setForm(emptyForm);
+      setErrorMessage(null);
+    },
+    onError: (e: Error) => setErrorMessage(e.message),
+  });
+
+  const remove = useMutation({
+    mutationFn: (id: string) => apiFetch(`/api/templates/${id}`, { method: "DELETE" }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["templates"] }),
+    onError: (e: Error) => setErrorMessage(e.message),
+  });
+
+  const inputClass =
+    "w-full rounded-xl border border-neutral-200 bg-white px-4 py-2.5 text-sm focus:border-neutral-400 focus:outline-none";
+
+  return (
+    <div className="space-y-10">
+      <section>
+        <h2 className="text-xl font-semibold tracking-tight">
+          {form.id ? "テンプレートを編集" : "テンプレートを作成"}
+        </h2>
+        <form
+          className="mt-4 space-y-3"
+          onSubmit={(e) => {
+            e.preventDefault();
+            save.mutate(form);
+          }}
+        >
+          <input
+            className={inputClass}
+            placeholder="テンプレート名（例: 毎週の定期配信）"
+            value={form.name}
+            onChange={(e) => setForm({ ...form, name: e.target.value })}
+          />
+          <input
+            className={inputClass}
+            placeholder="配信タイトル"
+            value={form.title}
+            required
+            onChange={(e) => setForm({ ...form, title: e.target.value })}
+          />
+          <textarea
+            className={`${inputClass} min-h-28`}
+            placeholder="概要欄"
+            value={form.description}
+            onChange={(e) => setForm({ ...form, description: e.target.value })}
+          />
+          <select
+            className={inputClass}
+            value={form.privacy}
+            onChange={(e) => setForm({ ...form, privacy: e.target.value as typeof form.privacy })}
+          >
+            <option value="private">非公開</option>
+            <option value="unlisted">限定公開</option>
+            <option value="public">公開</option>
+          </select>
+          {errorMessage && (
+            <p className="rounded-xl bg-red-50 px-4 py-2.5 text-sm text-red-600">{errorMessage}</p>
+          )}
+          <div className="flex gap-2">
+            <button
+              type="submit"
+              disabled={save.isPending}
+              className="rounded-full bg-neutral-900 px-6 py-2.5 text-sm text-white transition-opacity hover:opacity-80 disabled:opacity-40"
+            >
+              {form.id ? "更新" : "保存"}
+            </button>
+            {form.id && (
+              <button
+                type="button"
+                onClick={() => setForm(emptyForm)}
+                className="rounded-full px-6 py-2.5 text-sm text-neutral-500 hover:bg-neutral-100"
+              >
+                キャンセル
+              </button>
+            )}
+          </div>
+        </form>
+      </section>
+
+      <section>
+        <h2 className="text-xl font-semibold tracking-tight">保存済みテンプレート</h2>
+        {isLoading ? (
+          <p className="mt-4 text-sm text-neutral-400">読み込み中…</p>
+        ) : templates.length === 0 ? (
+          <p className="mt-4 text-sm text-neutral-400">まだテンプレートがありません。</p>
+        ) : (
+          <ul className="mt-4 space-y-3">
+            {(templates ?? []).map((t) => (
+              <li
+                key={t.id}
+                className="flex items-center justify-between rounded-2xl border border-neutral-200 bg-white px-5 py-4"
+              >
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-medium">{t.name}</p>
+                  <p className="truncate text-sm text-neutral-500">{t.title}</p>
+                  <span className="mt-1 inline-block rounded-full bg-neutral-100 px-2.5 py-0.5 text-xs text-neutral-500">
+                    {PRIVACY_LABELS[t.privacy]}
+                  </span>
+                </div>
+                <div className="flex shrink-0 gap-2">
+                  <button
+                    onClick={() =>
+                      setForm({
+                        id: t.id,
+                        name: t.name,
+                        title: t.title,
+                        description: t.description,
+                        privacy: t.privacy,
+                      })
+                    }
+                    className="rounded-full px-4 py-1.5 text-sm text-neutral-600 hover:bg-neutral-100"
+                  >
+                    編集
+                  </button>
+                  <button
+                    onClick={() => remove.mutate(t.id)}
+                    className="rounded-full px-4 py-1.5 text-sm text-red-500 hover:bg-red-50"
+                  >
+                    削除
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </section>
+    </div>
+  );
+}

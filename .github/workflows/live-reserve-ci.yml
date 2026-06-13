@@ -1,0 +1,32 @@
+name: LiveReserve CI
+
+on:
+  push:
+    paths:
+      - "app/live-reserve/**"
+      - ".github/workflows/live-reserve-ci.yml"
+  pull_request:
+    paths:
+      - "app/live-reserve/**"
+      - ".github/workflows/live-reserve-ci.yml"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app/live-reserve
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: app/live-reserve/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: pnpm build
