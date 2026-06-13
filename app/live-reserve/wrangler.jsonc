@@ -12,7 +12,7 @@
     {
       "binding": "DB",
       "database_name": "live-reserve",
-      "database_id": "REPLACE_WITH_YOUR_D1_ID",
+      "database_id": "0089098a-2666-4d47-80d4-b9d3870f2a92",
       "migrations_dir": "migrations"
     }
   ],
@@ -37,13 +37,13 @@
       //   https://live-reserve-production.<your-subdomain>.workers.dev
       // OAUTH_REDIRECT_URL は本番URLに合わせ、Google Cloud の承認済みリダイレクトURIにも追加すること。
       "vars": {
-        "OAUTH_REDIRECT_URL": "https://live-reserve-production.<your-subdomain>.workers.dev/api/auth/callback"
+        "OAUTH_REDIRECT_URL": "https://live-reserve-production.daichi-go-study.workers.dev/api/auth/callback"
       },
       "d1_databases": [
         {
           "binding": "DB",
           "database_name": "live-reserve",
-          "database_id": "REPLACE_WITH_YOUR_D1_ID",
+          "database_id": "0089098a-2666-4d47-80d4-b9d3870f2a92",
           "migrations_dir": "migrations"
         }
       ],
