@@ -83,7 +83,8 @@ export default function BulkCreate() {
       localId: crypto.randomUUID(),
       templateId,
       dateISO,
-      time: draft.defaultTime,
+      // テンプレに既定時刻があれば優先。無ければボード既定にフォールバック。
+      time: template.defaultTime ?? draft.defaultTime,
       title: expandTitle(template.title, { date, round }),
       description: template.description,
       privacy: template.privacy,

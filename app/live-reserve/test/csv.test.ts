@@ -73,8 +73,23 @@ describe("parseTemplateCsv", () => {
       title: "My Title",
       description: "概要",
       privacy: "public",
+      defaultTime: null,
     });
     expect(row!.lineNumber).toBe(2);
+  });
+
+  it("末尾のtime列があれば既定時刻として読む", () => {
+    const input = `${validHeader},time\nasa,朝活,概要,public,9:00`;
+    const { headerError, rows } = parseTemplateCsv(input);
+    expect(headerError).toBeUndefined();
+    expect(rows[0]!.value?.defaultTime).toBe("09:00");
+  });
+
+  it("time列の不正値・空欄はnullになる", () => {
+    const input = `${validHeader},time\na,t1,,public,25:99\nb,t2,,public,`;
+    const { rows } = parseTemplateCsv(input);
+    expect(rows[0]!.value?.defaultTime).toBeNull();
+    expect(rows[1]!.value?.defaultTime).toBeNull();
   });
 
   it("ヘッダー不一致はheaderErrorを返しrowsは空", () => {

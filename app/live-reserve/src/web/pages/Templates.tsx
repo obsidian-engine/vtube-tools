@@ -9,6 +9,7 @@ export interface Template {
   title: string;
   description: string;
   privacy: "public" | "unlisted" | "private";
+  defaultTime: string | null;
   thumbnailKey: string | null;
 }
 
@@ -19,6 +20,7 @@ const emptyForm = {
   title: "",
   description: "",
   privacy: "private" as Template["privacy"],
+  defaultTime: "",
 };
 
 interface ImportResult {
@@ -163,6 +165,15 @@ export default function Templates() {
             <option value="unlisted">限定公開</option>
             <option value="public">公開</option>
           </select>
+          <label className="block text-sm text-neutral-500">
+            既定の配信時刻（カレンダー配置時に自動セット。空欄ならボード既定）
+            <input
+              type="time"
+              className={`${inputClass} mt-1`}
+              value={form.defaultTime}
+              onChange={(e) => setForm({ ...form, defaultTime: e.target.value })}
+            />
+          </label>
           {errorMessage && (
             <p className="rounded-xl bg-red-50 px-4 py-2.5 text-sm text-red-600">{errorMessage}</p>
           )}
@@ -197,11 +208,13 @@ export default function Templates() {
           。privacy は <code className="rounded bg-neutral-100 px-1 py-0.5">public</code> /{" "}
           <code className="rounded bg-neutral-100 px-1 py-0.5">unlisted</code> /{" "}
           <code className="rounded bg-neutral-100 px-1 py-0.5">private</code>（空欄は private）。
+          末尾に任意で <code className="rounded bg-neutral-100 px-1 py-0.5">,time</code> 列（
+          <code className="rounded bg-neutral-100 px-1 py-0.5">HH:MM</code>）を付けると既定の配信時刻を設定できる。
         </p>
         <p className="mt-1 text-xs text-neutral-400">
           例:{" "}
           <code className="rounded bg-neutral-100 px-1 py-0.5">
-            毎週の雑談,雑談配信,概要テキスト,public
+            毎週の雑談,雑談配信,概要テキスト,public,09:00
           </code>
         </p>
         <div className="mt-3">
@@ -259,6 +272,11 @@ export default function Templates() {
                   <span className="mt-1 inline-block rounded-full bg-neutral-100 px-2.5 py-0.5 text-xs text-neutral-500">
                     {PRIVACY_LABELS[t.privacy]}
                   </span>
+                  {t.defaultTime && (
+                    <span className="mt-1 ml-1.5 inline-block rounded-full bg-neutral-100 px-2.5 py-0.5 text-xs text-neutral-500">
+                      🕒 {t.defaultTime}
+                    </span>
+                  )}
                 </div>
                 <div className="flex shrink-0 gap-2">
                   <button
@@ -269,6 +287,7 @@ export default function Templates() {
                         title: t.title,
                         description: t.description,
                         privacy: t.privacy,
+                        defaultTime: t.defaultTime ?? "",
                       })
                     }
                     className="rounded-full px-4 py-1.5 text-sm text-neutral-600 hover:bg-neutral-100"

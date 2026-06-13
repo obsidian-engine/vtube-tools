@@ -16,12 +16,16 @@ export interface Template {
   title: string;
   description: string;
   privacy: PrivacyStatus;
+  defaultTime: string | null;
   thumbnailKey: string | null;
   createdAt: string;
   updatedAt: string;
 }
 
-export type NewTemplate = Pick<Template, "userId" | "name" | "title" | "description" | "privacy">;
+export type NewTemplate = Pick<
+  Template,
+  "userId" | "name" | "title" | "description" | "privacy" | "defaultTime"
+>;
 
 export interface BroadcastRecord {
   id: string;

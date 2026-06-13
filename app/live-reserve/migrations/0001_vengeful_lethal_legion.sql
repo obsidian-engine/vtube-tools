@@ -1,0 +1,1 @@
+ALTER TABLE `templates` ADD `default_time` text;

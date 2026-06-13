@@ -23,6 +23,8 @@ export const templates = sqliteTable("templates", {
   privacy: text("privacy", { enum: ["public", "unlisted", "private"] })
     .notNull()
     .default("private"),
+  // カレンダー/週ボード配置時に既定で入る配信時刻（"HH:MM"）。未設定はボード既定にフォールバック。
+  defaultTime: text("default_time"),
   thumbnailKey: text("thumbnail_key"),
   createdAt: text("created_at")
     .notNull()

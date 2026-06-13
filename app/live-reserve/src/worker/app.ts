@@ -47,6 +47,17 @@ function isPrivacy(v: unknown): v is PrivacyStatus {
   return typeof v === "string" && (PRIVACY_VALUES as string[]).includes(v);
 }
 
+// "HH:MM"（00:00〜23:59）なら正規化して返す。空文字・未指定・不正は null。
+function parseDefaultTime(v: unknown): string | null {
+  if (typeof v !== "string" || !v.trim()) return null;
+  const m = v.trim().match(/^(\d{1,2}):(\d{2})$/);
+  if (!m) return null;
+  const h = Number(m[1]);
+  const min = Number(m[2]);
+  if (h > 23 || min > 59) return null;
+  return `${String(h).padStart(2, "0")}:${m[2]}`;
+}
+
 // 1配信の仕様（テンプレを既定にしつつ item で上書き可能）。
 interface BroadcastSpec {
   templateId: string;
@@ -202,6 +213,7 @@ export function createApp(deps: AppDeps) {
       title: body.title,
       description: typeof body.description === "string" ? body.description : "",
       privacy: body.privacy,
+      defaultTime: parseDefaultTime(body.defaultTime),
     });
     return c.json(template, 201);
   });
@@ -217,6 +229,7 @@ export function createApp(deps: AppDeps) {
       ...(typeof body.title === "string" ? { title: body.title } : {}),
       ...(typeof body.description === "string" ? { description: body.description } : {}),
       ...(isPrivacy(body.privacy) ? { privacy: body.privacy } : {}),
+      ...("defaultTime" in body ? { defaultTime: parseDefaultTime(body.defaultTime) } : {}),
     });
     if (!updated) return c.json({ error: "テンプレートが見つかりません" }, 404);
     return c.json(updated);
