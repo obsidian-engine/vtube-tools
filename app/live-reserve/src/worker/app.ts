@@ -36,9 +36,12 @@ const PRIVACY_VALUES: PrivacyStatus[] = ["public", "unlisted", "private"];
 // YouTube のサムネイル上限は 2MB。これを超えるボディは YouTube に渡す前に弾く。
 const MAX_THUMBNAIL_BYTES = 2 * 1024 * 1024;
 
-// 一括作成の上限。Workers 無料枠の subrequest 上限(50/req)に収める
-// （1配信あたり fetch 4回 + トークン更新1回 → 4×12+1=49）。
-const MAX_BULK_ITEMS = 12;
+// 一括作成の上限。Workers 無料枠の subrequest 上限(50/req)に収める。
+// サムネ付き1配信あたりの subrequest（D1/R2 のバインディング I/O も上限にカウントされる）:
+//   YouTube fetch 4回（insertBroadcast/insertStream/bind/setThumbnail）
+//   + D1 findById 1 + R2 get 1 + D1 create 1 + R2 staging delete 1 = 8回。
+// バッチ全体で getAccessToken のトークン更新 1回。8×6+1=49 ≤ 50。
+const MAX_BULK_ITEMS = 6;
 
 function isPrivacy(v: unknown): v is PrivacyStatus {
   return typeof v === "string" && (PRIVACY_VALUES as string[]).includes(v);

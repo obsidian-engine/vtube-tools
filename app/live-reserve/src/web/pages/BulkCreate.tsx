@@ -17,7 +17,9 @@ import TemplatePalette from "../components/TemplatePalette";
 import WeekBoard from "../components/WeekBoard";
 import CardEditor from "../components/CardEditor";
 
-const MAX_BULK = 12;
+// バックエンドの MAX_BULK_ITEMS (worker/app.ts) と一致させる。
+// 超過するとバッチ全体が 400 になるため、UI 側で追加を抑止する。
+const MAX_BULK = 6;
 
 function emptyDraft(): BulkDraft {
   return {

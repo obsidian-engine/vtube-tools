@@ -241,8 +241,8 @@ describe("一括予約 / ステージングサムネ", () => {
       expect(res.status).toBe(400);
     });
 
-    it("13件以上は400", async () => {
-      const items = Array.from({ length: 13 }, () => ({ templateId, scheduledAt: "2026-06-21T12:00:00Z" }));
+    it("上限(6件)を超えると400", async () => {
+      const items = Array.from({ length: 7 }, () => ({ templateId, scheduledAt: "2026-06-21T12:00:00Z" }));
       const res = await app.request("/api/broadcasts/bulk", {
         method: "POST",
         headers: { Cookie: cookie, "Content-Type": "application/json" },
