@@ -1,9 +1,11 @@
 # 🏗️ LiveReserve MVP 設計プラン
 
-> 関連: [LiveReserve PRD](./LiveReserve-PRD.md)
+> 関連: [LiveReserve PRD](./LiveReserve-PRD.md) / [LiveReserve Design Doc](./LiveReserve-Design-Doc.md)
 
 本ドキュメントは PRD の MVP スコープを実装に落とし込むための設計プラン。
 実装着手前のアーキテクチャ・API・DB・タスク分解を定義する。
+
+> **注記**: 本書のBackendはGo / net/httpを前提に記述しているが、実行環境・Backendは [Design Doc](./LiveReserve-Design-Doc.md) でHono on Cloudflare Workers / D1へ変更済み。DBスキーマ・オーケストレーション設計は流用可だが、Backend実装言語・ランタイムはDesign Docを正とする。
 
 ---
 

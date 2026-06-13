@@ -182,6 +182,8 @@ https://youtube.com/xxxxx
 
 ## 7. 🏗️ 技術構成
 
+> **注記**: 本節のBackend (Go) / Database (SQLite) は初期案。技術選定の最終決定は [LiveReserve Design Doc](./LiveReserve-Design-Doc.md) でHono on Cloudflare Workers / D1へ変更済み。実装時はDesign Docを正とする。
+
 ### Frontend
 - React
 - Vite

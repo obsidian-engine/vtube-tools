@@ -38,10 +38,12 @@ VTuber・配信者向けの便利ツール集です。
 
 #### 技術スタック
 - **フロントエンド**: React, Vite, TypeScript, TailwindCSS
-- **バックエンド**: Hono on Cloudflare Workers (TypeScript)
+- **バックエンド**: Hono (TypeScript) on Cloudflare Workers
 - **データベース**: Cloudflare D1 (SQLite互換) + Drizzle ORM
+- **ストレージ**: Cloudflare R2 (サムネ保存)
 - **外部API**: YouTube Data API / Live Streaming API
 - **認証**: Google OAuth
+- 技術選定の根拠は [docs/LiveReserve-Design-Doc.md](docs/LiveReserve-Design-Doc.md) を参照（PRD §7のGo/SQLite案から本スタックへ変更）
 
 #### 📱 LINE公式アカウント管理ツール
 - **場所**: `app/line-official-manager/` (開発予定)
