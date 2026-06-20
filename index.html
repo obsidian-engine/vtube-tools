@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OBSIDIAN ENGINE // 配信卓の隣にあるツール箱</title>
-    <meta name="description" content="VTuber・配信者のための硬派なツール集。Discord立ち絵CSS、コメント表示、OBSテキスト、くじびきまで。">
+    <meta name="description" content="VTuber・配信者のための硬派なツール集。Discord立ち絵CSS、コメント表示、OBSテキスト、くじびき、週間予定表まで。">
     <meta name="keywords" content="VTuber,配信,ツール,Discord,OBS,YouTube">
     <meta name="author" content="Obsidian Engine">
 
@@ -23,7 +23,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Zen+Dots&family=JetBrains+Mono:wght@400;500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet">
 
     <!-- Material Symbols (Outlined) -->
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=casino,chat_bubble,check_circle,edit_note,error,group,handyman,hourglass_empty,north_east,radio_button_checked,terminal,theater_comedy&display=block" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=calendar_month,casino,chat_bubble,check_circle,edit_note,error,group,handyman,hourglass_empty,north_east,radio_button_checked,terminal,theater_comedy&display=block" rel="stylesheet" />
 
     <!-- CSS -->
     <link rel="stylesheet" href="style.css">
@@ -225,14 +225,36 @@
                         </a>
                     </article>
 
-                    <!-- placeholder: 増設スロット -->
-                    <article class="tool-card tool-card--ghost" aria-hidden="true">
+                    <!-- 06 週間予定表作成 -->
+                    <article class="tool-card" data-accent="cyan" style="--card-index: 5">
                         <div class="tool-card__corner tool-card__corner--tl"></div>
                         <div class="tool-card__corner tool-card__corner--tr"></div>
                         <div class="tool-card__corner tool-card__corner--bl"></div>
                         <div class="tool-card__corner tool-card__corner--br"></div>
-                        <div class="ghost__plus">+</div>
-                        <p class="ghost__text">NEW TOOL<br>INCOMING</p>
+
+                        <header class="tool-card__head">
+                            <span class="tool-card__index">06</span>
+                            <span class="tool-card__status">
+                                <span class="material-symbols-outlined" aria-hidden="true">radio_button_checked</span>
+                                READY
+                            </span>
+                        </header>
+                        <div class="tool-card__icon">
+                            <span class="material-symbols-outlined" aria-hidden="true">calendar_month</span>
+                        </div>
+                        <div class="tool-card__body">
+                            <h3 class="tool-card__title">週間予定表作成</h3>
+                            <p class="tool-card__desc">
+                                1920×1080の週間予定表をブラウザで作成。テンプレートに予定とメモを重ねてPNG書き出し。
+                            </p>
+                            <ul class="tool-card__tags">
+                                <li>予定表</li><li>PNG</li><li>1920×1080</li>
+                            </ul>
+                        </div>
+                        <a href="https://live-schedule-creater.vercel.app/" class="tool-card__link" target="_blank" rel="noopener">
+                            <span>ツールを起動</span>
+                            <span class="material-symbols-outlined" aria-hidden="true">north_east</span>
+                        </a>
                     </article>
                 </div>
             </div>
@@ -255,6 +277,7 @@
                             <li><a href="https://youtube-comment-user-list.vercel.app/" target="_blank" rel="noopener">名前読み上げ</a></li>
                             <li><a href="comment-css/">コメント用CSS</a></li>
                             <li><a href="obs-text/">OBSテキスト表示</a></li>
+                            <li><a href="https://live-schedule-creater.vercel.app/" target="_blank" rel="noopener">週間予定表作成</a></li>
                         </ul>
                     </nav>
 
@@ -273,7 +296,7 @@
                         <pre class="terminal"><span>&gt; ping obsidian.engine</span>
 <span>&gt; 64 bytes from 127.0.0.1</span>
 <span>&gt; signal ........ <em>STRONG</em></span>
-<span>&gt; tools  ........ <em>05 / READY</em></span>
+<span>&gt; tools  ........ <em>06 / READY</em></span>
 <span>&gt; status ........ <em class="blink">ON AIR_</em></span></pre>
                     </div>
                 </div>
