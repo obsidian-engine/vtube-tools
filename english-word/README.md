@@ -14,10 +14,14 @@
 | `pos` | br | 表示位置。`tl` 左上 / `tr` 右上 / `bl` 左下 / `br` 右下 |
 | `meaning` | 1 | `0` で意味を表示しない |
 | `scale` | 1 | 全体の大きさ (例: `1.5`) |
+| `set` | english | 単語セット。`mahjong` で麻雀用語 (読み・分類・解説) を表示する |
 
 例: `.../english-word/index.html?interval=20&pos=tr&scale=1.3`
+
+麻雀配信: `.../english-word/index.html?set=mahjong&interval=20`
 
 ## 仕組み
 
 - 単語は `index.html` 内の一覧からランダムに選ぶ。一覧を一巡するまで同じ単語は出ない
-- 意味と発音は [Free Dictionary API](https://dictionaryapi.dev/) から取得する。取得できないときは単語だけを表示する
+- 麻雀用語は辞書 API に無いため、読み・分類・解説を `index.html` 内に持つ (役・点数・待ち・戦術など 40 語)
+- 英単語の意味と発音は [Free Dictionary API](https://dictionaryapi.dev/) から取得する。取得できないときは単語だけを表示する
