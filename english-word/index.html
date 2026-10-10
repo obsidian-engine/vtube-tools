@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>English Word Overlay</title>
+<!--
+  OBS のブラウザソースに URL を貼って使う。背景は透過。
+  URL パラメータ:
+    interval=15   切り替え間隔 (秒)
+    pos=br        表示位置 tl / tr / bl / br
+    meaning=1     0 で意味を出さない
+    scale=1       全体の大きさ
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root { --scale: 1; }
+  html, body { margin: 0; background: transparent; overflow: hidden; }
+  body { width: 100vw; height: 100vh; font-family: "Inter", system-ui, sans-serif; }
+  .card {
+    position: absolute;
+    max-width: calc(520px * var(--scale));
+    padding: calc(18px * var(--scale)) calc(24px * var(--scale));
+    border-radius: calc(14px * var(--scale));
+    background: rgba(20, 20, 28, 0.78);
+    color: #fff;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity .6s ease, transform .6s ease;
+  }
+  .card.show { opacity: 1; transform: translateY(0); }
+  .pos-tl { top: 32px; left: 32px; }
+  .pos-tr { top: 32px; right: 32px; }
+  .pos-bl { bottom: 32px; left: 32px; }
+  .pos-br { bottom: 32px; right: 32px; }
+  .label { font-size: calc(12px * var(--scale)); letter-spacing: .18em; color: #9fb4ff; font-weight: 600; }
+  .word { font-size: calc(44px * var(--scale)); font-weight: 800; line-height: 1.15; margin-top: 4px; }
+  .meta { font-size: calc(16px * var(--scale)); color: #c9c9d6; margin-top: 2px; }
+  .meta .pos { font-style: italic; margin-left: 8px; }
+  .def { font-size: calc(18px * var(--scale)); line-height: 1.45; margin-top: 10px; }
+  .def:empty, .meta:empty { display: none; }
+</style>
+</head>
+<body>
+<div id="card" class="card">
+  <div class="label">WORD OF THE MOMENT</div>
+  <div id="word" class="word"></div>
+  <div id="meta" class="meta"></div>
+  <div id="def" class="def"></div>
+</div>
+<script>
+  const params = new URLSearchParams(location.search);
+  const intervalSec = Math.max(5, Number(params.get("interval")) || 15);
+  const position = ["tl", "tr", "bl", "br"].includes(params.get("pos")) ? params.get("pos") : "br";
+  const showMeaning = params.get("meaning") !== "0";
+  const scale = Number(params.get("scale")) || 1;
+
+  // ランダム単語 API は停止や上限に当たりやすいので、単語は手元に持ち、意味だけを辞書 API から取る
+  const WORDS = [
+    "serendipity","ephemeral","resilient","nostalgia","whimsical","eloquent","meticulous","ubiquitous",
+    "candid","tenacious","vivid","benevolent","curious","diligent","euphoria","fragile","gratitude",
+    "harmony","intricate","jovial","keen","luminous","mellow","nimble","oblivious","pristine","quaint",
+    "radiant","serene","tranquil","uncanny","vibrant","wander","zealous","adventure","brilliant","cozy",
+    "delightful","enigma","fascinate","gleam","hustle","illusion","journey","kindle","legend","mystery",
+    "notion","odyssey","paradox","quest","riddle","spark","thrive","unique","voyage","wisdom","yearn",
+    "zenith","ambitious","blossom","cascade","dazzle","echo","flourish","glimpse","horizon","inspire",
+    "jubilant","knack","linger","marvel","nurture","opulent","ponder","quirky","resonate","savor",
+    "twilight","unravel","venture","wholesome","awkward","bizarre","clumsy","drowsy","fluffy","grumpy",
+    "hilarious","itchy","jittery","lazy","mischief","nervous","peculiar","sneaky","stubborn","tipsy",
+    "wobbly","banter","chaos","dilemma","epic","fiasco","gossip","hype","legendary","meme","nonsense",
+    "overrated","plot","rumor","spoiler","stealth","strategy","victory","glitch","respawn","loot","boss",
+  ];
+
+  const card = document.getElementById("card");
+  const wordEl = document.getElementById("word");
+  const metaEl = document.getElementById("meta");
+  const defEl = document.getElementById("def");
+  card.classList.add("pos-" + position);
+  document.documentElement.style.setProperty("--scale", scale);
+
+  let queue = [];
+  function nextWord() {
+    if (queue.length === 0) {
+      queue = [...WORDS].sort(() => Math.random() - 0.5);
+    }
+    return queue.pop();
+  }
+
+  async function lookup(word) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 4000);
+    try {
+      const res = await fetch("https://api.dictionaryapi.dev/api/v2/entries/en/" + encodeURIComponent(word), { signal: controller.signal });
+      if (!res.ok) return null;
+      const entry = (await res.json())[0];
+      const meaning = entry.meanings && entry.meanings[0];
+      return {
+        phonetic: entry.phonetic || (entry.phonetics || []).map(p => p.text).find(Boolean) || "",
+        partOfSpeech: meaning ? meaning.partOfSpeech : "",
+        definition: meaning && meaning.definitions[0] ? meaning.definitions[0].definition : "",
+      };
+    } catch {
+      return null;
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
+  function render(word, info) {
+    wordEl.textContent = word;
+    metaEl.innerHTML = "";
+    defEl.textContent = "";
+    if (info) {
+      if (info.phonetic) metaEl.append(info.phonetic);
+      if (info.partOfSpeech) {
+        const pos = document.createElement("span");
+        pos.className = "pos";
+        pos.textContent = info.partOfSpeech;
+        metaEl.append(pos);
+      }
+      if (showMeaning) defEl.textContent = info.definition;
+    }
+  }
+
+  async function cycle() {
+    const word = nextWord();
+    const info = await lookup(word);
+    card.classList.remove("show");
+    await new Promise(r => setTimeout(r, 600));
+    render(word, info);
+    card.classList.add("show");
+  }
+
+  cycle();
+  setInterval(cycle, intervalSec * 1000);
+</script>
+</body>
+</html>
