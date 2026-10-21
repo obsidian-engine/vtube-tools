@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>English Word Overlay</title>
+<!--
+  OBS のブラウザソースに URL を貼って使う。背景は透過。
+  URL パラメータ:
+    interval=15   切り替え間隔 (秒)
+    pos=br        表示位置 tl / tr / bl / br
+    meaning=1     0 で意味を出さない
+    scale=1       全体の大きさ
+    set=english   単語セット english / mahjong
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Zen+Kaku+Gothic+New:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root { --scale: 1; }
+  html, body { margin: 0; background: transparent; overflow: hidden; }
+  body { width: 100vw; height: 100vh; font-family: "Inter", "Zen Kaku Gothic New", system-ui, sans-serif; }
+  .card {
+    position: absolute;
+    max-width: calc(520px * var(--scale));
+    padding: calc(18px * var(--scale)) calc(24px * var(--scale));
+    border-radius: calc(14px * var(--scale));
+    background: rgba(20, 20, 28, 0.78);
+    color: #fff;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity .6s ease, transform .6s ease;
+  }
+  .card.show { opacity: 1; transform: translateY(0); }
+  .pos-tl { top: 32px; left: 32px; }
+  .pos-tr { top: 32px; right: 32px; }
+  .pos-bl { bottom: 32px; left: 32px; }
+  .pos-br { bottom: 32px; right: 32px; }
+  .label { font-size: calc(12px * var(--scale)); letter-spacing: .18em; color: #9fb4ff; font-weight: 600; }
+  .word { font-size: calc(44px * var(--scale)); font-weight: 800; line-height: 1.15; margin-top: 4px; }
+  .meta { font-size: calc(16px * var(--scale)); color: #c9c9d6; margin-top: 2px; }
+  .meta .pos { font-style: italic; margin-left: 8px; }
+  .def { font-size: calc(18px * var(--scale)); line-height: 1.45; margin-top: 10px; }
+  .def:empty, .meta:empty { display: none; }
+</style>
+</head>
+<body>
+<div id="card" class="card">
+  <div class="label">WORD OF THE MOMENT</div>
+  <div id="word" class="word"></div>
+  <div id="meta" class="meta"></div>
+  <div id="def" class="def"></div>
+</div>
+<script>
+  const params = new URLSearchParams(location.search);
+  const intervalSec = Math.max(5, Number(params.get("interval")) || 15);
+  const position = ["tl", "tr", "bl", "br"].includes(params.get("pos")) ? params.get("pos") : "br";
+  const showMeaning = params.get("meaning") !== "0";
+  const scale = Number(params.get("scale")) || 1;
+  const wordSet = params.get("set") === "mahjong" ? "mahjong" : "english";
+
+  // ランダム単語 API は停止や上限に当たりやすいので、単語は手元に持ち、意味だけを辞書 API から取る
+  const WORDS = [
+    "serendipity","ephemeral","resilient","nostalgia","whimsical","eloquent","meticulous","ubiquitous",
+    "candid","tenacious","vivid","benevolent","curious","diligent","euphoria","fragile","gratitude",
+    "harmony","intricate","jovial","keen","luminous","mellow","nimble","oblivious","pristine","quaint",
+    "radiant","serene","tranquil","uncanny","vibrant","wander","zealous","adventure","brilliant","cozy",
+    "delightful","enigma","fascinate","gleam","hustle","illusion","journey","kindle","legend","mystery",
+    "notion","odyssey","paradox","quest","riddle","spark","thrive","unique","voyage","wisdom","yearn",
+    "zenith","ambitious","blossom","cascade","dazzle","echo","flourish","glimpse","horizon","inspire",
+    "jubilant","knack","linger","marvel","nurture","opulent","ponder","quirky","resonate","savor",
+    "twilight","unravel","venture","wholesome","awkward","bizarre","clumsy","drowsy","fluffy","grumpy",
+    "hilarious","itchy","jittery","lazy","mischief","nervous","peculiar","sneaky","stubborn","tipsy",
+    "wobbly","banter","chaos","dilemma","epic","fiasco","gossip","hype","legendary","meme","nonsense",
+    "overrated","plot","rumor","spoiler","stealth","strategy","victory","glitch","respawn","loot","boss",
+  ];
+
+  // 麻雀用語は辞書 API に無いので、読み・分類・解説をここに持つ
+  const MAHJONG = [
+    ["立直","リーチ","役","門前で聴牌したときに宣言し、1000点を供託する。以後は手牌を変えられない"],
+    ["一発","イッパツ","役","立直の後、1巡以内に誰の鳴きも入らずに和了する"],
+    ["門前清自摸和","メンゼンツモ","役","鳴かずに自分のツモで和了する"],
+    ["断幺九","タンヤオ","役","2〜8の数牌だけで手を作る。字牌と1・9を使わない"],
+    ["平和","ピンフ","役","4組すべてを順子にし、雀頭は役牌以外、待ちは両面にする"],
+    ["一盃口","イーペーコー","役","同じ種類・同じ数字の順子を2組そろえる。門前限定"],
+    ["役牌","ヤクハイ","役","三元牌、場風、自風のいずれかを刻子にする"],
+    ["三色同順","サンショク","役","萬子・筒子・索子で同じ数字の順子をそろえる"],
+    ["一気通貫","イッツー","役","同じ種類の数牌で123・456・789をそろえる"],
+    ["対々和","トイトイ","役","4組すべてを刻子にする"],
+    ["七対子","チートイツ","役","対子を7組そろえる特殊な形。門前限定"],
+    ["混一色","ホンイツ","役","1種類の数牌と字牌だけで手を作る"],
+    ["清一色","チンイツ","役","1種類の数牌だけで手を作る"],
+    ["海底摸月","ハイテイ","役","その局の最後のツモ牌で和了する"],
+    ["嶺上開花","リンシャンカイホウ","役","槓をした後の嶺上牌で和了する"],
+    ["国士無双","コクシムソウ","役満","1・9・字牌の13種をすべて集め、どれか1つを2枚にする"],
+    ["四暗刻","スーアンコー","役満","鳴かずに作った刻子を4組そろえる"],
+    ["大三元","ダイサンゲン","役満","白・發・中の三元牌をすべて刻子にする"],
+    ["ドラ","ドラ","点数","持っているだけで1翻増える牌。ドラ表示牌の次の牌がドラになる"],
+    ["裏ドラ","ウラドラ","点数","立直して和了したときだけ、表示牌の下をめくって決まる追加のドラ"],
+    ["赤ドラ","アカドラ","点数","赤く塗られた5の牌。1枚ごとに1翻増える"],
+    ["満貫","マンガン","点数","子なら8000点、親なら12000点の点数区分"],
+    ["跳満","ハネマン","点数","満貫の1.5倍。子なら12000点、親なら18000点"],
+    ["倍満","バイマン","点数","満貫の2倍。子なら16000点、親なら24000点"],
+    ["聴牌","テンパイ","状態","あと1枚で和了できる状態"],
+    ["一向聴","イーシャンテン","状態","聴牌まであと1枚の状態"],
+    ["両面待ち","リャンメン","待ち","23で1か4を待つように、両側の2種類を待つ形"],
+    ["嵌張待ち","カンチャン","待ち","13で2を待つように、間の1種類を待つ形"],
+    ["辺張待ち","ペンチャン","待ち","12で3を待つように、端の1種類だけを待つ形"],
+    ["単騎待ち","タンキ","待ち","雀頭にする1枚を待つ形"],
+    ["振聴","フリテン","ルール","自分が捨てた牌で待っている状態。ロン和了ができない"],
+    ["現物","ゲンブツ","戦術","相手がすでに捨てている牌。その相手にはロンされない"],
+    ["筋","スジ","戦術","捨て牌から両面待ちで当たらないと読める牌の関係。1-4-7、2-5-8、3-6-9"],
+    ["押し引き","オシヒキ","戦術","自分の和了を目指して攻めるか、放銃を避けて守るかの判断"],
+    ["ベタオリ","ベタオリ","戦術","和了をあきらめ、安全な牌だけを捨てて守りに徹すること"],
+    ["放銃","ホウジュウ","用語","自分の捨てた牌で他家にロン和了されること"],
+    ["鳴き","ナキ","用語","他家の捨て牌を使ってポン・チー・カンで面子を作ること"],
+    ["親被り","オヤッカブリ","用語","親のときに他家にツモ和了され、子より多く点数を払うこと"],
+    ["流局","リュウキョク","用語","誰も和了せずに牌山がなくなり、局が終わること"],
+    ["オーラス","オーラス","用語","その対局の最後の局"],
+  ].map(([word, reading, category, def]) => ({ word, reading, category, def }));
+
+  const card = document.getElementById("card");
+  const wordEl = document.getElementById("word");
+  const metaEl = document.getElementById("meta");
+  const defEl = document.getElementById("def");
+  card.classList.add("pos-" + position);
+  if (wordSet === "mahjong") document.querySelector(".label").textContent = "麻雀用語";
+  document.documentElement.style.setProperty("--scale", scale);
+
+  let queue = [];
+  function nextWord() {
+    if (queue.length === 0) {
+      queue = [...(wordSet === "mahjong" ? MAHJONG : WORDS)].sort(() => Math.random() - 0.5);
+    }
+    return queue.pop();
+  }
+
+  async function lookup(word) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 4000);
+    try {
+      const res = await fetch("https://api.dictionaryapi.dev/api/v2/entries/en/" + encodeURIComponent(word), { signal: controller.signal });
+      if (!res.ok) return null;
+      const entry = (await res.json())[0];
+      const meaning = entry.meanings && entry.meanings[0];
+      return {
+        phonetic: entry.phonetic || (entry.phonetics || []).map(p => p.text).find(Boolean) || "",
+        partOfSpeech: meaning ? meaning.partOfSpeech : "",
+        definition: meaning && meaning.definitions[0] ? meaning.definitions[0].definition : "",
+      };
+    } catch {
+      return null;
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
+  function render(word, info) {
+    wordEl.textContent = word;
+    metaEl.innerHTML = "";
+    defEl.textContent = "";
+    if (info) {
+      if (info.phonetic) metaEl.append(info.phonetic);
+      if (info.partOfSpeech) {
+        const pos = document.createElement("span");
+        pos.className = "pos";
+        pos.textContent = info.partOfSpeech;
+        metaEl.append(pos);
+      }
+      if (showMeaning) defEl.textContent = info.definition;
+    }
+  }
+
+  async function cycle() {
+    const entry = nextWord();
+    const word = typeof entry === "string" ? entry : entry.word;
+    const info = typeof entry === "string"
+      ? await lookup(entry)
+      : { phonetic: entry.reading, partOfSpeech: entry.category, definition: entry.def };
+    card.classList.remove("show");
+    await new Promise(r => setTimeout(r, 600));
+    render(word, info);
+    card.classList.add("show");
+  }
+
+  cycle();
+  setInterval(cycle, intervalSec * 1000);
+</script>
+</body>
+</html>
