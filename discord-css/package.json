@@ -10,10 +10,9 @@
     "serve": "vite dev --host"
   },
   "devDependencies": {
-    "vite": "^5.0.0",
-    "terser": "^5.36.0"
+    "terser": "^5.36.0",
+    "vite": "^8.3.5"
   },
-  "dependencies": {},
   "keywords": [
     "discord",
     "tachie",
